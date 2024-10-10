@@ -1,9 +1,6 @@
 package com.backend.EasyPark.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +12,11 @@ public class Veiculo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String placa;
-    private String tipoVeiculo;
-    private boolean ocpVaga;
+    private String tipoVeiculo;  //se ele é moto ou carro
+    private boolean ocupandoVaga;
+
+    @ManyToOne
+    @JoinColumn(name = "fabricante_id")
+    private Fabricante fabricante;
 
 }
