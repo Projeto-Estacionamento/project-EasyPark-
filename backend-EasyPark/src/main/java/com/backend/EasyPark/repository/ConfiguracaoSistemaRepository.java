@@ -1,19 +1,20 @@
-// package com.backend.EasyPark.repository;
+package com.backend.EasyPark.repository;
 
-// import com.backend.EasyPark.entities.ConfiguracaoSistema;
-// import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-// import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-// @Repository
-// public interface ConfiguracaoSistemaRepository extends JpaRepository<ConfiguracaoSistema, Long> {
+import com.backend.EasyPark.entities.ConfiguracaoSistema;
+
+@Repository
+public interface ConfiguracaoSistemaRepository extends JpaRepository<ConfiguracaoSistema, Long> {
     
-//     Optional<ConfiguracaoSistema> findTopByOrderByIdAsc();
+    Optional<ConfiguracaoSistema> findTopByOrderByIdAsc();
     
-//     Optional<ConfiguracaoSistema> findByQtdMotoAndQtdCarro(int qtdMoto, int qtdCarro);
+    Optional<ConfiguracaoSistema> findByQtdMotoAndQtdCarro(int qtdMoto, int qtdCarro);
     
-//     Optional<ConfiguracaoSistema> findByValorHoraMotoAndValorHoraCarro(double valorHoraMoto, double valorHoraCarro);
+    Optional<ConfiguracaoSistema> findByValorHoraMotoAndValorHoraCarro(double valorHoraMoto, double valorHoraCarro);
     
-//     Optional<ConfiguracaoSistema> findByHoraMaximaAvulso(double horaMaximaAvulso);
-// }
+    Optional<ConfiguracaoSistema> findByHoraMaximaAvulso(double horaMaximaAvulso);
+}
