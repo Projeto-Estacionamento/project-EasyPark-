@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.EasyPark.dto.FabricanteDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
+import com.backend.EasyPark.entities.Fabricante;
 import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.repository.FabricanteRepository;
 import com.backend.EasyPark.repository.VeiculoRepository;
@@ -74,7 +75,7 @@ public class VeiculoService {
                 .collect(Collectors.toList());
     }
 
-    private Veiculo convertToEntity(VeiculoDTO veiculoDTO) {
+    public Veiculo convertToEntity(VeiculoDTO veiculoDTO) {
         Veiculo veiculo = new Veiculo();
         veiculo.setId(veiculoDTO.getId());
         veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja salva em maiúsculas
@@ -87,7 +88,7 @@ public class VeiculoService {
         return veiculo;
     }
 
-    private VeiculoDTO convertToDTO(Veiculo veiculo) {
+    public VeiculoDTO convertToDTO(Veiculo veiculo) {
         VeiculoDTO veiculoDTO = new VeiculoDTO();
         veiculoDTO.setId(veiculo.getId());
         veiculoDTO.setPlaca(veiculo.getPlaca());
@@ -102,13 +103,18 @@ public class VeiculoService {
         return veiculoDTO;
     }
 
-    private void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO veiculoDTO) {
+    public void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO veiculoDTO) {
         veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja atualizada em maiúsculas
         veiculo.setTipoVeiculo(veiculoDTO.getTipoVeiculo());
         veiculo.setOcupandoVaga(veiculoDTO.isOcupandoVaga());
+        // veiculo.setFabricante(fabricanteRepository.findById(veiculoDTO.getFabricanteDTO().getId())
+        //             .orElseThrow(() -> new RuntimeException("Fabricante não encontrado")));
         if (veiculoDTO.getFabricanteDTO() != null) {
-            veiculo.setFabricante(fabricanteRepository.findById(veiculoDTO.getFabricanteDTO().getId())
-                    .orElseThrow(() -> new RuntimeException("Fabricante não encontrado")));
+            if (veiculo.getFabricante() == null) {
+                veiculo.setFabricante(new Fabricante());
+            }
+            fabricanteRepository.findById(veiculoDTO.getFabricanteDTO().getId())
+                    .ifPresent(fabricante -> veiculo.setFabricante(fabricante));
         }
     }
 
