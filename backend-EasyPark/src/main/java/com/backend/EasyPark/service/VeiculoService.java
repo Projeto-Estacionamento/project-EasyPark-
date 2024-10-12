@@ -126,4 +126,10 @@ public class VeiculoService {
             throw new IllegalArgumentException("Placa inválida. Deve estar no formato antigo (ABC1234) ou Mercosul (ABC1D23).");
         }
     }
+
+    public void validarVeiculo(VeiculoDTO veiculoDTO) {
+        if (veiculoDTO.getPlaca() == null || !veiculoDTO.getPlaca().matches("^[A-Z]{3}\\d[A-Z0-9]\\d{2}$")) {
+            throw new IllegalArgumentException("Placa do veículo inválida");
+        }
+    }
 }

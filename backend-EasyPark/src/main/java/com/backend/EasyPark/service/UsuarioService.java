@@ -28,6 +28,9 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
         validarUsuario(usuarioDTO);
+        if (usuarioDTO.getVeiculoDTO() != null) {
+            veiculoService.validarVeiculo(usuarioDTO.getVeiculoDTO());
+        }
         Usuario usuario = convertToEntity(usuarioDTO);
         Usuario savedUsuario = usuarioRepository.save(usuario);
         return convertToDTO(savedUsuario);
@@ -48,6 +51,9 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
         validarUsuario(usuarioDTO);
+        if (usuarioDTO.getVeiculoDTO() != null) {
+            veiculoService.validarVeiculo(usuarioDTO.getVeiculoDTO());
+        }
         return usuarioRepository.findById(id)
                 .map(usuario -> {
                     updateUsuarioFromDTO(usuario, usuarioDTO);
@@ -83,7 +89,7 @@ public class UsuarioService {
         usuario.setPagamentoPendente(usuarioDTO.isPagamentoPendente());
         
         if (usuarioDTO.getEnderecoDTO() != null) {
-            usuario.setEndereco((Endereco) enderecoService.convertToEntity(usuarioDTO.getEnderecoDTO()));
+            usuario.setEndereco(enderecoService.convertToEntity(usuarioDTO.getEnderecoDTO()));
         }
         
         if (usuarioDTO.getVeiculoDTO() != null) {
@@ -132,6 +138,8 @@ public class UsuarioService {
                 usuario.setVeiculo(new Veiculo());
             }
             veiculoService.updateVeiculoFromDTO(usuario.getVeiculo(), usuarioDTO.getVeiculoDTO());
+        } else {
+            usuario.setVeiculo(null);
         }
     }
 
