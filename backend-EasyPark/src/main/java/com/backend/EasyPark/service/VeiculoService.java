@@ -1,6 +1,7 @@
 package com.backend.EasyPark.service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,12 @@ public class VeiculoService {
     @Autowired
     private FabricanteRepository fabricanteRepository;
 
+    private static final Pattern PLACA_ANTIGA = Pattern.compile("^[A-Z]{3}\\d{4}$");
+    private static final Pattern PLACA_MERCOSUL = Pattern.compile("^[A-Z]{3}\\d[A-Z]\\d{2}$");
+
     @Transactional
     public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO) {
+        validarPlaca(veiculoDTO.getPlaca());
         Veiculo veiculo = convertToEntity(veiculoDTO);
         Veiculo savedVeiculo = veiculoRepository.save(veiculo);
         return convertToDTO(savedVeiculo);
@@ -43,6 +48,7 @@ public class VeiculoService {
 
     @Transactional
     public VeiculoDTO atualizarVeiculo(Long id, VeiculoDTO veiculoDTO) {
+        validarPlaca(veiculoDTO.getPlaca());
         return veiculoRepository.findById(id)
                 .map(veiculo -> {
                     updateVeiculoFromDTO(veiculo, veiculoDTO);
@@ -71,7 +77,7 @@ public class VeiculoService {
     private Veiculo convertToEntity(VeiculoDTO veiculoDTO) {
         Veiculo veiculo = new Veiculo();
         veiculo.setId(veiculoDTO.getId());
-        veiculo.setPlaca(veiculoDTO.getPlaca());
+        veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja salva em maiúsculas
         veiculo.setTipoVeiculo(veiculoDTO.getTipoVeiculo());
         veiculo.setOcupandoVaga(veiculoDTO.isOcupandoVaga());
         if (veiculoDTO.getFabricanteDTO() != null) {
@@ -97,12 +103,18 @@ public class VeiculoService {
     }
 
     private void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO veiculoDTO) {
-        veiculo.setPlaca(veiculoDTO.getPlaca());
+        veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja atualizada em maiúsculas
         veiculo.setTipoVeiculo(veiculoDTO.getTipoVeiculo());
         veiculo.setOcupandoVaga(veiculoDTO.isOcupandoVaga());
         if (veiculoDTO.getFabricanteDTO() != null) {
             veiculo.setFabricante(fabricanteRepository.findById(veiculoDTO.getFabricanteDTO().getId())
                     .orElseThrow(() -> new RuntimeException("Fabricante não encontrado")));
+        }
+    }
+
+    private void validarPlaca(String placa) {
+        if (placa == null || (!PLACA_ANTIGA.matcher(placa).matches() && !PLACA_MERCOSUL.matcher(placa).matches())) {
+            throw new IllegalArgumentException("Placa inválida. Deve estar no formato antigo (ABC1234) ou Mercosul (ABC1D23).");
         }
     }
 }
