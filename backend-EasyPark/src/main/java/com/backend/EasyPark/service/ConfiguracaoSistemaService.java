@@ -1,19 +1,25 @@
 package com.backend.EasyPark.service;
 
-import com.backend.EasyPark.dto.ConfiguracaoSistemaDTO;
-import com.backend.EasyPark.entities.ConfiguracaoSistema;
-import com.backend.EasyPark.repository.ConfiguracaoSistemaRepository;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.backend.EasyPark.dto.ConfiguracaoSistemaDTO;
+import com.backend.EasyPark.entities.ConfiguracaoSistema;
+import com.backend.EasyPark.repository.ConfiguracaoSistemaRepository;
 
 @Service
 public class ConfiguracaoSistemaService {
 
+    private final ConfiguracaoSistemaRepository configuracaoSistemaRepository;
+
     @Autowired
-    private ConfiguracaoSistemaRepository configuracaoSistemaRepository;
+    public ConfiguracaoSistemaService(ConfiguracaoSistemaRepository configuracaoSistemaRepository) {
+        this.configuracaoSistemaRepository = configuracaoSistemaRepository;
+    }
 
     public ConfiguracaoSistemaDTO criarConfiguracao(ConfiguracaoSistemaDTO configuracaoDTO) {
         ConfiguracaoSistema configuracao = convertToEntity(configuracaoDTO);
@@ -39,6 +45,12 @@ public class ConfiguracaoSistemaService {
         return configuracaoSistemaRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public BigDecimal getValorPorHora() {
+        ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada"));
+        return BigDecimal.valueOf(configuracao.getValorHoraCarro());
     }
 
     private ConfiguracaoSistema convertToEntity(ConfiguracaoSistemaDTO dto) {

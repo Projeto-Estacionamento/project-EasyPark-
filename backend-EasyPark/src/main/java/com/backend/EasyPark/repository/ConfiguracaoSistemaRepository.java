@@ -17,4 +17,6 @@ public interface ConfiguracaoSistemaRepository extends JpaRepository<Configuraca
     Optional<ConfiguracaoSistema> findByValorHoraMotoAndValorHoraCarro(double valorHoraMoto, double valorHoraCarro);
     
     Optional<ConfiguracaoSistema> findByHoraMaximaAvulso(double horaMaximaAvulso);
+    
+    Optional<ConfiguracaoSistema> findTopByOrderByIdDesc();
 }
