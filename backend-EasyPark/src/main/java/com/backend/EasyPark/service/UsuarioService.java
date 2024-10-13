@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.entities.Endereco;
 import com.backend.EasyPark.entities.Usuario;
-import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.repository.UsuarioRepository;
+import com.backend.EasyPark.util.UsuarioMapper;
 
 @Service
 public class UsuarioService {
@@ -20,10 +19,10 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private EnderecoService enderecoService;
+    private VeiculoService veiculoService;
 
     @Autowired
-    private VeiculoService veiculoService;
+    private UsuarioMapper usuarioMapper;
 
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
@@ -31,20 +30,20 @@ public class UsuarioService {
         if (usuarioDTO.getVeiculoDTO() != null) {
             veiculoService.validarVeiculo(usuarioDTO.getVeiculoDTO());
         }
-        Usuario usuario = convertToEntity(usuarioDTO);
+        Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
         Usuario savedUsuario = usuarioRepository.save(usuario);
-        return convertToDTO(savedUsuario);
+        return usuarioMapper.toDTO(savedUsuario);
     }
 
     public UsuarioDTO buscarUsuarioPorId(Long id) {
         return usuarioRepository.findById(id)
-                .map(this::convertToDTO)
+                .map(usuarioMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
     public List<UsuarioDTO> listarUsuarios() {
         return usuarioRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(usuarioMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -56,8 +55,8 @@ public class UsuarioService {
         }
         return usuarioRepository.findById(id)
                 .map(usuario -> {
-                    updateUsuarioFromDTO(usuario, usuarioDTO);
-                    return convertToDTO(usuarioRepository.save(usuario));
+                    usuarioMapper.updateUsuarioFromDTO(usuario, usuarioDTO);
+                    return usuarioMapper.toDTO(usuarioRepository.save(usuario));
                 })
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
@@ -69,78 +68,14 @@ public class UsuarioService {
 
     public List<UsuarioDTO> buscarUsuarioPorCpf(String cpf) {
         return usuarioRepository.findByCpf(cpf).stream()
-                .map(this::convertToDTO)
+                .map(usuarioMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     public List<UsuarioDTO> buscarUsuarioPorEmail(String email) {
         return usuarioRepository.findByEmail(email).stream()
-                .map(this::convertToDTO)
+                .map(usuarioMapper::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    private Usuario convertToEntity(UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario();
-        usuario.setId(usuarioDTO.getId());
-        usuario.setNome(usuarioDTO.getNome());
-        usuario.setEmail(usuarioDTO.getEmail());
-        usuario.setTelefone(usuarioDTO.getTelefone());
-        usuario.setCpf(usuarioDTO.getCpf());
-        usuario.setPagamentoPendente(usuarioDTO.isPagamentoPendente());
-        
-        if (usuarioDTO.getEnderecoDTO() != null) {
-            usuario.setEndereco(enderecoService.convertToEntity(usuarioDTO.getEnderecoDTO()));
-        }
-        
-        if (usuarioDTO.getVeiculoDTO() != null) {
-            usuario.setVeiculo(veiculoService.convertToEntity(usuarioDTO.getVeiculoDTO()));
-        }
-        
-        return usuario;
-    }
-
-    private UsuarioDTO convertToDTO(Usuario usuario) {
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setNome(usuario.getNome());
-        usuarioDTO.setEmail(usuario.getEmail());
-        usuarioDTO.setTelefone(usuario.getTelefone());
-        usuarioDTO.setCpf(usuario.getCpf());
-        usuarioDTO.setPagamentoPendente(usuario.isPagamentoPendente());
-        
-        if (usuario.getEndereco() != null) {
-            usuarioDTO.setEnderecoDTO(enderecoService.convertToDTO(usuario.getEndereco()));
-        }
-        
-        if (usuario.getVeiculo() != null) {
-            usuarioDTO.setVeiculoDTO(veiculoService.convertToDTO(usuario.getVeiculo()));
-        }
-        
-        return usuarioDTO;
-    }
-
-    private void updateUsuarioFromDTO(Usuario usuario, UsuarioDTO usuarioDTO) {
-        usuario.setNome(usuarioDTO.getNome());
-        usuario.setEmail(usuarioDTO.getEmail());
-        usuario.setTelefone(usuarioDTO.getTelefone());
-        usuario.setCpf(usuarioDTO.getCpf());
-        usuario.setPagamentoPendente(usuarioDTO.isPagamentoPendente());
-        
-        if (usuarioDTO.getEnderecoDTO() != null) {
-            if (usuario.getEndereco() == null) {
-                usuario.setEndereco(new Endereco());
-            }
-            enderecoService.updateEnderecoFromDTO(usuario.getEndereco(), usuarioDTO.getEnderecoDTO());
-        }
-        
-        if (usuarioDTO.getVeiculoDTO() != null) {
-            if (usuario.getVeiculo() == null) {
-                usuario.setVeiculo(new Veiculo());
-            }
-            veiculoService.updateVeiculoFromDTO(usuario.getVeiculo(), usuarioDTO.getVeiculoDTO());
-        } else {
-            usuario.setVeiculo(null);
-        }
     }
 
     private void validarUsuario(UsuarioDTO usuarioDTO) {

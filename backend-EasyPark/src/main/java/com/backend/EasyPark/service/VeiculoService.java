@@ -13,6 +13,7 @@ import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.repository.FabricanteRepository;
 import com.backend.EasyPark.repository.VeiculoRepository;
+import com.backend.EasyPark.util.VeiculoMapper;
 
 @Service
 public class VeiculoService {
@@ -25,6 +26,9 @@ public class VeiculoService {
 
     @Autowired
     private FabricanteService fabricanteService;
+
+    @Autowired
+    private VeiculoMapper veiculoMapper;
 
     private static final Pattern PLACA_ANTIGA = Pattern.compile("^[A-Z]{3}\\d{4}$");
     private static final Pattern PLACA_MERCOSUL = Pattern.compile("^[A-Z]{3}\\d[A-Z]\\d{2}$");
@@ -78,13 +82,8 @@ public class VeiculoService {
     }
 
     public Veiculo convertToEntity(VeiculoDTO veiculoDTO) {
-        Veiculo veiculo = new Veiculo();
-        veiculo.setId(veiculoDTO.getId());
-        veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja salva em maiúsculas
-        veiculo.setTipoVeiculo(veiculoDTO.getTipoVeiculo());
-        veiculo.setOcupandoVaga(veiculoDTO.isOcupandoVaga());
+        Veiculo veiculo = veiculoMapper.toEntity(veiculoDTO);
         if (veiculoDTO.getFabricanteDTO() != null) {
-            // Use o FabricanteService para buscar ou criar o fabricante
             FabricanteDTO fabricanteDTO = fabricanteService.buscarPorId(veiculoDTO.getFabricanteDTO().getId());
             veiculo.setFabricante(fabricanteRepository.findById(fabricanteDTO.getId())
                     .orElseThrow(() -> new RuntimeException("Fabricante não encontrado")));
@@ -93,18 +92,7 @@ public class VeiculoService {
     }
 
     public VeiculoDTO convertToDTO(Veiculo veiculo) {
-        VeiculoDTO veiculoDTO = new VeiculoDTO();
-        veiculoDTO.setId(veiculo.getId());
-        veiculoDTO.setPlaca(veiculo.getPlaca());
-        veiculoDTO.setTipoVeiculo(veiculo.getTipoVeiculo());
-        veiculoDTO.setOcupandoVaga(veiculo.isOcupandoVaga());
-        if (veiculo.getFabricante() != null) {
-            veiculoDTO.setFabricanteDTO(new FabricanteDTO(veiculo.getFabricante().getId(), 
-                                                          veiculo.getFabricante().getMarca(), 
-                                                          veiculo.getFabricante().getModelo(), 
-                                                          veiculo.getFabricante().getAno()));
-        }
-        return veiculoDTO;
+        return veiculoMapper.toDTO(veiculo);
     }
 
     public void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO veiculoDTO) {

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.EasyPark.dto.EnderecoDTO;
 import com.backend.EasyPark.entities.Endereco;
 import com.backend.EasyPark.repository.EnderecoRepository;
+import com.backend.EasyPark.util.EnderecoMapper;
 
 @Service
 public class EnderecoService {
@@ -17,69 +18,48 @@ public class EnderecoService {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
+    @Autowired
+    private EnderecoMapper enderecoMapper;
+
     @Transactional(readOnly = true)
     public List<EnderecoDTO> findAll() {
         List<Endereco> enderecos = enderecoRepository.findAll();
-        return enderecos.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return enderecos.stream().map(enderecoMapper::toDTO).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public EnderecoDTO findById(Long id) {
         Endereco endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
-        return convertToDTO(endereco);
+        return enderecoMapper.toDTO(endereco);
     }
 
     @Transactional(readOnly = true)
     public List<EnderecoDTO> findByCep(String cep) {
         List<Endereco> enderecos = enderecoRepository.findByCep(cep);
-        return enderecos.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return enderecos.stream().map(enderecoMapper::toDTO).collect(Collectors.toList());
     }
 
     @Transactional
     public EnderecoDTO create(EnderecoDTO enderecoDTO) {
         validarEndereco(enderecoDTO);
-        Endereco endereco = convertToEntity(enderecoDTO);
+        Endereco endereco = enderecoMapper.toEntity(enderecoDTO);
         endereco = enderecoRepository.save(endereco);
-        return convertToDTO(endereco);
+        return enderecoMapper.toDTO(endereco);
     }
 
     @Transactional
     public EnderecoDTO update(Long id, EnderecoDTO enderecoDTO) {
         Endereco endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
-        updateEnderecoFromDTO(endereco, enderecoDTO);
+        enderecoMapper.updateEntityFromDTO(enderecoDTO, endereco);
         endereco = enderecoRepository.save(endereco);
-        return convertToDTO(endereco);
+        return enderecoMapper.toDTO(endereco);
     }
 
     @Transactional
     public void delete(Long id) {
         enderecoRepository.deleteById(id);
-    }
-
-    public Endereco convertToEntity(EnderecoDTO enderecoDTO) {
-        Endereco endereco = new Endereco();
-        endereco.setId(enderecoDTO.getId());
-        endereco.setCidade(enderecoDTO.getCidade());
-        endereco.setEstado(enderecoDTO.getEstado());
-        endereco.setCep(enderecoDTO.getCep());
-        return endereco;
-    }
-
-    public EnderecoDTO convertToDTO(Endereco endereco) {
-        EnderecoDTO enderecoDTO = new EnderecoDTO();
-        enderecoDTO.setId(endereco.getId());
-        enderecoDTO.setCidade(endereco.getCidade());
-        enderecoDTO.setEstado(endereco.getEstado());
-        enderecoDTO.setCep(endereco.getCep());
-        return enderecoDTO;
-    }
-
-    public void updateEnderecoFromDTO(Endereco endereco, EnderecoDTO enderecoDTO) {
-        endereco.setCidade(enderecoDTO.getCidade());
-        endereco.setEstado(enderecoDTO.getEstado());
-        endereco.setCep(enderecoDTO.getCep());
     }
 
     private void validarEndereco(EnderecoDTO enderecoDTO) {

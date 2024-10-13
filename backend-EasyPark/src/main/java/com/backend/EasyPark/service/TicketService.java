@@ -12,36 +12,40 @@ import org.springframework.stereotype.Service;
 import com.backend.EasyPark.dto.TicketDTO;
 import com.backend.EasyPark.entities.Ticket;
 import com.backend.EasyPark.repository.TicketRepository;
+import com.backend.EasyPark.util.TicketMapper;
 // import com.backend.EasyPark.service.ConfiguracaoSistemaService;
 
 @Service
 public class TicketService {
     private final TicketRepository ticketRepository;
     private final ConfiguracaoSistemaService configuracaoSistemaService;
+    private final TicketMapper ticketMapper;
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
-                         ConfiguracaoSistemaService configuracaoSistemaService) {
+                         ConfiguracaoSistemaService configuracaoSistemaService,
+                         TicketMapper ticketMapper) {
         this.ticketRepository = ticketRepository;
         this.configuracaoSistemaService = configuracaoSistemaService;
+        this.ticketMapper = ticketMapper;
     }
 
     public TicketDTO criarTicket(TicketDTO ticketDTO) {
-        Ticket ticket = convertToEntity(ticketDTO);
+        Ticket ticket = ticketMapper.toEntity(ticketDTO);
         ticket.setHoraChegada(LocalDateTime.now());
         Ticket savedTicket = ticketRepository.save(ticket);
-        return convertToDTO(savedTicket);
+        return ticketMapper.toDTO(savedTicket);
     }
 
     public TicketDTO buscarTicketPorId(Long id) {
         return ticketRepository.findById(id)
-                .map(this::convertToDTO)
+                .map(ticketMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
     }
 
     public List<TicketDTO> listarTickets() {
         return ticketRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(ticketMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -52,33 +56,13 @@ public class TicketService {
         BigDecimal valorTotal = calcularValorTicket(ticket);
         ticket.setValorTotalPagar(valorTotal.doubleValue());
         Ticket updatedTicket = ticketRepository.save(ticket);
-        return convertToDTO(updatedTicket);
+        return ticketMapper.toDTO(updatedTicket);
     }
 
     public List<TicketDTO> buscarTicketsPorUsuario(Long usuarioId) {
         return ticketRepository.findByUsuarioId(usuarioId).stream()
-                .map(this::convertToDTO)
+                .map(ticketMapper::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    private Ticket convertToEntity(TicketDTO ticketDTO) {
-        Ticket ticket = new Ticket();
-        ticket.setId(ticketDTO.getId());
-        ticket.setPlacaVeiculo(ticketDTO.getPlacaVeiculo());
-        ticket.setHoraChegada(ticketDTO.getHoraChegada());
-        ticket.setHoraSaida(ticketDTO.getHoraSaida());
-        return ticket;
-    }
-
-    private TicketDTO convertToDTO(Ticket ticket) {
-        return new TicketDTO(
-                ticket.getId(),
-                ticket.getPlacaVeiculo(),
-                ticket.getHoraChegada(),
-                ticket.getHoraSaida(),
-                ticket.getTotalHoras(),
-                ticket.getValorTotalPagar()
-        );
     }
 
     public BigDecimal calcularValorTicket(Ticket ticket) {

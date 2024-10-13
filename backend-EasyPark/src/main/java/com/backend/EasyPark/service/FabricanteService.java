@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.backend.EasyPark.dto.FabricanteDTO;
 import com.backend.EasyPark.entities.Fabricante;
 import com.backend.EasyPark.repository.FabricanteRepository;
+import com.backend.EasyPark.util.FabricanteMapper;
 
 @Service
 public class FabricanteService {
@@ -16,24 +17,24 @@ public class FabricanteService {
     @Autowired
     private FabricanteRepository fabricanteRepository;
 
+    @Autowired
+    private FabricanteMapper fabricanteMapper;
+
     public FabricanteDTO criar(FabricanteDTO fabricanteDTO) {
         validarAno(fabricanteDTO.getAno());
-        Fabricante fabricante = new Fabricante();
-        fabricante.setModelo(fabricanteDTO.getModelo());
-        fabricante.setMarca(fabricanteDTO.getMarca());
-        fabricante.setAno(fabricanteDTO.getAno());
-        return convertToDTO(fabricanteRepository.save(fabricante));
+        Fabricante fabricante = fabricanteMapper.toEntity(fabricanteDTO);
+        return fabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
     }
 
     public FabricanteDTO buscarPorId(Long id) {
         return fabricanteRepository.findById(id)
-                .map(this::convertToDTO)
+                .map(fabricanteMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Fabricante não encontrado"));
     }
 
     public List<FabricanteDTO> listarTodos() {
         return fabricanteRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(fabricanteMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -41,27 +42,15 @@ public class FabricanteService {
         validarAno(fabricanteDTO.getAno());
         Fabricante fabricante = fabricanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fabricante não encontrado"));
-        fabricante.setModelo(fabricanteDTO.getModelo());
-        fabricante.setMarca(fabricanteDTO.getMarca());
-        fabricante.setAno(fabricanteDTO.getAno());
-        return convertToDTO(fabricanteRepository.save(fabricante));
+        fabricanteMapper.updateEntityFromDTO(fabricante, fabricanteDTO);
+        return fabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
     }
 
     public void deletar(Long id) {
         fabricanteRepository.deleteById(id);
     }
 
-    private FabricanteDTO convertToDTO(Fabricante fabricante) {
-        return new FabricanteDTO(
-                fabricante.getId(),
-                fabricante.getModelo(),
-                fabricante.getMarca(),
-                fabricante.getAno()
-        );
-    }
-
     private void validarAno(int ano) {
-        // Botei 1886 porque 
         if (ano < 1886) {
             throw new IllegalArgumentException("O ano do fabricante deve ser a partir de 1886");
         }

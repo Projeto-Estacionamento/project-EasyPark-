@@ -10,40 +10,44 @@ import org.springframework.stereotype.Service;
 import com.backend.EasyPark.dto.ConfiguracaoSistemaDTO;
 import com.backend.EasyPark.entities.ConfiguracaoSistema;
 import com.backend.EasyPark.repository.ConfiguracaoSistemaRepository;
+import com.backend.EasyPark.util.ConfiguracaoSistemaMapper;
 
 @Service
 public class ConfiguracaoSistemaService {
 
     private final ConfiguracaoSistemaRepository configuracaoSistemaRepository;
+    private final ConfiguracaoSistemaMapper configuracaoSistemaMapper;
 
     @Autowired
-    public ConfiguracaoSistemaService(ConfiguracaoSistemaRepository configuracaoSistemaRepository) {
+    public ConfiguracaoSistemaService(ConfiguracaoSistemaRepository configuracaoSistemaRepository,
+                                      ConfiguracaoSistemaMapper configuracaoSistemaMapper) {
         this.configuracaoSistemaRepository = configuracaoSistemaRepository;
+        this.configuracaoSistemaMapper = configuracaoSistemaMapper;
     }
 
     public ConfiguracaoSistemaDTO criarConfiguracao(ConfiguracaoSistemaDTO configuracaoDTO) {
-        ConfiguracaoSistema configuracao = convertToEntity(configuracaoDTO);
+        ConfiguracaoSistema configuracao = configuracaoSistemaMapper.toEntity(configuracaoDTO);
         ConfiguracaoSistema savedConfiguracao = configuracaoSistemaRepository.save(configuracao);
-        return convertToDTO(savedConfiguracao);
+        return configuracaoSistemaMapper.toDTO(savedConfiguracao);
     }
 
     public ConfiguracaoSistemaDTO buscarConfiguracaoAtual() {
         ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdAsc()
                 .orElseThrow(() -> new RuntimeException("Nenhuma configuração encontrada"));
-        return convertToDTO(configuracao);
+        return configuracaoSistemaMapper.toDTO(configuracao);
     }
 
     public ConfiguracaoSistemaDTO atualizarConfiguracao(Long id, ConfiguracaoSistemaDTO configuracaoDTO) {
         ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Configuração não encontrada"));
-        updateConfiguracao(configuracao, configuracaoDTO);
+        configuracaoSistemaMapper.updateEntityFromDTO(configuracao, configuracaoDTO);
         ConfiguracaoSistema updatedConfiguracao = configuracaoSistemaRepository.save(configuracao);
-        return convertToDTO(updatedConfiguracao);
+        return configuracaoSistemaMapper.toDTO(updatedConfiguracao);
     }
 
     public List<ConfiguracaoSistemaDTO> listarTodasConfiguracoes() {
         return configuracaoSistemaRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(configuracaoSistemaMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -51,41 +55,5 @@ public class ConfiguracaoSistemaService {
         ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
                 .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada"));
         return BigDecimal.valueOf(configuracao.getValorHoraCarro());
-    }
-
-    private ConfiguracaoSistema convertToEntity(ConfiguracaoSistemaDTO dto) {
-        ConfiguracaoSistema configuracao = new ConfiguracaoSistema();
-        configuracao.setId(dto.getId());
-        configuracao.setQtdMoto(dto.getQtdMoto());
-        configuracao.setQtdCarro(dto.getQtdCarro());
-        configuracao.setValorHoraMoto(dto.getValorHoraMoto());
-        configuracao.setValorHoraCarro(dto.getValorHoraCarro());
-        configuracao.setValorDiariaCarro(dto.getValorDiariaCarro());
-        configuracao.setValorDiariaMoto(dto.getValorDiariaMoto());
-        configuracao.setHoraMaximaAvulso(dto.getHoraMaximaAvulso());
-        return configuracao;
-    }
-
-    private ConfiguracaoSistemaDTO convertToDTO(ConfiguracaoSistema configuracao) {
-        return new ConfiguracaoSistemaDTO(
-                configuracao.getId(),
-                configuracao.getQtdMoto(),
-                configuracao.getQtdCarro(),
-                configuracao.getValorHoraMoto(),
-                configuracao.getValorHoraCarro(),
-                configuracao.getValorDiariaCarro(),
-                configuracao.getValorDiariaMoto(),
-                configuracao.getHoraMaximaAvulso()
-        );
-    }
-
-    private void updateConfiguracao(ConfiguracaoSistema configuracao, ConfiguracaoSistemaDTO dto) {
-        configuracao.setQtdMoto(dto.getQtdMoto());
-        configuracao.setQtdCarro(dto.getQtdCarro());
-        configuracao.setValorHoraMoto(dto.getValorHoraMoto());
-        configuracao.setValorHoraCarro(dto.getValorHoraCarro());
-        configuracao.setValorDiariaCarro(dto.getValorDiariaCarro());
-        configuracao.setValorDiariaMoto(dto.getValorDiariaMoto());
-        configuracao.setHoraMaximaAvulso(dto.getHoraMaximaAvulso());
     }
 }
