@@ -1,32 +1,20 @@
-package com.backend.EasyPark.entities;
-
-
+package com.backend.EasyPark.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Avulso {
+@AllArgsConstructor
+public class AvulsoDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String placaVeiculo;
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
     private LocalDateTime qtdHora;
     private boolean valorTotal;
-
-
-
 }
