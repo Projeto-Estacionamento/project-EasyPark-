@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,10 +22,10 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int placaVeiculo;
+    private String placaVeiculo;
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
-    private LocalDateTime totalHoras;
+    private Duration totalHoras;
     private double valorTotalPagar;
 
 }

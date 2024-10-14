@@ -1,13 +1,19 @@
 package com.backend.EasyPark.util;
 
-import org.springframework.stereotype.Component;
-
-import com.backend.EasyPark.dto.FabricanteDTO;
+import com.backend.EasyPark.dto.FabricanteDTO; // Certifique-se de que você tenha esta importação
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.Veiculo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class VeiculoMapper {
+
+    @Autowired
+    private FabricanteMapper fabricanteMapper; // Injeção do fabricanteMapper
 
     public Veiculo toEntity(VeiculoDTO dto) {
         if (dto == null) {
@@ -16,12 +22,15 @@ public class VeiculoMapper {
 
         Veiculo veiculo = new Veiculo();
         veiculo.setId(dto.getId());
-        veiculo.setPlaca(dto.getPlaca().toUpperCase());
+        veiculo.setPlaca(dto.getPlaca());
         veiculo.setTipoVeiculo(dto.getTipoVeiculo());
         veiculo.setOcupandoVaga(dto.isOcupandoVaga());
-        
-        // O fabricante será definido no serviço, pois pode precisar ser buscado ou criado
-        
+
+        // Mapeia o fabricante
+        if (dto.getFabricanteDTO() != null) {
+            veiculo.setFabricante(fabricanteMapper.toEntity(dto.getFabricanteDTO()));
+        }
+
         return veiculo;
     }
 
@@ -35,26 +44,57 @@ public class VeiculoMapper {
         dto.setPlaca(entity.getPlaca());
         dto.setTipoVeiculo(entity.getTipoVeiculo());
         dto.setOcupandoVaga(entity.isOcupandoVaga());
-        
+
+        // Mapeia o fabricante
         if (entity.getFabricante() != null) {
-            FabricanteDTO fabricanteDTO = new FabricanteDTO(
-                entity.getFabricante().getId(),
-                entity.getFabricante().getMarca(),
-                entity.getFabricante().getModelo(),
-                entity.getFabricante().getAno()
-            );
-            dto.setFabricanteDTO(fabricanteDTO);
+            dto.setFabricanteDTO(fabricanteMapper.toDTO(entity.getFabricante()));
         }
-        
+
         return dto;
     }
 
-    public void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO dto) {
-        if (dto == null) {
-            return;
+    public List<Veiculo> toEntity(List<VeiculoDTO> dtos) {
+        if (dtos == null) {
+            return null;
         }
-        veiculo.setPlaca(dto.getPlaca().toUpperCase());
-        veiculo.setTipoVeiculo(dto.getTipoVeiculo());
-        veiculo.setOcupandoVaga(dto.isOcupandoVaga());
+        return dtos.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<VeiculoDTO> toDTO(List<Veiculo> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public void updateVeiculoFromDTO(List<Veiculo> veiculos, List<VeiculoDTO> dtos) {
+        for (int i = 0; i < dtos.size(); i++) {
+            if (i < veiculos.size()) {
+                Veiculo veiculo = veiculos.get(i);
+                VeiculoDTO dto = dtos.get(i);
+                veiculo.setPlaca(dto.getPlaca());
+                veiculo.setTipoVeiculo(dto.getTipoVeiculo());
+                veiculo.setOcupandoVaga(dto.isOcupandoVaga());
+
+                // Atualiza o fabricante se necessário
+                if (dto.getFabricanteDTO() != null) {
+                    if (veiculo.getFabricante() == null) {
+                        veiculo.setFabricante(fabricanteMapper.toEntity(dto.getFabricanteDTO()));
+                    } else {
+                        fabricanteMapper.updateEntityFromDTO(veiculo.getFabricante(), dto.getFabricanteDTO());
+                    }
+                } else {
+                    veiculo.setFabricante(null); // Define como null se não houver fabricante
+                }
+            } else {
+                // Adiciona novos veículos se houver mais DTOs que entidades
+                Veiculo novoVeiculo = toEntity(dtos.get(i));
+                veiculos.add(novoVeiculo);
+            }
+        }
     }
 }

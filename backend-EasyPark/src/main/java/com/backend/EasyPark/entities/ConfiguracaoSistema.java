@@ -3,6 +3,7 @@ package com.backend.EasyPark.entities;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConfiguracaoSistema {
 
-   private Long id;
+   @Id
+   private Long id = 1L;
+
    private int qtdMoto;
    private int qtdCarro;
    private double valorHoraMoto;

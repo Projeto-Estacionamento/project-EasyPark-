@@ -1,32 +1,32 @@
 package com.backend.EasyPark.entities;
 
+
+import com.backend.EasyPark.enums.TipoPlano;
 import com.backend.EasyPark.enums.TipoVeiculo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
+import java.math.BigDecimal;
+
 @Entity
 @Data
-public class Veiculo {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Plano {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String placa;
 
     @Enumerated(EnumType.STRING)
-    private TipoVeiculo tipoVeiculo;//se ele é moto ou carro
+    private TipoPlano tipoPlano; // Adicionar qual o tipo de veiculo para o plano se é carro ou moto
 
-    private boolean ocupandoVaga;
-
-    @ManyToOne
-    @JoinColumn(name = "fabricante_id")
-    private Fabricante fabricante;
+    private BigDecimal valorMensal;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
-
 }
+

@@ -19,7 +19,7 @@ public class AvulsoMapper {
         avulso.setHoraChegada(dto.getHoraChegada());
         avulso.setHoraSaida(dto.getHoraSaida());
         avulso.setQtdHora(dto.getQtdHora());
-        avulso.setValorTotal(dto.isValorTotal());
+        avulso.setValorTotal(dto.getValorTotal());
 
         return avulso;
     }
@@ -35,7 +35,7 @@ public class AvulsoMapper {
             entity.getHoraChegada(),
             entity.getHoraSaida(),
             entity.getQtdHora(),
-            entity.isValorTotal()
+            entity.getValorTotal()
         );
     }
 
@@ -48,6 +48,6 @@ public class AvulsoMapper {
         avulso.setHoraChegada(dto.getHoraChegada());
         avulso.setHoraSaida(dto.getHoraSaida());
         avulso.setQtdHora(dto.getQtdHora());
-        avulso.setValorTotal(dto.isValorTotal());
+        avulso.setValorTotal(dto.getValorTotal());
     }
 }

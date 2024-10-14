@@ -1,5 +1,6 @@
 package com.backend.EasyPark.dto;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -11,9 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TicketDTO {
     private int id;
-    private int placaVeiculo;
+    private String placaVeiculo;
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
-    private LocalDateTime totalHoras;
+    private Duration totalHoras;
     private double valorTotalPagar;
 }
