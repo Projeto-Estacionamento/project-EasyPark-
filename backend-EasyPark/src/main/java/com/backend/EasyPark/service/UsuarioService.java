@@ -27,8 +27,8 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
         validarUsuario(usuarioDTO);
-        if (usuarioDTO.getVeiculoDTO() != null) {
-            veiculoService.validarVeiculo(usuarioDTO.getVeiculoDTO());
+        if (usuarioDTO.getVeiculosDTO() != null) {
+            veiculoService.validarVeiculo(usuarioDTO.getVeiculosDTO());
         }
         Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
         Usuario savedUsuario = usuarioRepository.save(usuario);
@@ -50,8 +50,8 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
         validarUsuario(usuarioDTO);
-        if (usuarioDTO.getVeiculoDTO() != null) {
-            veiculoService.validarVeiculo(usuarioDTO.getVeiculoDTO());
+        if (usuarioDTO.getVeiculosDTO() != null) {
+            veiculoService.validarVeiculo(usuarioDTO.getVeiculosDTO());
         }
         return usuarioRepository.findById(id)
                 .map(usuario -> {
