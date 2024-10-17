@@ -1,14 +1,21 @@
 package com.backend.EasyPark.entities;
 
+import java.math.BigDecimal;
 
 import com.backend.EasyPark.enums.TipoPlano;
 import com.backend.EasyPark.enums.TipoVeiculo;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -21,8 +28,10 @@ public class Plano {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private TipoPlano tipoPlano; // Adicionar qual o tipo de veiculo para o plano se é carro ou moto
+    private TipoPlano tipoPlano;
 
+    @Enumerated(EnumType.STRING)
+    private TipoVeiculo tipoVeiculo;
     private BigDecimal valorMensal;
 
     @ManyToOne
