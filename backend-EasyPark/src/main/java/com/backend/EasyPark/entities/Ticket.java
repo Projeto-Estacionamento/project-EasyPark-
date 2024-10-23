@@ -2,6 +2,7 @@ package com.backend.EasyPark.entities;
 
 
 
+import com.backend.EasyPark.enums.TipoTicket;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,7 @@ public class Ticket {
     private String placaVeiculo;
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
+    private TipoTicket tipoTicket;
     private Duration totalHoras;
     private double valorTotalPagar;
 

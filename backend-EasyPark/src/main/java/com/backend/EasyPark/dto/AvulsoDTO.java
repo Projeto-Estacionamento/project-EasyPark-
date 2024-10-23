@@ -1,3 +1,4 @@
+/*
 package com.backend.EasyPark.dto;
 
 import java.time.LocalDateTime;
@@ -18,3 +19,4 @@ public class AvulsoDTO {
     private LocalDateTime qtdHora;
     private double valorTotal;
 }
+*/

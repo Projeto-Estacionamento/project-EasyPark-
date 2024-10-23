@@ -29,7 +29,7 @@ public class UsuarioMapper {
         usuario.setEmail(dto.getEmail());
         usuario.setTelefone(dto.getTelefone());
         usuario.setCpf(dto.getCpf());
-        usuario.setPagamentoPendente(dto.isPagamentoPendente());
+        //usuario.setPagamentoPendente(dto.isPagamentoPendente());
 
         // Mapeia o endereço
         if (dto.getEnderecoDTO() != null) {
@@ -58,7 +58,7 @@ public class UsuarioMapper {
         dto.setEmail(entity.getEmail());
         dto.setTelefone(entity.getTelefone());
         dto.setCpf(entity.getCpf());
-        dto.setPagamentoPendente(entity.isPagamentoPendente());
+       // dto.setPagamentoPendente(entity.isPagamentoPendente());
 
         // Mapeia o endereço
         if (entity.getEndereco() != null) {
@@ -84,7 +84,7 @@ public class UsuarioMapper {
         usuario.setEmail(dto.getEmail());
         usuario.setTelefone(dto.getTelefone());
         usuario.setCpf(dto.getCpf());
-        usuario.setPagamentoPendente(dto.isPagamentoPendente());
+       // usuario.setPagamentoPendente(dto.isPagamentoPendente());
 
         // Atualiza o endereço
         if (dto.getEnderecoDTO() != null) {

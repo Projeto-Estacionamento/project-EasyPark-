@@ -23,7 +23,7 @@ public class Usuario {
     private String email;
     private String telefone;
     private String cpf;
-    private boolean pagamentoPendente;
+    //private boolean pagamentoPendente;
 
     @ManyToOne
     @JoinColumn(name = "endereco_id")
