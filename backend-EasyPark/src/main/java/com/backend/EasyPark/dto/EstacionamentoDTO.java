@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrarEntradaDTO {
+public class EstacionamentoDTO {
 
     private boolean sucesso;
     private String mensagem;

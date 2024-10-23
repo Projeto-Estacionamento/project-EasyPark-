@@ -1,9 +1,13 @@
 package com.backend.EasyPark.util;
 
+import com.backend.EasyPark.enums.TipoTicket;
 import org.springframework.stereotype.Component;
 
 import com.backend.EasyPark.dto.TicketDTO;
 import com.backend.EasyPark.entities.Ticket;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @Component
 public class TicketMapper {
@@ -35,9 +39,12 @@ public class TicketMapper {
             entity.getHoraChegada(),
             entity.getHoraSaida(),
             entity.getTotalHoras(),
+            entity.getTipoTicket(),
             entity.getValorTotalPagar()
         );
     }
+
+
 
     public void updateEntityFromDTO(Ticket ticket, TicketDTO dto) {
         if (dto == null) {

@@ -3,6 +3,8 @@ package com.backend.EasyPark.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
+import com.backend.EasyPark.util.validacao.ValidacaoVeiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +26,11 @@ public class UsuarioService {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
+    private ValidacaoUsuario validacaoUsuario;
+
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
-        validarUsuario(usuarioDTO);
+       validacaoUsuario.validarUsuario(usuarioDTO);
         if (usuarioDTO.getVeiculosDTO() != null) {
             veiculoService.validarVeiculo(usuarioDTO.getVeiculosDTO());
         }
@@ -49,7 +53,7 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
-        validarUsuario(usuarioDTO);
+        validacaoUsuario.validarUsuario(usuarioDTO);
         if (usuarioDTO.getVeiculosDTO() != null) {
             veiculoService.validarVeiculo(usuarioDTO.getVeiculosDTO());
         }
@@ -78,15 +82,4 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    private void validarUsuario(UsuarioDTO usuarioDTO) {
-        if (usuarioDTO.getNome() == null || usuarioDTO.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do usuário não pode ser vazio");
-        }
-        if (usuarioDTO.getEmail() == null || !usuarioDTO.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            throw new IllegalArgumentException("Email inválido");
-        }
-        if (usuarioDTO.getCpf() == null || !usuarioDTO.getCpf().matches("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$")) {
-            throw new IllegalArgumentException("CPF inválido. Use o formato: XXX.XXX.XXX-XX");
-        }
-    }
 }

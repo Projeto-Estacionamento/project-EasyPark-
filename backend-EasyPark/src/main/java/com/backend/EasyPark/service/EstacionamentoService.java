@@ -1,19 +1,21 @@
 package com.backend.EasyPark.service;
 
-import com.backend.EasyPark.dto.RegistrarEntradaDTO;
+import com.backend.EasyPark.dto.EstacionamentoDTO;
 import com.backend.EasyPark.entities.*;
 import com.backend.EasyPark.enums.TipoTicket;
 import com.backend.EasyPark.enums.TipoVeiculo;
 import com.backend.EasyPark.repository.ConfiguracaoSistemaRepository;
 import com.backend.EasyPark.repository.TicketRepository;
 import com.backend.EasyPark.repository.VeiculoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
-public class RegistrarEntradaService {
+public class EstacionamentoService {
 
     @Autowired
     private VeiculoRepository veiculoRepository;
@@ -25,57 +27,62 @@ public class RegistrarEntradaService {
     private ConfiguracaoSistemaRepository configuracaoSistemaRepository;
 
 
-    public RegistrarEntradaDTO RegistrarEntradaDTO(String placaVeiculo) {
-    Veiculo veiculo = veiculoRepository.findByPlaca(placaVeiculo);
+    public EstacionamentoDTO RegistrarEntradaDTO(String placaVeiculo) {
+    Optional<Veiculo> veiculo = veiculoRepository.findByPlaca(placaVeiculo);
 
-    if (veiculo == null) {
-        return new RegistrarEntradaDTO(false, criarTicketAvulso(placaVeiculo), null);
+    if (veiculo.isEmpty()){
+        throw new EntityNotFoundException("O veiculo com a placa " + veiculo.get().getPlaca()
+                + " não foi encontrada" );
     }
 
-        RegistrarEntradaDTO validacaoPlano = validarPlanoVeiculo(veiculo);
+    if (veiculo.get().getPlaca() == null) {
+        return new EstacionamentoDTO(false, criarTicketAvulso(placaVeiculo), null);
+    }
+
+        EstacionamentoDTO validacaoPlano = validarPlanoVeiculo(veiculo.get());
     if (!validacaoPlano.isSucesso()) {
         return validacaoPlano;
     }
 
-        RegistrarEntradaDTO validacaoVaga = verificarVagaDisponivel(veiculo);
+        EstacionamentoDTO validacaoVaga = verificarVagaDisponivel(veiculo.get());
     if (!validacaoVaga.isSucesso()) {
         return validacaoVaga;
     }
 
-    Ticket ticket = criarTicketMensalista(veiculo);
-    return new RegistrarEntradaDTO(true, "Entrada registrada com sucesso.", ticket);
+    Ticket ticket = criarTicketMensalista(veiculo.get());
+    return new EstacionamentoDTO(true, "Entrada registrada com sucesso.", ticket);
 }
 
-private RegistrarEntradaDTO validarPlanoVeiculo(Veiculo veiculo) {
+private EstacionamentoDTO validarPlanoVeiculo(Veiculo veiculo) {
     Usuario usuario = veiculo.getUsuario();
     Plano plano = usuario.getPlanos().stream()
             .filter(p -> p.getTipoPlano().name().equals(veiculo.getTipoVeiculo().name()))
             .findFirst().orElse(null);
 
     if (plano == null) {
-        return new RegistrarEntradaDTO(false, "Usuário não possui plano compatível com o tipo de veículo.", null);
+        return new EstacionamentoDTO(false, "Usuário não possui plano compatível com o tipo de veículo.", null);
     }
 
     LocalDateTime dataAtual = LocalDateTime.now();
     LocalDateTime dataPagamento = plano.getDataPagamento();
     if (dataPagamento == null || dataPagamento.plusDays(30).isBefore(dataAtual)) {
-        return new RegistrarEntradaDTO(false, "Plano vencido. Favor regularizar o pagamento.", null);
+        return new EstacionamentoDTO(false, "Plano vencido. Favor regularizar o pagamento.", null);
     }
 
     if (veiculo.isOcupandoVaga()) {
-        return new RegistrarEntradaDTO(false, "O veículo já está ocupando uma vaga no estacionamento.", null);
+        return new EstacionamentoDTO(false, "O veículo já está ocupando uma vaga no estacionamento.", null);
     }
 
-    return new RegistrarEntradaDTO(true, "Plano válido.", null);
+    return new EstacionamentoDTO(true, "Plano válido.", null);
 }
 
-private RegistrarEntradaDTO verificarVagaDisponivel(Veiculo veiculo) {
+private EstacionamentoDTO verificarVagaDisponivel(Veiculo veiculo) {
     boolean vagaDisponivel = verificarVagasDisponiveis(veiculo.getTipoVeiculo());
     if (!vagaDisponivel) {
-        return new RegistrarEntradaDTO(false, "Não há vagas disponíveis para o tipo de veículo.", null);
+        return new EstacionamentoDTO(false, "Não há vagas disponíveis para o tipo de veículo.", null);
     }
 
-    return new RegistrarEntradaDTO(true, "Vaga disponível.", null);
+    return new EstacionamentoDTO(true, "Vaga disponível.", null);
 }
 
 private String criarTicketAvulso(String placaVeiculo) {
