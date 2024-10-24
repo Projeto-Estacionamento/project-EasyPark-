@@ -1,13 +1,10 @@
 package com.backend.EasyPark.entities;
 
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 
 @Entity
@@ -26,6 +23,7 @@ public class ConfiguracaoSistema {
    private double valorDiariaCarro;
    private double valorDiariaMoto;
    private double horaMaximaAvulso;
+
 
 //    qtdMoto: Quantidade total de vagas para motos.
 //    qtdCarro: Quantidade total de vagas para carros.
