@@ -1,8 +1,8 @@
 package com.backend.EasyPark.service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,13 +41,14 @@ public class TicketService {
 
 
     public TicketDTO criarTicket(TicketDTO ticketDTO) {
+        // Cria um novo ticket e salva no banco de dados
         Ticket ticket = ticketMapper.toEntity(ticketDTO);
         ticket.setHoraChegada(LocalDateTime.now());
         Ticket savedTicket = ticketRepository.save(ticket);
         return ticketMapper.toDTO(savedTicket);
     }
 
-    public TicketDTO buscarTicketPorId(Long id) {
+    public TicketDTO buscarTicketPorId(Integer id) {
         return ticketRepository.findById(id)
                 .map(ticketMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
@@ -59,25 +60,21 @@ public class TicketService {
                 .collect(Collectors.toList());
     }
 
-    public TicketDTO finalizarTicket(Long id) {
+    public TicketDTO finalizarTicket(Integer id) {
+        // Finaliza um ticket, calculando o tempo total e o valor a pagar
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
         ticket.setHoraSaida(LocalDateTime.now());
+        ticket.setTotalHoras(Duration.between(ticket.getHoraChegada(), ticket.getHoraSaida()));
         BigDecimal valorTotal = calcularValorTicket(ticket);
         ticket.setValorTotalPagar(valorTotal.doubleValue());
         Ticket updatedTicket = ticketRepository.save(ticket);
         return ticketMapper.toDTO(updatedTicket);
     }
 
-    public List<TicketDTO> buscarTicketsPorUsuario(Long usuarioId) {
-        return ticketRepository.findByUsuarioId(usuarioId).stream()
-                .map(ticketMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
     public BigDecimal calcularValorTicket(Ticket ticket) {
         BigDecimal valorPorHora = configuracaoSistemaService.getValorPorHora();
-        long horasEstacionado = ChronoUnit.HOURS.between(ticket.getHoraChegada(), ticket.getHoraSaida());
+        long horasEstacionado = ticket.getTotalHoras().toHours();
         return valorPorHora.multiply(BigDecimal.valueOf(horasEstacionado));
     }
 
