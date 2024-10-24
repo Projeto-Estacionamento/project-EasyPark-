@@ -1,11 +1,13 @@
 package com.backend.EasyPark.util;
 
+import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.backend.EasyPark.dto.UsuarioDTO;
 import com.backend.EasyPark.entities.Usuario;
 
+import java.util.List;
 
 @Component
 public class UsuarioMapper {
@@ -27,16 +29,21 @@ public class UsuarioMapper {
         usuario.setEmail(dto.getEmail());
         usuario.setTelefone(dto.getTelefone());
         usuario.setCpf(dto.getCpf());
-        usuario.setPagamentoPendente(dto.isPagamentoPendente());
-        
+        //usuario.setPagamentoPendente(dto.isPagamentoPendente());
+
+        // Mapeia o endereço
         if (dto.getEnderecoDTO() != null) {
             usuario.setEndereco(enderecoMapper.toEntity(dto.getEnderecoDTO()));
         }
-        
-        if (dto.getVeiculoDTO() != null) {
-            usuario.setVeiculo(veiculoMapper.toEntity(dto.getVeiculoDTO()));
+
+        // Mapeia os veículos
+        if (dto.getVeiculosDTO() != null) {
+            List<Veiculo> veiculos = veiculoMapper.toEntity(dto.getVeiculosDTO());
+            usuario.setVeiculos(veiculos);
+        } else {
+            usuario.setVeiculos(null); // Define como null se não houver veículos
         }
-        
+
         return usuario;
     }
 
@@ -51,16 +58,20 @@ public class UsuarioMapper {
         dto.setEmail(entity.getEmail());
         dto.setTelefone(entity.getTelefone());
         dto.setCpf(entity.getCpf());
-        dto.setPagamentoPendente(entity.isPagamentoPendente());
-        
+       // dto.setPagamentoPendente(entity.isPagamentoPendente());
+
+        // Mapeia o endereço
         if (entity.getEndereco() != null) {
             dto.setEnderecoDTO(enderecoMapper.toDTO(entity.getEndereco()));
         }
-        
-        if (entity.getVeiculo() != null) {
-            dto.setVeiculoDTO(veiculoMapper.toDTO(entity.getVeiculo()));
+
+        // Mapeia os veículos
+        if (entity.getVeiculos() != null) {
+            dto.setVeiculosDTO(veiculoMapper.toDTO(entity.getVeiculos()));
+        } else {
+            dto.setVeiculosDTO(null); // Define como null se não houver veículos
         }
-        
+
         return dto;
     }
 
@@ -73,8 +84,9 @@ public class UsuarioMapper {
         usuario.setEmail(dto.getEmail());
         usuario.setTelefone(dto.getTelefone());
         usuario.setCpf(dto.getCpf());
-        usuario.setPagamentoPendente(dto.isPagamentoPendente());
-        
+       // usuario.setPagamentoPendente(dto.isPagamentoPendente());
+
+        // Atualiza o endereço
         if (dto.getEnderecoDTO() != null) {
             if (usuario.getEndereco() == null) {
                 usuario.setEndereco(enderecoMapper.toEntity(dto.getEnderecoDTO()));
@@ -84,15 +96,16 @@ public class UsuarioMapper {
         } else {
             usuario.setEndereco(null);
         }
-        
-        if (dto.getVeiculoDTO() != null) {
-            if (usuario.getVeiculo() == null) {
-                usuario.setVeiculo(veiculoMapper.toEntity(dto.getVeiculoDTO()));
+
+        // Atualiza os veículos
+        if (dto.getVeiculosDTO() != null) {
+            if (usuario.getVeiculos() == null) {
+                usuario.setVeiculos(veiculoMapper.toEntity(dto.getVeiculosDTO()));
             } else {
-                veiculoMapper.updateVeiculoFromDTO(usuario.getVeiculo(), dto.getVeiculoDTO());
+                veiculoMapper.updateVeiculoFromDTO(usuario.getVeiculos(), dto.getVeiculosDTO());
             }
         } else {
-            usuario.setVeiculo(null);
+            usuario.setVeiculos(null); // Define como null se não houver veículos
         }
     }
 }

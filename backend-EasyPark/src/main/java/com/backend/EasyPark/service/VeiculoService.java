@@ -1,5 +1,6 @@
 package com.backend.EasyPark.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -115,9 +116,13 @@ public class VeiculoService {
         }
     }
 
-    public void validarVeiculo(VeiculoDTO veiculoDTO) {
-        if (veiculoDTO.getPlaca() == null || !veiculoDTO.getPlaca().matches("^[A-Z]{3}\\d[A-Z0-9]\\d{2}$")) {
-            throw new IllegalArgumentException("Placa do veículo inválida");
+    public void validarVeiculo(List<VeiculoDTO> veiculoDTO) {
+        List<VeiculoDTO> novaLista = new ArrayList<>();
+        for (VeiculoDTO veiculo : veiculoDTO) {
+            if (veiculo.getPlaca() == null || !veiculo.getPlaca().matches("^[A-Z]{3}\\d[A-Z0-9]\\d{2}$")) {
+                throw new IllegalArgumentException("Placa do veículo inválida: " + veiculo.getPlaca());
+            }
+            novaLista.add(veiculo);
         }
     }
 }

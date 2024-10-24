@@ -1,6 +1,7 @@
 package com.backend.EasyPark.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,4 +16,6 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     List<Veiculo> findByOcupandoVagaFalse();
     
     List<Veiculo> findByTipoVeiculo(String tipoVeiculo);
+
+    Optional<Veiculo> findByPlaca(String placaVeiculo);
 }
