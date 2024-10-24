@@ -4,8 +4,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.entities.Veiculo;
+import com.backend.EasyPark.repository.VeiculoRepository;
+import com.backend.EasyPark.util.validacao.ValidacaoVeiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +24,21 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final ConfiguracaoSistemaService configuracaoSistemaService;
     private final TicketMapper ticketMapper;
+    private final VeiculoRepository veiculoRepository;
+    private ValidacaoVeiculo validarVeiculo = new ValidacaoVeiculo();
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
                          ConfiguracaoSistemaService configuracaoSistemaService,
-                         TicketMapper ticketMapper) {
+                         TicketMapper ticketMapper,
+                         VeiculoRepository veiculoRepository) {
         this.ticketRepository = ticketRepository;
         this.configuracaoSistemaService = configuracaoSistemaService;
         this.ticketMapper = ticketMapper;
+        this.veiculoRepository = veiculoRepository;
     }
+
+
 
     public TicketDTO criarTicket(TicketDTO ticketDTO) {
         Ticket ticket = ticketMapper.toEntity(ticketDTO);
@@ -69,5 +79,12 @@ public class TicketService {
         BigDecimal valorPorHora = configuracaoSistemaService.getValorPorHora();
         long horasEstacionado = ChronoUnit.HOURS.between(ticket.getHoraChegada(), ticket.getHoraSaida());
         return valorPorHora.multiply(BigDecimal.valueOf(horasEstacionado));
+    }
+
+    public Optional<Ticket> registrarEntrada (Veiculo placa) {
+        validarVeiculo.verificarSeVeiculoEstaCadastrado(placa.getPlaca());
+
+
+        return null;
     }
 }
