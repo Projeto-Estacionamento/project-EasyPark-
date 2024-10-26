@@ -1,3 +1,4 @@
+/*
 package com.backend.EasyPark.repository;
 
 import java.time.LocalDateTime;
@@ -22,3 +23,4 @@ public interface AvulsoRepository extends JpaRepository<Avulso, Long> {
     
     Optional<Avulso> findTopByPlacaVeiculoOrderByHoraChegadaDesc(String placaVeiculo);
 }
+*/

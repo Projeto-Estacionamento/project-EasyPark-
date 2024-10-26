@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,5 +18,5 @@ public class UsuarioDTO {
     private String cpf;
     private boolean pagamentoPendente;
     private EnderecoDTO enderecoDTO;
-    private VeiculoDTO veiculoDTO;
+    private List<VeiculoDTO> veiculosDTO;
 }

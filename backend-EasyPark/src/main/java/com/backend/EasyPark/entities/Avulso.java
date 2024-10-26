@@ -25,7 +25,7 @@ public class Avulso {
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
     private LocalDateTime qtdHora;
-    private boolean valorTotal;
+    private double valorTotal;
 
 
 

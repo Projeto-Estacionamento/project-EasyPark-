@@ -1,3 +1,4 @@
+/*
 package com.backend.EasyPark.service;
 
 import java.time.LocalDateTime;
@@ -73,3 +74,4 @@ public class AvulsoService {
         return avulsoMapper.toDTO(avulso);
     }
 }
+*/

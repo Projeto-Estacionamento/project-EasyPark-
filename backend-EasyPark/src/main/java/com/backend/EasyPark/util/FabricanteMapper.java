@@ -44,4 +44,6 @@ public class FabricanteMapper {
         fabricante.setMarca(dto.getMarca());
         fabricante.setAno(dto.getAno());
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.backend.EasyPark.dto;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import com.backend.EasyPark.enums.TipoTicket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,6 @@ public class TicketDTO {
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
     private Duration totalHoras;
-    private double valorTotalPagar;
+    private TipoTicket tipoTicket;
+
 }
