@@ -2,6 +2,7 @@ package com.backend.EasyPark.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import com.backend.EasyPark.enums.TipoVeiculo;
 import org.springframework.data.jpa.repository.JpaRepository;

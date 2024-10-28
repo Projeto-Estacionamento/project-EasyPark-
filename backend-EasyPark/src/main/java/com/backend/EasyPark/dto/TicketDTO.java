@@ -18,5 +18,7 @@ public class TicketDTO {
     private LocalDateTime horaSaida;
     private Duration totalHoras;
     private TipoTicket tipoTicket;
+    private double valorTotalPagar;
+
 
 }

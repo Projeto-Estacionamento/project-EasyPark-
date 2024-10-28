@@ -3,10 +3,12 @@ package com.backend.EasyPark.service;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.repository.VeiculoRepository;
 import com.backend.EasyPark.util.validacao.ValidacaoVeiculo;
@@ -26,6 +28,7 @@ public class TicketService {
     private final TicketMapper ticketMapper;
     private final VeiculoRepository veiculoRepository;
     private ValidacaoVeiculo validarVeiculo = new ValidacaoVeiculo();
+    private VeiculoService veiculoService;
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
@@ -41,6 +44,11 @@ public class TicketService {
 
 
     public TicketDTO criarTicket(TicketDTO ticketDTO) {
+        List<VeiculoDTO> veiculos = veiculoService.listarVeiculos();
+
+        validarVeiculo.verificarSeVeiculoEstaCadastrado(ticketDTO);
+        veiculoRepository.findByOcupandoVagaFalse();
+
         // Cria um novo ticket e salva no banco de dados
         Ticket ticket = ticketMapper.toEntity(ticketDTO);
         ticket.setHoraChegada(LocalDateTime.now());
@@ -78,10 +86,5 @@ public class TicketService {
         return valorPorHora.multiply(BigDecimal.valueOf(horasEstacionado));
     }
 
-    public Optional<Ticket> registrarEntrada (Veiculo placa) {
-        validarVeiculo.verificarSeVeiculoEstaCadastrado(placa.getPlaca());
 
-
-        return null;
-    }
 }

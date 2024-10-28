@@ -3,6 +3,7 @@ package com.backend.EasyPark.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.backend.EasyPark.dto.VeiculoDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

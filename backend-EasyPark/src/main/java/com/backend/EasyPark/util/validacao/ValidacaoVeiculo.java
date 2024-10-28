@@ -1,21 +1,24 @@
 package com.backend.EasyPark.util.validacao;
 
+
 import com.backend.EasyPark.dto.EstacionamentoDTO;
+import com.backend.EasyPark.dto.TicketDTO;
 import com.backend.EasyPark.entities.*;
-import com.backend.EasyPark.enums.TipoVeiculo;
-import com.backend.EasyPark.repository.ConfiguracaoSistemaRepository;
+import com.backend.EasyPark.enums.TipoTicket;
+
 import com.backend.EasyPark.repository.TicketRepository;
 import com.backend.EasyPark.repository.VeiculoRepository;
+import com.backend.EasyPark.util.TicketMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class ValidacaoVeiculo {
-
-    private VeiculoRepository veiculoRepository;
+    private  TicketRepository ticketRepository;
+    private  VeiculoRepository veiculoRepository;
+    private  TicketMapper ticketMapper;
 
     //public Veiculo verificarVagaDisponivel(Veiculo veiculo) {
     //  Veiculo vagaDisponivel = verificarVagasDisponiveis(veiculo.getTipoVeiculo());
@@ -25,23 +28,60 @@ public class ValidacaoVeiculo {
     // return vagaDisponivel;
     // }
 
-    public Optional<Veiculo> verificarSeVeiculoEstaCadastrado(String placaVeiculo) {
-        Optional<Veiculo> verificarPlaca = veiculoRepository.findByPlaca(placaVeiculo);
-        if (verificarPlaca.isEmpty()) {
-            throw new EntityNotFoundException("O veiculo com a placa " + placaVeiculo
-                    + " não foi encontrada");
+    public void verificarSeVeiculoEstaCadastrado(TicketDTO ticketDTO) {
+        Optional<Veiculo> verificarVeiculo = veiculoRepository.findByPlaca(ticketDTO.getPlacaVeiculo());
+
+        if (verificarVeiculo.isEmpty()) {
+            criarTicketAvulso(ticketDTO);
+        } else {
+            verificarVeiculo.ifPresent(this::validarPlanoVeiculo);
+
+            criarTicketMensalista(ticketDTO);
         }
-        return verificarPlaca;
+
     }
 
+    private Ticket criarTicketMensalista(TicketDTO ticketDTO) {
+        Ticket ticket = new Ticket();
+        Veiculo veiculo = new Veiculo();
+        ticket.setPlacaVeiculo(ticket.getPlacaVeiculo());
+        ticket.setHoraChegada(LocalDateTime.now());
+        ticket.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
+        ticketRepository.save(ticket);
 
+        veiculo.setOcupandoVaga(true);
+        veiculoRepository.save(veiculo);
 
-    public void validarPlanoVeiculo(Veiculo veiculo) {
+        return ticket;
+    }
+
+    private Ticket criarTicketAvulso(TicketDTO ticketDTO) {
+        Veiculo veiculo = new Veiculo();
+        Ticket ticket =  ticketMapper.toEntity(ticketDTO);
+        ticket.setPlacaVeiculo(ticketDTO.getPlacaVeiculo());
+        ticket.setHoraChegada(LocalDateTime.now());
+        ticket.setTipoTicket(TipoTicket.TICKET_AVULSO);
+        veiculo.setOcupandoVaga(true);
+        ticketRepository.save(ticket);
+
+        return ticket;
+    }
+
+    private void validarPlanoVeiculo(Veiculo veiculo) {
         Usuario usuario = veiculo.getUsuario();
         for (Plano plano : usuario.getPlanos()) {
             if (!plano.getTipoPlano().equals(veiculo.getTipoVeiculo())) {
                 throw new EntityNotFoundException("O plano não é válido para o tipo de veículo" + veiculo.getTipoVeiculo());
             }
+        }
+        LocalDateTime dataAtual = LocalDateTime.now();
+        LocalDateTime dataPagamento = usuario.getPlanos().getLast().getDataPagamento();
+        if (dataPagamento == null || dataPagamento.plusDays(30).isBefore(dataAtual)) {
+           throw new EntityNotFoundException("Plano vencido. Favor regularizar o pagamento.");
+        }
+
+        if (veiculo.isOcupandoVaga()) {
+            throw new EntityNotFoundException("O veículo já está ocupando uma vaga no estacionamento.");
         }
     }
 
