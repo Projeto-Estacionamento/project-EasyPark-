@@ -2,6 +2,7 @@ package com.backend.EasyPark.util;
 
 import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.backend.EasyPark.dto.UsuarioDTO;
@@ -16,6 +17,7 @@ public class UsuarioMapper {
     private EnderecoMapper enderecoMapper;
 
     @Autowired
+    @Lazy
     private VeiculoMapper veiculoMapper;
 
     public Usuario toEntity(UsuarioDTO dto) {

@@ -11,7 +11,7 @@ import com.backend.EasyPark.entities.Fabricante;
 @Repository
 public interface FabricanteRepository extends JpaRepository<Fabricante, Long> {
     
-    Optional<Fabricante> findByMarca(String marca);
+    Fabricante findByMarca(String marca);
     
     List<Fabricante> findByModeloContainingIgnoreCase(String modelo);
     

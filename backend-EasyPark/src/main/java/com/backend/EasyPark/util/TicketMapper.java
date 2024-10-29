@@ -1,6 +1,8 @@
 package com.backend.EasyPark.util;
 
 import com.backend.EasyPark.enums.TipoTicket;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import org.springframework.stereotype.Component;
 
 import com.backend.EasyPark.dto.TicketDTO;
@@ -13,35 +15,16 @@ import java.time.LocalDateTime;
 public class TicketMapper {
 
     public Ticket toEntity(TicketDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        Ticket ticket = new Ticket();
-        ticket.setId(dto.getId());
-        ticket.setPlacaVeiculo(dto.getPlacaVeiculo());
-        ticket.setHoraChegada(dto.getHoraChegada());
-        ticket.setHoraSaida(dto.getHoraSaida());
-        ticket.setTotalHoras(dto.getTotalHoras());
-        ticket.setValorTotalPagar(dto.getValorTotalPagar());
+        Ticket ticket = new Ticket(dto.getId(), dto.getPlacaVeiculo(), dto.getHoraChegada(),
+                dto.getHoraSaida(), dto.getTipoTicket(), dto.getTotalHoras(), dto.getValorTotalPagar());
 
         return ticket;
     }
 
     public TicketDTO toDTO(Ticket entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        return new TicketDTO(
-            entity.getId(),
-            entity.getPlacaVeiculo(),
-            entity.getHoraChegada(),
-            entity.getHoraSaida(),
-            entity.getTotalHoras(),
-            entity.getTipoTicket(),
-            entity.getValorTotalPagar()
-        );
+        TicketDTO dto = new TicketDTO(entity.getId(), entity.getPlacaVeiculo(), entity.getHoraChegada(), entity.getHoraSaida()
+        ,entity.getTotalHoras(),entity.getTipoTicket(),entity.getValorTotalPagar());
+        return dto;
     }
 
 

@@ -1,6 +1,7 @@
 package com.backend.EasyPark.util;
 
 import com.backend.EasyPark.dto.FabricanteDTO; // Certifique-se de que você tenha esta importação
+import com.backend.EasyPark.dto.UsuarioDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class VeiculoMapper {
 
     @Autowired
     private FabricanteMapper fabricanteMapper; // Injeção do fabricanteMapper
+    @Autowired
+    private UsuarioMapper usuarioMapper;
 
     public Veiculo toEntity(VeiculoDTO dto) {
         if (dto == null) {
@@ -30,6 +33,11 @@ public class VeiculoMapper {
         if (dto.getFabricanteDTO() != null) {
             veiculo.setFabricante(fabricanteMapper.toEntity(dto.getFabricanteDTO()));
         }
+
+        if (dto.getUsuarioDTO() != null) {
+            veiculo.setUsuario(usuarioMapper.toEntity(dto.getUsuarioDTO()));
+        }
+
 
         return veiculo;
     }
@@ -48,6 +56,10 @@ public class VeiculoMapper {
         // Mapeia o fabricante
         if (entity.getFabricante() != null) {
             dto.setFabricanteDTO(fabricanteMapper.toDTO(entity.getFabricante()));
+        }
+
+        if (entity.getUsuario() != null) {
+            dto.setUsuarioDTO(usuarioMapper.toDTO(entity.getUsuario()));
         }
 
         return dto;

@@ -11,8 +11,8 @@ import com.backend.EasyPark.entities.Veiculo;
 
 @Repository
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
+
     List<Veiculo> findByOcupandoVagaTrue();
-    
     // Método adicional que pode ser útil
     List<Veiculo> findByOcupandoVagaFalse();
     
