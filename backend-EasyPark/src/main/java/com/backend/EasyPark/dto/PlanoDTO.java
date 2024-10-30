@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlanoDTO {
-    private Long id;
+    private Integer id;
     private TipoPlano tipoPlano;
     private LocalDateTime dataPagamento;
     private LocalDateTime dataVencimento; // Adicionar qual o tipo de veiculo para o plano se é carro ou moto

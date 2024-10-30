@@ -1,5 +1,7 @@
 package com.backend.EasyPark.util;
 
+import com.backend.EasyPark.dto.PlanoDTO;
+import com.backend.EasyPark.entities.Plano;
 import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -20,23 +22,19 @@ public class UsuarioMapper {
     @Lazy
     private VeiculoMapper veiculoMapper;
 
+    private PlanoMapper planoMapper;
+
     public Usuario toEntity(UsuarioDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        Usuario usuario = new Usuario();
-        usuario.setId(dto.getId());
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setTelefone(dto.getTelefone());
-        usuario.setCpf(dto.getCpf());
-        //usuario.setPagamentoPendente(dto.isPagamentoPendente());
-
+        Usuario usuario = new Usuario(
+                dto.getId(),
+                dto.getNome(),
+                dto.getEmail(),
+                dto.getTelefone(),
+                dto.getCpf(),
+                enderecoMapper.toEntity(dto.getEnderecoDTO())
+        );
         // Mapeia o endereço
-        if (dto.getEnderecoDTO() != null) {
-            usuario.setEndereco(enderecoMapper.toEntity(dto.getEnderecoDTO()));
-        }
+        usuario.setEndereco(enderecoMapper.toEntity(dto.getEnderecoDTO()));
 
         // Mapeia os veículos
         if (dto.getVeiculosDTO() != null) {
@@ -44,6 +42,14 @@ public class UsuarioMapper {
             usuario.setVeiculos(veiculos);
         } else {
             usuario.setVeiculos(null); // Define como null se não houver veículos
+        }
+
+        // Mapeia os planos, se existir um `PlanoMapper`
+        if (dto.getPlanosDTO() != null) {
+            List<Plano> planos = planoMapper.toPlanoList(dto.getPlanosDTO());
+            usuario.setPlanos(planos);
+        } else {
+            usuario.setPlanos(null); // Define como null se não houver planos
         }
 
         return usuario;

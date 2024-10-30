@@ -23,7 +23,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     
     //List<Ticket> findByStatusPagamento(boolean statusPagamento);
 
-   // int countByTipoVeiculo(TipoVeiculo tipoVeiculo);
+   // String countByTipoVeiculo(TipoVeiculo tipoVeiculo);
 
     Optional<Ticket> findByPlacaVeiculoAndHoraSaidaIsNull(String placaVeiculo);
 }

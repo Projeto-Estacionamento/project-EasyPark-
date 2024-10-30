@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ConfiguracaoSistema {
 
    @Id
-   private Long id = 1L;
+   private Integer id = 1;
 
    private int qtdMoto;
    private int qtdCarro;

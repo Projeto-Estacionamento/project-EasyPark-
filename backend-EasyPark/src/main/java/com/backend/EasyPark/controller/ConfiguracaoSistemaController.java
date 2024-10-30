@@ -36,7 +36,7 @@ public class ConfiguracaoSistemaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ConfiguracaoSistemaDTO> atualizarConfiguracao(@PathVariable Long id, @RequestBody ConfiguracaoSistemaDTO configuracaoDTO) {
+    public ResponseEntity<ConfiguracaoSistemaDTO> atualizarConfiguracao(@PathVariable Integer id, @RequestBody ConfiguracaoSistemaDTO configuracaoDTO) {
         ConfiguracaoSistemaDTO configuracaoAtualizada = configuracaoSistemaService.atualizarConfiguracao(id, configuracaoDTO);
         return ResponseEntity.ok(configuracaoAtualizada);
     }

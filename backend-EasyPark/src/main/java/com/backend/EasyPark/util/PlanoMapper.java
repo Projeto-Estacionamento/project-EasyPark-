@@ -32,19 +32,19 @@ public class PlanoMapper {
                 ,plano.getDataVencimento(),plano.getValorMensal(), usuarioMapper.toDTO(plano.getUsuario()));
         return planoDTO;
     }
-    // Converte uma lista de Planos para uma lista de PlanoDTOs
-    public List<PlanoDTO> toEnderecoDtoList(List<Plano> planos) {
+    //Converte uma lista de Planos para uma lista de PlanoDTOs
+    public List<PlanoDTO> toPlanoListDTO(List<Plano> planos) {
         List<PlanoDTO> planoListDto = new ArrayList<PlanoDTO>();
         for (Plano plano : planos) {
             planoListDto.add(toDTO(plano));
         }
         return planoListDto;
     }
-
-    public List<Plano> toEnderecoList(List<PlanoDTO> planosDTO) {
-        List<Plano> listaPlano = new ArrayList<Plano>();
+    //
+    public List<Plano> toPlanoList(List<PlanoDTO> planosDTO) {
+        List<Plano> listaPlano = new ArrayList<>();
         for (PlanoDTO plano : planosDTO) {
-            listaPlano.add(toEntity(plano));
+            listaPlano.add(toEntity(plano)); // Método que converte PlanoDTO para Plano
         }
         return listaPlano;
     }

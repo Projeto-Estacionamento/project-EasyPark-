@@ -2,6 +2,7 @@ package com.backend.EasyPark.controller;
 
 import java.util.List;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Long id) {
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Integer id) throws EstacionamentoException {
         UsuarioDTO usuario = usuarioService.buscarUsuarioPorId(id);
         return ResponseEntity.ok(usuario);
     }
@@ -44,13 +45,13 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioDTO usuarioDTO) {
         UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioDTO);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarUsuario(@PathVariable Integer id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
     }

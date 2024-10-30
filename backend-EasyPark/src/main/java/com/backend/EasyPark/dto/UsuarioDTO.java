@@ -12,13 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 public class UsuarioDTO {
     
-    private Long id;
+    private Integer id;
     private String nome;
     private String email;
     private String telefone;
     private String cpf;
-    private boolean pagamentoPendente;
+    //private boolean pagamentoPendente;
     private EnderecoDTO enderecoDTO;
     private List<VeiculoDTO> veiculosDTO;
-    private List<Plano> planosDTO;
+    private List<PlanoDTO> planosDTO;
 }

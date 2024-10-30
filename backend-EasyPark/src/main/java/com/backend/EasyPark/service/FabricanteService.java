@@ -26,7 +26,7 @@ public class FabricanteService {
         return fabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
     }
 
-    public FabricanteDTO buscarPorId(Long id) {
+    public FabricanteDTO buscarPorId(Integer id) {
         return fabricanteRepository.findById(id)
                 .map(fabricanteMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Fabricante não encontrado"));
@@ -38,7 +38,7 @@ public class FabricanteService {
                 .collect(Collectors.toList());
     }
 
-    public FabricanteDTO atualizar(Long id, FabricanteDTO fabricanteDTO) {
+    public FabricanteDTO atualizar(Integer id, FabricanteDTO fabricanteDTO) {
         validarAno(fabricanteDTO.getAno());
         Fabricante fabricante = fabricanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fabricante não encontrado"));
@@ -46,7 +46,7 @@ public class FabricanteService {
         return fabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
     }
 
-    public void deletar(Long id) {
+    public void deletar(Integer id) {
         fabricanteRepository.deleteById(id);
     }
 

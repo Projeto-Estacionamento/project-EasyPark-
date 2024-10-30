@@ -17,7 +17,7 @@ public class Fabricante {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String modelo;
     private String marca;
     private int ano;

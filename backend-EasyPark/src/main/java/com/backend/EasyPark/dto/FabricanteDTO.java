@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FabricanteDTO {
 
-    private Long id;
+    private Integer id;
     private String modelo;
     private String marca;
     private int ano;

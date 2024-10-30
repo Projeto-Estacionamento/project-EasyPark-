@@ -1,6 +1,7 @@
 package com.backend.EasyPark.util.validacao;
 
 
+import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.dto.TicketDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.*;
@@ -80,7 +81,7 @@ public class ValidarVeiculo {
 
         VeiculoDTO veiculoDTO = buscarVeiculoPorPlaca(placaVeiculo);
 
-        List<Plano> planos = this.planoAssociadoAoUsuario(veiculoDTO); //plano associado ao usuario que recebe um veiculo
+        List<PlanoDTO> planos = this.planoAssociadoAoUsuario(veiculoDTO); //plano associado ao usuario que recebe um veiculo
 
         LocalDateTime dataAtual = LocalDateTime.now();
         LocalDateTime dataPagamento = planos.get(planos.size() - 1).getDataPagamento();
@@ -94,15 +95,15 @@ public class ValidarVeiculo {
 
     }
 
-    private List<Plano> planoAssociadoAoUsuario(VeiculoDTO veiculo) {
-        List<Plano> planos = veiculo.getUsuarioDTO().getPlanosDTO();
+    private List<PlanoDTO> planoAssociadoAoUsuario(VeiculoDTO veiculo) {
+        List<PlanoDTO> planos = veiculo.getUsuarioDTO().getPlanosDTO();
 
 
         if (planos.isEmpty()) {
             throw new EntityNotFoundException("Não existe plano associado ao usuário");
         }
 
-        for (Plano plano : planos) {
+        for (PlanoDTO plano : planos) {
             if (!plano.getTipoPlano().equals(veiculo.getTipoVeiculo())) {
                 throw new EntityNotFoundException("O plano não é válido para o tipo de veículo: " + veiculo.getTipoVeiculo());
             }

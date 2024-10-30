@@ -33,7 +33,7 @@ public class VeiculoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VeiculoDTO> buscarVeiculoPorId(@PathVariable Long id) {
+    public ResponseEntity<VeiculoDTO> buscarVeiculoPorId(@PathVariable Integer id) {
         // Lógica para buscar um veículo por ID
         VeiculoDTO veiculo = veiculoService.buscarVeiculoPorId(id);
         if (veiculo != null) {
@@ -51,7 +51,7 @@ public class VeiculoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VeiculoDTO> atualizarVeiculo(@PathVariable Long id, @RequestBody VeiculoDTO veiculoDTO) {
+    public ResponseEntity<VeiculoDTO> atualizarVeiculo(@PathVariable Integer id, @RequestBody VeiculoDTO veiculoDTO) {
         // Lógica para atualizar um veículo
         VeiculoDTO veiculoAtualizado = veiculoService.atualizarVeiculo(id, veiculoDTO);
         if (veiculoAtualizado != null) {

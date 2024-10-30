@@ -42,7 +42,7 @@ public class VeiculoService {
         return convertToDTO(savedVeiculo);
     }
 
-    public VeiculoDTO buscarVeiculoPorId(Long id) {
+    public VeiculoDTO buscarVeiculoPorId(Integer id) {
         return veiculoRepository.findById(id)
                 .map(this::convertToDTO)
                 .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
@@ -55,7 +55,7 @@ public class VeiculoService {
     }
 
     @Transactional
-    public VeiculoDTO atualizarVeiculo(Long id, VeiculoDTO veiculoDTO) {
+    public VeiculoDTO atualizarVeiculo(Integer id, VeiculoDTO veiculoDTO) {
         validarPlaca(veiculoDTO.getPlaca());
         return veiculoRepository.findById(id)
                 .map(veiculo -> {
@@ -65,8 +65,8 @@ public class VeiculoService {
                 .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
     }
 
-    @Transactional
-    public void deletarVeiculo(Long id) {
+
+    public void deletarVeiculo(Integer id) {
         veiculoRepository.deleteById(id);
     }
 

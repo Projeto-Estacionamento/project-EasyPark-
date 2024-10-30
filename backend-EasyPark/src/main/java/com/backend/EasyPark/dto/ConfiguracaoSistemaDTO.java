@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConfiguracaoSistemaDTO {
 
-    private Long id;
+    private Integer id;
     private int qtdMoto;
     private int qtdCarro;
     private double valorHoraMoto;

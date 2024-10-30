@@ -21,7 +21,7 @@ public class FabricanteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FabricanteDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<FabricanteDTO> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(fabricanteService.buscarPorId(id));
     }
 
@@ -31,12 +31,12 @@ public class FabricanteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FabricanteDTO> atualizar(@PathVariable Long id, @RequestBody FabricanteDTO fabricanteDTO) {
+    public ResponseEntity<FabricanteDTO> atualizar(@PathVariable Integer id, @RequestBody FabricanteDTO fabricanteDTO) {
         return ResponseEntity.ok(fabricanteService.atualizar(id, fabricanteDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         fabricanteService.deletar(id);
         return ResponseEntity.noContent().build();
     }

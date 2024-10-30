@@ -20,7 +20,7 @@ public class Avulso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String placaVeiculo;
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;

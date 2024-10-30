@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.enums.TipoTicket;
+import com.backend.EasyPark.repository.UsuarioRepository;
 import com.backend.EasyPark.repository.VeiculoRepository;
 import com.backend.EasyPark.util.VeiculoMapper;
 import com.backend.EasyPark.util.validacao.ValidarVeiculo;
@@ -29,6 +31,7 @@ public class TicketService {
     private final TicketMapper ticketMapper;
     private final ValidarVeiculo validarVeiculo;
     private final VeiculoMapper veiculoMapper;
+    private final UsuarioRepository usuarioRepository;
     private VeiculoRepository veiculoRepository;
 
     @Autowired
@@ -37,14 +40,14 @@ public class TicketService {
                          TicketMapper ticketMapper,
                          VeiculoRepository veiculoRepository,
                          ValidarVeiculo validarVeiculo,
-                         VeiculoMapper veiculoMapper
-    ) {
+                         VeiculoMapper veiculoMapper,
+                         UsuarioRepository usuarioRepository) {
         this.ticketRepository = ticketRepository;
         this.configuracaoSistemaService = configuracaoSistemaService;
         this.ticketMapper = ticketMapper;
         this.validarVeiculo = validarVeiculo;
         this.veiculoMapper = veiculoMapper;
-
+        this.usuarioRepository = usuarioRepository;
     }
 
     public TicketDTO criarTicket(TicketDTO ticket) {
@@ -87,20 +90,35 @@ public class TicketService {
     }
 
     public TicketDTO finalizarTicket(Integer id) {
-        //Finaliza um ticket, calculando o tempo total e o valor a pagar
+        // Finaliza um ticket, calculando o tempo total e o valor a pagar
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Ticket não encontrado"));
         ticket.setHoraSaida(LocalDateTime.now());
         ticket.setTotalHoras(Duration.between(ticket.getHoraChegada(), ticket.getHoraSaida()));
-        BigDecimal valorTotal = calcularValorTicket(ticket);
+
+        BigDecimal valorTotal = calcularValorTicket(ticketMapper.toDTO(ticket));
         ticket.setValorTotalPagar(valorTotal.doubleValue());
+
         Ticket updatedTicket = ticketRepository.save(ticket);
         return ticketMapper.toDTO(updatedTicket);
     }
 
-    public BigDecimal calcularValorTicket(Ticket ticket) {
+    public BigDecimal calcularValorTicket(TicketDTO ticket) {
+        // Verifica se o ticket é de um cliente mensalista ou se a permanência foi inferior a 15 minutos
+        boolean isMenosDe15Minutos = ticket.getTotalHoras().toMinutes() < 15;
+
+        if (isMenosDe15Minutos || ticket.getTipoTicket().equals(TipoTicket.TICKET_MENSALISTA)) {
+            return BigDecimal.ZERO; // Isenção de pagamento
+        }
+
         BigDecimal valorPorHora = configuracaoSistemaService.getValorPorHora();
         long horasEstacionado = ticket.getTotalHoras().toHours();
+
+        // Arredonda para cima qualquer fração de hora
+        if (ticket.getTotalHoras().toMinutesPart() > 0) {
+            horasEstacionado++;
+        }
+
         return valorPorHora.multiply(BigDecimal.valueOf(horasEstacionado));
     }
 

@@ -3,6 +3,7 @@ package com.backend.EasyPark.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,6 @@ public class UsuarioService {
 
     private ValidacaoUsuario validacaoUsuario;
 
-    @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
        validacaoUsuario.validarUsuario(usuarioDTO);
         if (usuarioDTO.getVeiculosDTO() != null) {
@@ -38,10 +38,10 @@ public class UsuarioService {
         return usuarioMapper.toDTO(savedUsuario);
     }
 
-    public UsuarioDTO buscarUsuarioPorId(Long id) {
+    public UsuarioDTO buscarUsuarioPorId(Integer id) throws EstacionamentoException {
         return usuarioRepository.findById(id)
                 .map(usuarioMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EstacionamentoException("Usuário não encontrado"));
     }
 
     public List<UsuarioDTO> listarUsuarios() {
@@ -50,8 +50,8 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
+
+    public UsuarioDTO atualizarUsuario(Integer id, UsuarioDTO usuarioDTO) {
         validacaoUsuario.validarUsuario(usuarioDTO);
         if (usuarioDTO.getVeiculosDTO() != null) {
             veiculoService.validarVeiculo(usuarioDTO.getVeiculosDTO());
@@ -64,8 +64,8 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
-    @Transactional
-    public void deletarUsuario(Long id) {
+
+    public void deletarUsuario(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
