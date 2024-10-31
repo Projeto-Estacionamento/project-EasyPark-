@@ -1,7 +1,6 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.entities.Plano;
+import com.backend.EasyPark.entities.UsuarioPlano;
 import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -46,10 +45,10 @@ public class UsuarioMapper {
 
         // Mapeia os planos, se existir um `PlanoMapper`
         if (dto.getPlanosDTO() != null) {
-            List<Plano> planos = planoMapper.toPlanoList(dto.getPlanosDTO());
-            usuario.setPlanos(planos);
+            List<UsuarioPlano> usuarioPlanos = planoMapper.toPlanoList(dto.getPlanosDTO());
+            usuario.setUsuarioPlanos(usuarioPlanos);
         } else {
-            usuario.setPlanos(null); // Define como null se não houver planos
+            usuario.setUsuarioPlanos(null); // Define como null se não houver planos
         }
 
         return usuario;

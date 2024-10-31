@@ -1,12 +1,12 @@
 package com.backend.EasyPark.enums;
 
-public enum TipoPlano {
+public enum CategoriaPlano {
     CARRO(100.0),  // valor para carro
     MOTO(50.0);    // valor para moto
 
     private final double valorMensal;
 
-    TipoPlano(double valorMensal) {
+    CategoriaPlano(double valorMensal) {
         this.valorMensal = valorMensal;
     }
 

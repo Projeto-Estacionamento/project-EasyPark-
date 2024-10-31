@@ -1,6 +1,5 @@
 package com.backend.EasyPark.dto;
 
-import com.backend.EasyPark.entities.Plano;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

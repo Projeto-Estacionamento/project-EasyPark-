@@ -1,8 +1,7 @@
 package com.backend.EasyPark.entities;
 
 
-import com.backend.EasyPark.enums.TipoPlano;
-import com.backend.EasyPark.enums.TipoVeiculo;
+import com.backend.EasyPark.enums.CategoriaPlano;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Plano {
+public class UsuarioPlano {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,7 @@ public class Plano {
     private LocalDateTime dataVencimento;
 
     @Enumerated(EnumType.STRING)
-    private TipoPlano tipoPlano; // Adicionar qual o tipo de veiculo para o plano se é carro ou moto
+    private CategoriaPlano categoriaPlano; // Adicionar qual o tipo de veiculo para o plano se é carro ou moto
 
 
     private BigDecimal valorMensal;

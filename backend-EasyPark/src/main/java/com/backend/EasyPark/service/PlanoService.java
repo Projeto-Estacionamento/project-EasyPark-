@@ -1,13 +1,12 @@
 package com.backend.EasyPark.service;
 
 import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.entities.Plano;
+import com.backend.EasyPark.entities.UsuarioPlano;
 import com.backend.EasyPark.repository.PlanoRepository;
 import com.backend.EasyPark.util.PlanoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,19 +20,19 @@ public class PlanoService {
 
 
     public PlanoDTO criarPlano(PlanoDTO planoDTO) {
-        Plano plano = planoRepository.save(planoMapper.toEntity(planoDTO));
-        return planoMapper.toDTO(plano);
+        UsuarioPlano usuarioPlano = planoRepository.save(planoMapper.toEntity(planoDTO));
+        return planoMapper.toDTO(usuarioPlano);
     }
 
     public PlanoDTO buscarPlanoPorId(Integer id) {
-        Plano plano = planoRepository.findById(id).orElse(null);
-        return planoMapper.toDTO(plano);
+        UsuarioPlano usuarioPlano = planoRepository.findById(id).orElse(null);
+        return planoMapper.toDTO(usuarioPlano);
     }
 
 
     public List<PlanoDTO> listarPlanos() {
-        List<Plano> planos = planoRepository.findAll();
-        return planoMapper.toPlanoListDTO(planos);
+        List<UsuarioPlano> usuarioPlanos = planoRepository.findAll();
+        return planoMapper.toPlanoListDTO(usuarioPlanos);
     }
 
 

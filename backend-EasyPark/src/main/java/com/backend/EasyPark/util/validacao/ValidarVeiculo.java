@@ -104,7 +104,7 @@ public class ValidarVeiculo {
         }
 
         for (PlanoDTO plano : planos) {
-            if (!plano.getTipoPlano().equals(veiculo.getTipoVeiculo())) {
+            if (!plano.getCategoriaPlano().equals(veiculo.getTipoVeiculo())) {
                 throw new EntityNotFoundException("O plano não é válido para o tipo de veículo: " + veiculo.getTipoVeiculo());
             }
         }

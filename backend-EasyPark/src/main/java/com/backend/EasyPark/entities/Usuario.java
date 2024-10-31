@@ -33,7 +33,7 @@ public class Usuario {
     private List<Veiculo> veiculos = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Plano> planos = new ArrayList<>();
+    private List<UsuarioPlano> usuarioPlanos = new ArrayList<>();
 
     public Usuario(Integer id, String nome, String email, String telefone, String cpf, Endereco endereco) {
         this.id = id;
@@ -50,8 +50,8 @@ public class Usuario {
         veiculos.add(veiculo);
     }
 
-    public void adicionarPlano(Plano plano) {
-        plano.setUsuario(this);
-        planos.add(plano);
+    public void adicionarPlano(UsuarioPlano usuarioPlano) {
+        usuarioPlano.setUsuario(this);
+        usuarioPlanos.add(usuarioPlano);
     }
 }
