@@ -22,6 +22,4 @@ public class Fabricante {
     private String marca;
     private int ano;
 
-
-
 }

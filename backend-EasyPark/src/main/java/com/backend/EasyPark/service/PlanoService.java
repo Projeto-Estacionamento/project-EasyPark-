@@ -1,13 +1,14 @@
 package com.backend.EasyPark.service;
 
 import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.entities.UsuarioPlano;
+import com.backend.EasyPark.entities.Plano;
 import com.backend.EasyPark.repository.PlanoRepository;
 import com.backend.EasyPark.util.PlanoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlanoService {
@@ -18,23 +19,20 @@ public class PlanoService {
     @Autowired
     private PlanoMapper planoMapper;
 
-
     public PlanoDTO criarPlano(PlanoDTO planoDTO) {
-        UsuarioPlano usuarioPlano = planoRepository.save(planoMapper.toEntity(planoDTO));
-        return planoMapper.toDTO(usuarioPlano);
+        Plano plano = planoMapper.toEntity(planoDTO);
+        plano = planoRepository.save(plano);
+        return planoMapper.toDTO(plano);
     }
 
     public PlanoDTO buscarPlanoPorId(Integer id) {
-        UsuarioPlano usuarioPlano = planoRepository.findById(id).orElse(null);
-        return planoMapper.toDTO(usuarioPlano);
+        Plano plano = planoRepository.findById(id).orElse(null);
+        return planoMapper.toDTO(plano);
     }
-
 
     public List<PlanoDTO> listarPlanos() {
-        List<UsuarioPlano> usuarioPlanos = planoRepository.findAll();
-        return planoMapper.toPlanoListDTO(usuarioPlanos);
+        return planoRepository.findAll().stream()
+                .map(planoMapper::toDTO)
+                .collect(Collectors.toList());
     }
-
-
-
 }

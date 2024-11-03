@@ -33,7 +33,6 @@ public class TicketMapper {
         if (dto == null) {
             return;
         }
-
         ticket.setPlacaVeiculo(dto.getPlacaVeiculo());
         ticket.setHoraChegada(dto.getHoraChegada());
         ticket.setHoraSaida(dto.getHoraSaida());

@@ -1,7 +1,5 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.dto.FabricanteDTO; // Certifique-se de que você tenha esta importação
-import com.backend.EasyPark.dto.UsuarioDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;

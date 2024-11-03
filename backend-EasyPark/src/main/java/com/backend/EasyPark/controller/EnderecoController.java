@@ -18,7 +18,7 @@ import com.backend.EasyPark.dto.EnderecoDTO;
 import com.backend.EasyPark.service.EnderecoService;
 
 @RestController
-@RequestMapping("/api/enderecos")
+@RequestMapping("/enderecos")
 public class EnderecoController {
 
     @Autowired

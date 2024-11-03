@@ -17,7 +17,7 @@ import com.backend.EasyPark.dto.ConfiguracaoSistemaDTO;
 import com.backend.EasyPark.service.ConfiguracaoSistemaService;
 
 @RestController
-@RequestMapping("/api/configuracoes")
+@RequestMapping("/configuracoes")
 public class ConfiguracaoSistemaController {
 
     @Autowired

@@ -16,5 +16,7 @@ public class ConfiguracaoSistemaDTO {
     private double valorHoraCarro;
     private double valorDiariaCarro;
     private double valorDiariaMoto;
+    private double valorMensalidadeMoto;
+    private double valorMensalidadeCarro;
     private double horaMaximaAvulso;
 }

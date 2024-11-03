@@ -19,5 +19,5 @@ public class UsuarioDTO {
     //private boolean pagamentoPendente;
     private EnderecoDTO enderecoDTO;
     private List<VeiculoDTO> veiculosDTO;
-    private List<PlanoDTO> planosDTO;
+    private List<UsuarioPlanoDTO> usuarioPlanosDto;
 }

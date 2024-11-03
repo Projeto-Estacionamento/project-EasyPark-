@@ -18,7 +18,7 @@ import com.backend.EasyPark.dto.TicketDTO;
 import com.backend.EasyPark.service.TicketService;
 
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("/tickets")
 public class TicketController {
 
     private final TicketService ticketService;

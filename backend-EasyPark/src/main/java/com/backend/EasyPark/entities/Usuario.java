@@ -1,6 +1,5 @@
 package com.backend.EasyPark.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,17 +22,16 @@ public class Usuario {
     private String email;
     private String telefone;
     private String cpf;
-    //private boolean pagamentoPendente;
-
+    
     @ManyToOne
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Veiculo> veiculos = new ArrayList<>();
+    @OneToMany(mappedBy = "veiculos", cascade = CascadeType.ALL)
+    private List<Veiculo> veiculos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<UsuarioPlano> usuarioPlanos = new ArrayList<>();
+    private List<UsuarioPlano> usuarioPlanos;
 
     public Usuario(Integer id, String nome, String email, String telefone, String cpf, Endereco endereco) {
         this.id = id;
@@ -43,7 +41,6 @@ public class Usuario {
         this.cpf = cpf;
         this.endereco = endereco;
     }
-//
 
     public void adicionarVeiculo(Veiculo veiculo) {
         veiculo.setUsuario(this);

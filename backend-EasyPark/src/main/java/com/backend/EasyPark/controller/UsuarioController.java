@@ -20,7 +20,7 @@ import com.backend.EasyPark.dto.UsuarioDTO;
 import com.backend.EasyPark.service.UsuarioService;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired

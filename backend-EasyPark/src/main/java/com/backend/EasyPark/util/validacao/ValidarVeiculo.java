@@ -1,8 +1,8 @@
 package com.backend.EasyPark.util.validacao;
 
 
-import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.dto.TicketDTO;
+import com.backend.EasyPark.dto.UsuarioPlanoDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.*;
 import com.backend.EasyPark.enums.TipoTicket;
@@ -30,16 +30,16 @@ public class ValidarVeiculo {
     private TicketMapper ticketMapper;
     private VeiculoMapper veiculoMapper;
 
-    public TicketDTO criarTicketPorPlaca(String placaVeiculo) {
-        try {
-            this.validarPlanoVeiculo(placaVeiculo);
-            return criarTicketMensalista(placaVeiculo);
-
-        } catch (EntityNotFoundException e) {
-            return criarTicketAvulso(placaVeiculo);
-        }
-
-    }
+//    public TicketDTO criarTicketPorPlaca(String placaVeiculo) {
+//        try {
+//            this.validarPlanoVeiculo(placaVeiculo);
+//            return criarTicketMensalista(placaVeiculo);
+//
+//        } catch (EntityNotFoundException e) {
+//            return criarTicketAvulso(placaVeiculo);
+//        }
+//
+//    }
 
     public TicketDTO criarTicketMensalista(String placaVeiculo) {
         Ticket ticket = new Ticket();
@@ -77,15 +77,14 @@ public class ValidarVeiculo {
         return ticketMapper.toDTO(ticketAtivo.get());
     }
 
-    public void validarPlanoVeiculo(String placaVeiculo) {
-
+    public void validarPlanoVeiculo(String placaVeiculo){
         VeiculoDTO veiculoDTO = buscarVeiculoPorPlaca(placaVeiculo);
 
-        List<PlanoDTO> planos = this.planoAssociadoAoUsuario(veiculoDTO); //plano associado ao usuario que recebe um veiculo
+        List<UsuarioPlanoDTO> planos = this.planoAssociadoAoUsuarioPlano(veiculoDTO); //plano associado ao usuario que recebe um veiculo
 
         LocalDateTime dataAtual = LocalDateTime.now();
-        LocalDateTime dataPagamento = planos.get(planos.size() - 1).getDataPagamento();
-        if (dataPagamento == null || dataPagamento.plusDays(30).isBefore(dataAtual)) {
+        LocalDateTime dataVencimento = planos.get(planos.size()- 1).getDataVencimento();
+        if (dataVencimento.isBefore(dataAtual)) {
             throw new EntityNotFoundException("Plano vencido. Favor regularizar o pagamento.");
         }
 
@@ -94,22 +93,21 @@ public class ValidarVeiculo {
         }
 
     }
+    //Metodo para verificar se o
+    private List<UsuarioPlanoDTO> planoAssociadoAoUsuarioPlano(VeiculoDTO veiculo) {
+        List<UsuarioPlanoDTO> usuarioPlanoDto = veiculo.getUsuarioDTO().getUsuarioPlanosDto();
 
-    private List<PlanoDTO> planoAssociadoAoUsuario(VeiculoDTO veiculo) {
-        List<PlanoDTO> planos = veiculo.getUsuarioDTO().getPlanosDTO();
-
-
-        if (planos.isEmpty()) {
+        if (usuarioPlanoDto == null || usuarioPlanoDto.isEmpty()) {
             throw new EntityNotFoundException("Não existe plano associado ao usuário");
         }
 
-        for (PlanoDTO plano : planos) {
-            if (!plano.getCategoriaPlano().equals(veiculo.getTipoVeiculo())) {
+        for (UsuarioPlanoDTO usuarioPlano : usuarioPlanoDto) {
+            if (!usuarioPlano.getPlano().getTipoPlano().equals(usuarioPlanoDto.get(usuarioPlanoDto.size()).getPlano().getTipoPlano())) { //não faz nada
                 throw new EntityNotFoundException("O plano não é válido para o tipo de veículo: " + veiculo.getTipoVeiculo());
             }
         }
 
-        return planos;
+        return usuarioPlanoDto;
     }
 
 }

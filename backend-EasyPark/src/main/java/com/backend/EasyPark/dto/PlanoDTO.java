@@ -1,24 +1,20 @@
 package com.backend.EasyPark.dto;
 
-
-import com.backend.EasyPark.enums.CategoriaPlano;
-
+import com.backend.EasyPark.enums.TipoPlano;
+import com.backend.EasyPark.enums.TipoVeiculo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlanoDTO {
     private Integer id;
-    private CategoriaPlano categoriaPlano;
-    private LocalDateTime dataPagamento;
-    private LocalDateTime dataVencimento; // Adicionar qual o tipo de veiculo para o plano se é carro ou moto
-    private BigDecimal valorMensal;
-    private UsuarioDTO usuarioDTO;
-
+    private TipoPlano tipoPlano;
+    private TipoVeiculo tipoVeiculo;
+    private double valorPlano;
+    private List<UsuarioPlanoDTO> usuarioPlanoDTOList;
 }
