@@ -12,11 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketDTO {
-    private int id;
+    private Integer id;
     private String placaVeiculo;
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
     private Duration totalHoras;
     private TipoTicket tipoTicket;
+    private double valorTotalPagar;
+
 
 }
