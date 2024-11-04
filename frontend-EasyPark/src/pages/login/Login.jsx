@@ -1,4 +1,4 @@
-import { Container } from "../../components/container/container";
+import { Container } from "../../components/container/Container";
 import { Input } from "../../components/input/input";
 import { Button } from "../../components/button/button";
 import "./login.css";
@@ -51,7 +51,7 @@ export function Login() {
   return (
     <>
       <Toaster position="top-center" />
-      <div className="div-main">
+      <Container>
         <h1>Login</h1>
 
         <form onSubmit={handleLogin}>
@@ -83,7 +83,7 @@ export function Login() {
             Login
           </Button>
         </form>
-      </div>
+      </Container>
     </>
   );
 }

@@ -4,6 +4,8 @@ import { AdminHome } from "./pages/admin/AdminHome";
 import { CaixaHome } from "./pages/caixa/CaixaHome";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import { ConfiguracaoEstacionamento } from "./pages/configuracao/ConfiguracaoEstacionamento";
+import { ConfiguracaoUsuarios } from "./pages/configuracao/ConfiguracaoUsuarios";
 
 function App() {
   return (
@@ -24,6 +26,22 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['CAIXA']}>
                 <CaixaHome />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/configuracao-estacionamento"
+            element={
+              <ProtectedRoute allowedRoles={['ADMINISTRADOR']}>
+                <ConfiguracaoEstacionamento />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/configuracao-usuarios"
+            element={
+              <ProtectedRoute allowedRoles={['ADMINISTRADOR']}>
+                <ConfiguracaoUsuarios />
               </ProtectedRoute>
             }
           />

@@ -1,3 +1,4 @@
+import React from 'react';
 import "./button.css"
 
 export function Button({type, onClick, children, color, size}) {
