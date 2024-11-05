@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Ignore dataService
-src/services/dataService.js
+src/services/EstacionamentoService.js

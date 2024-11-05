@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/login/login";
-import { AdminHome } from "./pages/admin/AdminHome";
-import { CaixaHome } from "./pages/caixa/CaixaHome";
+import { AdminHome } from "./pages/AdminHome/AdminHome";
+import { CaixaHome } from "./pages/CaixaHome/CaixaHome";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { ConfiguracaoEstacionamento } from "./pages/configuracao/ConfiguracaoEstacionamento";

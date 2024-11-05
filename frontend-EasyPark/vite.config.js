@@ -9,4 +9,10 @@ export default defineConfig({
       '@react-native-async-storage/async-storage': '@react-native-community/async-storage',
     },
   },
+  esbuild: {
+    loader: 'jsx',
+    include: [
+      'src/**/*.js',
+    ],
+  },
 });

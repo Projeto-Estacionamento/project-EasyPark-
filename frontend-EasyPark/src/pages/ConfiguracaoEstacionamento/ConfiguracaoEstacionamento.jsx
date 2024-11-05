@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
-import { getConfiguracaoAtual, updateConfiguracao } from '../../services/dataService';
+import { getConfiguracaoAtual, updateConfiguracao } from '../../services/EstacionamentoService';
 import './ConfiguracaoEstacionamento.css';
 
 export function ConfiguracaoEstacionamento() {
@@ -39,7 +39,7 @@ export function ConfiguracaoEstacionamento() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateConfiguracao(configuracao.id, configuracao);
+      await updateConfiguracao(configuracao);
       alert('Configuração atualizada com sucesso!');
       navigate('/admin');
     } catch (error) {
