@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
+import { getConfiguracaoAtual, updateConfiguracao } from '../../services/dataService';
 import './ConfiguracaoEstacionamento.css';
 
 export function ConfiguracaoEstacionamento() {
   const [configuracao, setConfiguracao] = useState({
+    id: 1, // Certifique-se de que o ID está correto
     qtdMoto: 0,
     qtdCarro: 0,
     valorHoraMoto: 0.0,
@@ -16,27 +17,34 @@ export function ConfiguracaoEstacionamento() {
   });
 
   const navigate = useNavigate();
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    axios.get(`${apiUrl}/api/configuracoes/atual`)
-      .then(response => setConfiguracao(response.data))
-      .catch(error => console.error('Erro ao buscar configuração:', error));
-  }, [apiUrl]);
+    const fetchConfiguracao = async () => {
+      try {
+        const data = await getConfiguracaoAtual();
+        setConfiguracao(data);
+      } catch (error) {
+        console.error('Erro ao buscar configuração:', error);
+      }
+    };
+
+    fetchConfiguracao();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setConfiguracao({ ...configuracao, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.put(`${apiUrl}/api/configuracoes/${configuracao.id}`, configuracao)
-      .then(() => {
-        alert('Configuração atualizada com sucesso!');
-        navigate('/admin');
-      })
-      .catch(error => console.error('Erro ao atualizar configuração:', error));
+    try {
+      await updateConfiguracao(configuracao.id, configuracao);
+      alert('Configuração atualizada com sucesso!');
+      navigate('/admin');
+    } catch (error) {
+      console.error('Erro ao atualizar configuração:', error);
+    }
   };
 
   return (
