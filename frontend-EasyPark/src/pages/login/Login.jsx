@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
-import { Container } from "../../components/container/Container";
+import { PageContainer } from "../../components/pageContainer/PageContainer";
+import { Card } from "../../components/card/Card";
 import { Input } from "../../components/input/Input";
 import { Button } from "../../components/button/Button";
 import { AuthContext } from "../../context/AuthContext";
@@ -23,7 +24,10 @@ export function Login() {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/usuario/login`, valores);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/usuario/login`,
+        valores
+      );
       if (response.status === 200) {
         login(response.data);
         if (response.data.tipoAcesso === "ADMINISTRADOR") {
@@ -39,33 +43,36 @@ export function Login() {
   };
 
   return (
-    <Container>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div className="div-login">
-          <Input
-            type="email"
-            text="E-mail"
-            name="email"
-            placeholder="E-mail"
-            value={valores.email}
-            onChangeFN={(e) => setValores({ ...valores, email: e.target.value })}
-          />
-        </div>
-        <div className="div-login">
-          <Input
-            type="password"
-            text="Senha"
-            name="senha"
-            placeholder="Senha"
-            value={valores.senha}
-            onChangeFN={(e) => setValores({ ...valores, senha: e.target.value })}
-          />
-        </div>
-        <Button type="submit" color="blue">
-          Login
-        </Button>
-      </form>
-    </Container>
+    <PageContainer darkMode>
+      <Card title="Login">
+        <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <Input
+              type="email"
+              text="E-mail"
+              name="email"
+              placeholder="Digite seu e-mail"
+              value={valores.email}
+              onChangeFN={(e) => setValores({ ...valores, email: e.target.value })}
+              darkMode
+            />
+          </div>
+          <div className="form-group">
+            <Input
+              type="password"
+              text="Senha"
+              name="senha"
+              placeholder="Digite sua senha"
+              value={valores.senha}
+              onChangeFN={(e) => setValores({ ...valores, senha: e.target.value })}
+              darkMode
+            />
+          </div>
+          <Button type="submit" variant="primary">
+            Entrar
+          </Button>
+        </form>
+      </Card>
+    </PageContainer>
   );
 }
