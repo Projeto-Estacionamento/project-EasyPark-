@@ -1,9 +1,17 @@
 import React from 'react';
 import './Input.css';
 
-export function Input({ type, text, name, placeholder, value, onChangeFN }) {
+export function Input({ 
+  type, 
+  text, 
+  name, 
+  placeholder, 
+  value, 
+  onChangeFN,
+  darkMode = false 
+}) {
   return (
-    <div className="input-container">
+    <div className={`input-container ${darkMode ? 'dark' : ''}`}>
       <label htmlFor={name}>{text}</label>
       <input
         type={type}
