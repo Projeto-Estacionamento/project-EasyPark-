@@ -1,41 +1,41 @@
 import React from 'react';
-import { InputField } from '../input/InputField';
+import { Input } from '../input/Input';
 import { Button } from '../button/Button';
 
 export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
   return (
     <form onSubmit={handleSubmit}>
-      <InputField
+      <Input
         label="Quantidade de Vagas para Motos:"
         type="number"
         name="qtdMoto"
         value={configuracao.qtdMoto}
         onChange={handleChange}
       />
-      <InputField
+      <Input
         label="Quantidade de Vagas para Carros:"
         type="number"
         name="qtdCarro"
         value={configuracao.qtdCarro}
         onChange={handleChange}
       />
-      <InputField
-        label="Valor por Hora para Motos:"
+      <Input
+        label="Valor da Hora para Motos:"
         type="number"
         step="0.01"
         name="valorHoraMoto"
         value={configuracao.valorHoraMoto}
         onChange={handleChange}
       />
-      <InputField
-        label="Valor por Hora para Carros:"
+      <Input
+        label="Valor da Hora para Carros:"
         type="number"
         step="0.01"
         name="valorHoraCarro"
         value={configuracao.valorHoraCarro}
         onChange={handleChange}
       />
-      <InputField
+      <Input
         label="Valor da Diária para Carros:"
         type="number"
         step="0.01"
@@ -43,7 +43,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         value={configuracao.valorDiariaCarro}
         onChange={handleChange}
       />
-      <InputField
+      <Input
         label="Valor da Diária para Motos:"
         type="number"
         step="0.01"
@@ -51,7 +51,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         value={configuracao.valorDiariaMoto}
         onChange={handleChange}
       />
-      <InputField
+      <Input
         label="Hora Máxima Avulso:"
         type="number"
         step="0.01"
