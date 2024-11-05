@@ -59,14 +59,13 @@ public class TicketService {
             VeiculoDTO veiculo = validarVeiculo.buscarVeiculoPorPlaca(ticket.getPlacaVeiculo());
             Veiculo veiculoSalvo = veiculoMapper.toEntity(veiculo);
             validarVeiculo.buscarTicketPorPlaca(ticket.getPlacaVeiculo());
-            validarVeiculo.validarPlanoVeiculo(ticket.getPlacaVeiculo());
+            //validarVeiculo.validarPlanoVeiculo(ticket.getPlacaVeiculo());
             ticketDTO.setPlacaVeiculo(ticket.getPlacaVeiculo());
             ticketDTO.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
             ticketDTO.setHoraChegada(LocalDateTime.now());
             veiculo.setOcupandoVaga(true);
             veiculoRepository.save(veiculoSalvo);
             ticketRepository.save(ticketDTO);
-
         } catch (EntityNotFoundException e) {
             validarVeiculo.criarTicketAvulso(ticketDTO.getPlacaVeiculo());
         } catch (Exception e) {

@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class VeiculoController {
     private VeiculoService veiculoService;
 
     @PostMapping
-    public ResponseEntity<VeiculoDTO> criarVeiculo(@RequestBody VeiculoDTO veiculoDTO) {
+    public ResponseEntity<VeiculoDTO> criarVeiculo(@RequestBody VeiculoDTO veiculoDTO) throws EstacionamentoException {
         // Lógica para criar um novo veículo
         VeiculoDTO novoVeiculo = veiculoService.criarVeiculo(veiculoDTO);
         return ResponseEntity.ok(novoVeiculo);
