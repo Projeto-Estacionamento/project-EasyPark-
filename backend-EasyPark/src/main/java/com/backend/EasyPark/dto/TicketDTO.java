@@ -19,4 +19,8 @@ public class TicketDTO {
     private Duration totalHoras;
     private TipoTicket tipoTicket;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 }

@@ -1,16 +1,13 @@
 package com.backend.EasyPark.entities;
 
-
-import com.backend.EasyPark.enums.TipoPlano;
 import com.backend.EasyPark.enums.TipoVeiculo;
 import jakarta.persistence.*;
-
+import com.backend.EasyPark.enums.TipoPlano;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,18 +17,15 @@ public class Plano {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private LocalDateTime dataPagamento;
-    private LocalDateTime dataVencimento;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
-    private TipoPlano tipoPlano; // Adicionar qual o tipo de veiculo para o plano se é carro ou moto
+    private TipoPlano tipoPlano;
 
+    private TipoVeiculo tipoVeiculo;
 
-    private BigDecimal valorMensal;
+    private double valorPlano;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private Usuario usuario;
-}
+    @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL)
+    private List<UsuarioPlano> usuariosPlanos;
+} 

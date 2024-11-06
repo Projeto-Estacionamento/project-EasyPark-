@@ -8,9 +8,13 @@ import org.springframework.stereotype.Repository;
 import com.backend.EasyPark.entities.Usuario;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     
     List<Usuario> findByCpf(String cpf);
     
     List<Usuario> findByEmail(String email);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.backend.EasyPark.entities.ConfiguracaoSistema;
 
 @Repository
-public interface ConfiguracaoSistemaRepository extends JpaRepository<ConfiguracaoSistema, Long> {
+public interface ConfiguracaoSistemaRepository extends JpaRepository<ConfiguracaoSistema, Integer> {
     
     Optional<ConfiguracaoSistema> findTopByOrderByIdAsc();
     

@@ -14,16 +14,17 @@ import lombok.NoArgsConstructor;
 public class ConfiguracaoSistema {
 
    @Id
-   private Long id = 1L;
+   private Integer id = 1;
 
    private int qtdMoto;
    private int qtdCarro;
    private double valorHoraMoto;
    private double valorHoraCarro;
+   private double valorMensalidadeMoto;
+   private double valorMensalidadeCarro;
    private double valorDiariaCarro;
    private double valorDiariaMoto;
    private double horaMaximaAvulso;
-
 
 //    qtdMoto: Quantidade total de vagas para motos.
 //    qtdCarro: Quantidade total de vagas para carros.

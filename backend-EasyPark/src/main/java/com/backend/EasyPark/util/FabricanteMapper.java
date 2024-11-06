@@ -9,30 +9,15 @@ import com.backend.EasyPark.entities.Fabricante;
 public class FabricanteMapper {
 
     public Fabricante toEntity(FabricanteDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        Fabricante fabricante = new Fabricante();
-        fabricante.setId(dto.getId());
-        fabricante.setModelo(dto.getModelo());
-        fabricante.setMarca(dto.getMarca());
-        fabricante.setAno(dto.getAno());
-
+        Fabricante fabricante = new Fabricante(dto.getId(), dto.getModelo(), dto.getMarca(),
+                dto.getAno());
         return fabricante;
     }
 
     public FabricanteDTO toDTO(Fabricante entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        return new FabricanteDTO(
-            entity.getId(),
-            entity.getModelo(),
-            entity.getMarca(),
-            entity.getAno()
-        );
+        FabricanteDTO dto = new FabricanteDTO(entity.getId(), entity.getModelo()
+                , entity.getMarca(), entity.getAno());
+        return dto;
     }
 
     public void updateEntityFromDTO(Fabricante fabricante, FabricanteDTO dto) {
@@ -44,6 +29,5 @@ public class FabricanteMapper {
         fabricante.setMarca(dto.getMarca());
         fabricante.setAno(dto.getAno());
     }
-
 
 }

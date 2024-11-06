@@ -2,6 +2,7 @@ package com.backend.EasyPark.util.validacao;
 
 import com.backend.EasyPark.dto.UsuarioDTO;
 
+
 public class ValidacaoUsuario {
 
     public void validarUsuario(UsuarioDTO usuarioDTO) {

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
+import com.backend.EasyPark.util.validacao.ValidarVeiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,18 +34,22 @@ public class VeiculoService {
     @Autowired
     private VeiculoMapper veiculoMapper;
 
+
+    private ValidarVeiculo validarVeiculo;
+
     private static final Pattern PLACA_ANTIGA = Pattern.compile("^[A-Z]{3}\\d{4}$");
     private static final Pattern PLACA_MERCOSUL = Pattern.compile("^[A-Z]{3}\\d[A-Z]\\d{2}$");
 
     @Transactional
-    public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO) {
+    public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO) throws EstacionamentoException {
+        validarVeiculo.validarCampoVeiculo(veiculoDTO);
         validarPlaca(veiculoDTO.getPlaca());
         Veiculo veiculo = convertToEntity(veiculoDTO);
         Veiculo savedVeiculo = veiculoRepository.save(veiculo);
         return convertToDTO(savedVeiculo);
     }
 
-    public VeiculoDTO buscarVeiculoPorId(Long id) {
+    public VeiculoDTO buscarVeiculoPorId(Integer id) {
         return veiculoRepository.findById(id)
                 .map(this::convertToDTO)
                 .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
@@ -55,7 +62,7 @@ public class VeiculoService {
     }
 
     @Transactional
-    public VeiculoDTO atualizarVeiculo(Long id, VeiculoDTO veiculoDTO) {
+    public VeiculoDTO atualizarVeiculo(Integer id, VeiculoDTO veiculoDTO) {
         validarPlaca(veiculoDTO.getPlaca());
         return veiculoRepository.findById(id)
                 .map(veiculo -> {
@@ -65,8 +72,8 @@ public class VeiculoService {
                 .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
     }
 
-    @Transactional
-    public void deletarVeiculo(Long id) {
+
+    public void deletarVeiculo(Integer id) {
         veiculoRepository.deleteById(id);
     }
 
