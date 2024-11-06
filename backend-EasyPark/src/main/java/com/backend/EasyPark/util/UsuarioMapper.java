@@ -91,4 +91,38 @@ public class UsuarioMapper {
 
         return dto;
     }
+
+    public void updateUsuarioFromDTO(Usuario usuario, UsuarioDTO dto) {
+        if (dto == null) {
+            return;
+        }
+
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setCpf(dto.getCpf());
+        // usuario.setPagamentoPendente(dto.isPagamentoPendente());
+
+        // Atualiza o endereço
+        if (dto.getEnderecoDTO() != null) {
+            if (usuario.getEndereco() == null) {
+                usuario.setEndereco(enderecoMapper.toEntity(dto.getEnderecoDTO()));
+            } else {
+                enderecoMapper.updateEnderecoFromDTO(usuario.getEndereco(), dto.getEnderecoDTO());
+            }
+        } else {
+            usuario.setEndereco(null);
+        }
+
+        // Atualiza os veículos
+        if (dto.getVeiculosDTO() != null) {
+            if (usuario.getVeiculos() == null) {
+                usuario.setVeiculos(veiculoMapper.toEntity(dto.getVeiculosDTO()));
+            } else {
+                veiculoMapper.updateVeiculoFromDTO(usuario.getVeiculos(), dto.getVeiculosDTO());
+            }
+        } else {
+            usuario.setVeiculos(null); // Define como null se não houver veículos
+        }
+    }
 }
