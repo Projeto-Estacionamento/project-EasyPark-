@@ -3,6 +3,7 @@ form {
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center; 
   gap: 0.5rem;
 }
 
@@ -15,3 +16,10 @@ form {
 .form-group:last-of-type {
   margin-bottom: 2rem;
 }
+
+
+
+.form-group {
+  margin-bottom: 15px;
+}
+

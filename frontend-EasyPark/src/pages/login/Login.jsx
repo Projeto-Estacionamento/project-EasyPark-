@@ -12,13 +12,13 @@ export function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [valores, setValores] = useState({
-    email: "",
+    username: "",
     senha: "",
   });
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!valores.email || !valores.senha) {
+    if (!valores.username || !valores.senha) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
@@ -38,7 +38,7 @@ export function Login() {
       }
     } catch (error) {
       console.error(error);
-      alert("E-mail ou senha incorretos!");
+      alert("Username ou senha incorretos!");
     }
   };
 
@@ -48,12 +48,12 @@ export function Login() {
         <form onSubmit={handleLogin}>
           <div className="form-group">
             <Input
-              type="email"
-              text="E-mail"
-              name="email"
-              placeholder="Digite seu e-mail"
-              value={valores.email}
-              onChangeFN={(e) => setValores({ ...valores, email: e.target.value })}
+              type="text"
+              text="Username"
+              name="username"
+              placeholder="Digite seu username"
+              value={valores.username}
+              onChangeFN={(e) => setValores({ ...valores, username: e.target.value })}
               darkMode
             />
           </div>
