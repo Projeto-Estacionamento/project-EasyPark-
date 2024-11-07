@@ -1,1 +1,0 @@
-export { ConfiguracaoUsuarios } from './ConfiguracaoUsuarios'; 

@@ -5,7 +5,7 @@ import { CaixaHome } from "./pages/CaixaHome/CaixaHome";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { ConfiguracaoEstacionamento } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamento";
-// import { ConfiguracaoUsuarios } from "./pages/ConfiguracaoUsuarios/ConfiguracaoUsuarios";
+// import { ConfiguracaoAcesso } from "./pages/ConfiguracaoAcesso/ConfiguracaoAcesso";
 
 function App() {
   return (
@@ -38,10 +38,10 @@ function App() {
             }
           />
           {/* <Route
-            path="/configuracao-usuarios"
+            path="/configuracao-acesso"
             element={
               <ProtectedRoute allowedRoles={['ADMINISTRADOR']}>
-                <ConfiguracaoUsuarios />
+                <ConfiguracaoAcesso />
               </ProtectedRoute>
             }
           /> */}
