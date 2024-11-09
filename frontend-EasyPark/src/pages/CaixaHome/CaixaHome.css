@@ -1,0 +1,12 @@
+.caixa-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f9;
+  }
+  
+  .menu {
+    margin: 20px 0;
+  }
