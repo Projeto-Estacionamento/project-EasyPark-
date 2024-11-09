@@ -1,23 +1,23 @@
 package com.backend.EasyPark.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
+import com.backend.EasyPark.dto.FabricanteDTO;
+import com.backend.EasyPark.dto.VeiculoDTO;
+import com.backend.EasyPark.entities.Fabricante;
+import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
-import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
-import com.backend.EasyPark.util.validacao.ValidarVeiculo;
+import com.backend.EasyPark.repository.FabricanteRepository;
+import com.backend.EasyPark.repository.VeiculoRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.EasyPark.dto.FabricanteDTO;
-import com.backend.EasyPark.dto.VeiculoDTO;
-import com.backend.EasyPark.entities.Veiculo;
-import com.backend.EasyPark.repository.FabricanteRepository;
-import com.backend.EasyPark.repository.VeiculoRepository;
-import com.backend.EasyPark.util.VeiculoMapper;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 
 @Service
 public class VeiculoService {
@@ -28,31 +28,19 @@ public class VeiculoService {
     @Autowired
     private FabricanteRepository fabricanteRepository;
 
-    @Autowired
-    private FabricanteService fabricanteService;
-
-    @Autowired
-    private VeiculoMapper veiculoMapper;
-
-
-    private ValidarVeiculo validarVeiculo;
-
     private static final Pattern PLACA_ANTIGA = Pattern.compile("^[A-Z]{3}\\d{4}$");
     private static final Pattern PLACA_MERCOSUL = Pattern.compile("^[A-Z]{3}\\d[A-Z]\\d{2}$");
 
     @Transactional
-    public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO) throws EstacionamentoException {
-        validarVeiculo.validarCampoVeiculo(veiculoDTO);
+    public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO) {
         validarPlaca(veiculoDTO.getPlaca());
         Veiculo veiculo = convertToEntity(veiculoDTO);
         Veiculo savedVeiculo = veiculoRepository.save(veiculo);
         return convertToDTO(savedVeiculo);
     }
 
-    public VeiculoDTO buscarVeiculoPorId(Integer id) {
-        return veiculoRepository.findById(id)
-                .map(this::convertToDTO)
-                .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+    public VeiculoDTO buscarVeiculoPorId(Integer id) throws EstacionamentoException {
+        return convertToDTO(veiculoRepository.findById(id).orElseThrow(() -> new EstacionamentoException("Veículo não encontrado")));
     }
 
     public List<VeiculoDTO> listarVeiculos() {
@@ -72,7 +60,7 @@ public class VeiculoService {
                 .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
     }
 
-
+    @Transactional
     public void deletarVeiculo(Integer id) {
         veiculoRepository.deleteById(id);
     }
@@ -90,30 +78,45 @@ public class VeiculoService {
     }
 
     public Veiculo convertToEntity(VeiculoDTO veiculoDTO) {
-        Veiculo veiculo = veiculoMapper.toEntity(veiculoDTO);
+        Veiculo veiculo = new Veiculo();
+        veiculo.setId(veiculoDTO.getId());
+        veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja salva em maiúsculas
+        veiculo.setTipoVeiculo(veiculoDTO.getTipoVeiculo());
+        veiculo.setOcupandoVaga(veiculoDTO.isOcupandoVaga());
         if (veiculoDTO.getFabricanteDTO() != null) {
-            FabricanteDTO fabricanteDTO = fabricanteService.buscarPorId(veiculoDTO.getFabricanteDTO().getId());
-            veiculo.setFabricante(fabricanteRepository.findById(fabricanteDTO.getId())
+            veiculo.setFabricante(fabricanteRepository.findById(veiculoDTO.getFabricanteDTO().getId())
                     .orElseThrow(() -> new RuntimeException("Fabricante não encontrado")));
         }
         return veiculo;
     }
 
     public VeiculoDTO convertToDTO(Veiculo veiculo) {
-        return veiculoMapper.toDTO(veiculo);
+        VeiculoDTO veiculoDTO = new VeiculoDTO();
+        veiculoDTO.setId(veiculo.getId());
+        veiculoDTO.setPlaca(veiculo.getPlaca());
+        veiculoDTO.setTipoVeiculo(veiculo.getTipoVeiculo());
+        veiculoDTO.setOcupandoVaga(veiculo.isOcupandoVaga());
+        if (veiculo.getFabricante() != null) {
+            veiculoDTO.setFabricanteDTO(new FabricanteDTO(veiculo.getFabricante().getId(),
+                    veiculo.getFabricante().getMarca(),
+                    veiculo.getFabricante().getModelo(),
+                    veiculo.getFabricante().getAno()));
+        }
+        return veiculoDTO;
     }
 
     public void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO veiculoDTO) {
         veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja atualizada em maiúsculas
         veiculo.setTipoVeiculo(veiculoDTO.getTipoVeiculo());
         veiculo.setOcupandoVaga(veiculoDTO.isOcupandoVaga());
+        // veiculo.setFabricante(fabricanteRepository.findById(veiculoDTO.getFabricanteDTO().getId())
+        //             .orElseThrow(() -> new RuntimeException("Fabricante não encontrado")));
         if (veiculoDTO.getFabricanteDTO() != null) {
-            // Use o FabricanteService para buscar ou criar o fabricante
-            FabricanteDTO fabricanteDTO = fabricanteService.buscarPorId(veiculoDTO.getFabricanteDTO().getId());
-            veiculo.setFabricante(fabricanteRepository.findById(fabricanteDTO.getId())
-                    .orElseThrow(() -> new RuntimeException("Fabricante não encontrado")));
-        } else {
-            veiculo.setFabricante(null);
+            if (veiculo.getFabricante() == null) {
+                veiculo.setFabricante(new Fabricante());
+            }
+            fabricanteRepository.findById(veiculoDTO.getFabricanteDTO().getId())
+                    .ifPresent(fabricante -> veiculo.setFabricante(fabricante));
         }
     }
 
@@ -122,14 +125,5 @@ public class VeiculoService {
             throw new IllegalArgumentException("Placa inválida. Deve estar no formato antigo (ABC1234) ou Mercosul (ABC1D23).");
         }
     }
-
-    public void validarVeiculo(List<VeiculoDTO> veiculoDTO) {
-        List<VeiculoDTO> novaLista = new ArrayList<>();
-        for (VeiculoDTO veiculo : veiculoDTO) {
-            if (veiculo.getPlaca() == null || !veiculo.getPlaca().matches("^[A-Z]{3}\\d[A-Z0-9]\\d{2}$")) {
-                throw new IllegalArgumentException("Placa do veículo inválida: " + veiculo.getPlaca());
-            }
-            novaLista.add(veiculo);
-        }
-    }
 }
+

@@ -2,7 +2,9 @@ package com.backend.EasyPark.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,14 +36,10 @@ public class VeiculoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VeiculoDTO> buscarVeiculoPorId(@PathVariable Integer id) {
+    public ResponseEntity<VeiculoDTO> buscarVeiculoPorId(@PathVariable Integer id) throws EstacionamentoException {
         // Lógica para buscar um veículo por ID
         VeiculoDTO veiculo = veiculoService.buscarVeiculoPorId(id);
-        if (veiculo != null) {
-            return ResponseEntity.ok(veiculo);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(veiculo);
     }
 
     @GetMapping
@@ -61,7 +59,6 @@ public class VeiculoController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
     @GetMapping("/ocupados")
     public ResponseEntity<List<VeiculoDTO>> listarVeiculosOcupandoVaga() {

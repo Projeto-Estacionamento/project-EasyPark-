@@ -4,13 +4,12 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.Veiculo;
 import com.backend.EasyPark.enums.TipoTicket;
-import com.backend.EasyPark.repository.UsuarioRepository;
+import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.repository.VeiculoRepository;
 import com.backend.EasyPark.util.VeiculoMapper;
 import com.backend.EasyPark.util.validacao.ValidarVeiculo;
@@ -26,33 +25,31 @@ import com.backend.EasyPark.util.TicketMapper;
 
 @Service
 public class TicketService {
+
     private final TicketRepository ticketRepository;
     private final ConfiguracaoSistemaService configuracaoSistemaService;
-    private final TicketMapper ticketMapper;
     private final ValidarVeiculo validarVeiculo;
+    private final VeiculoRepository veiculoRepository;
     private final VeiculoMapper veiculoMapper;
-    private final UsuarioRepository usuarioRepository;
-    private VeiculoRepository veiculoRepository;
+    private final TicketMapper ticketMapper;
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
                          ConfiguracaoSistemaService configuracaoSistemaService,
-                         TicketMapper ticketMapper,
-                         VeiculoRepository veiculoRepository,
                          ValidarVeiculo validarVeiculo,
-                         VeiculoMapper veiculoMapper,
-                         UsuarioRepository usuarioRepository) {
+                         VeiculoRepository veiculoRepository, VeiculoMapper veiculoMapper, TicketMapper ticketMapper) {
         this.ticketRepository = ticketRepository;
         this.configuracaoSistemaService = configuracaoSistemaService;
-        this.ticketMapper = ticketMapper;
         this.validarVeiculo = validarVeiculo;
+        this.veiculoRepository = veiculoRepository;
         this.veiculoMapper = veiculoMapper;
-        this.usuarioRepository = usuarioRepository;
+        this.ticketMapper = ticketMapper;
+
     }
 
-    public TicketDTO criarTicket(TicketDTO ticket) {
+    public TicketDTO criarTicket(TicketDTO ticket) throws EstacionamentoException {
         if (ticket == null || ticket.getPlacaVeiculo() == null) {
-            throw new EntityNotFoundException("Ticket ou placa do veículo não podem ser nulos");
+            throw new EstacionamentoException("Ticket ou placa do veículo não podem ser nulos");
         }
         Ticket ticketDTO = new Ticket();
         try {

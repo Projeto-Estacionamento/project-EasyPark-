@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConfiguracaoSistemaDTO {
-
     private Integer id;
     private int qtdMoto;
     private int qtdCarro;
@@ -16,7 +15,5 @@ public class ConfiguracaoSistemaDTO {
     private double valorHoraCarro;
     private double valorDiariaCarro;
     private double valorDiariaMoto;
-    private double valorMensalidadeMoto;
-    private double valorMensalidadeCarro;
     private double horaMaximaAvulso;
 }

@@ -1,14 +1,9 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.dto.UsuarioPlanoDTO;
-import com.backend.EasyPark.dto.VeiculoDTO;
-import com.backend.EasyPark.entities.Plano;
 import com.backend.EasyPark.entities.Usuario;
-import com.backend.EasyPark.entities.UsuarioPlano;
-import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,19 +12,25 @@ import java.util.stream.Collectors;
 @Component
 public class UsuarioMapper {
 
-    @Autowired
-    private EnderecoMapper enderecoMapper;
+    private final EnderecoMapper enderecoMapper;
+    private final PlanoMapper planoMapper;
 
     @Autowired
-    private VeiculoMapper veiculoMapper;
+    public UsuarioMapper(@Lazy VeiculoMapper veiculoMapper,
+                         EnderecoMapper enderecoMapper,
+                         PlanoMapper planoMapper) {
+        this.enderecoMapper = enderecoMapper;
+        this.planoMapper = planoMapper;
+    }
 
-    @Autowired
-    private UsuarioPlanoMapper usuarioPlanoMapper;
 
+
+    // Converte um UsuarioDTO para Usuario (entidade)
     public Usuario toEntity(UsuarioDTO dto) {
         if (dto == null) {
             return null;
         }
+
         Usuario usuario = new Usuario();
         usuario.setId(dto.getId());
         usuario.setNome(dto.getNome());
@@ -37,27 +38,22 @@ public class UsuarioMapper {
         usuario.setTelefone(dto.getTelefone());
         usuario.setCpf(dto.getCpf());
 
-        usuario.setEndereco(enderecoMapper.toEntity(dto.getEnderecoDTO()));
-
-        // Mapeia os veículos
-        if (dto.getVeiculosDTO() != null) {
-            List<Veiculo> veiculos = veiculoMapper.toEntity(dto.getVeiculosDTO());
-            usuario.setVeiculos(veiculos);
-        } else {
-            usuario.setVeiculos(null); // Define como null se não houver veículos
+        // Converte o Endereco
+        if (dto.getEndereco() != null) {
+            usuario.setEndereco(enderecoMapper.toEntity(dto.getEndereco()));
         }
 
-        // Mapeia os planos
-        if (dto.getUsuarioPlanosDto() != null) {
-            List<UsuarioPlano> usuarioPlanos = usuarioPlanoMapper.toEntity(dto.getUsuarioPlanosDto()); //CRIAR LISTA DE MAPPER
-            usuario.setUsuarioPlanos(usuarioPlanos);
-        } else {
-            usuario.setUsuarioPlanos(null); // Define como null se não houver planos
+        // Converte os Veiculos
+
+        // Converte os Planos
+        if (dto.getPlanosDTO() != null) {
+            usuario.setPlanos(planoMapper.toEntityList(dto.getPlanosDTO()));
         }
 
         return usuario;
     }
 
+    // Converte uma entidade Usuario para UsuarioDTO
     public UsuarioDTO toDTO(Usuario entity) {
         if (entity == null) {
             return null;
@@ -69,60 +65,52 @@ public class UsuarioMapper {
         dto.setEmail(entity.getEmail());
         dto.setTelefone(entity.getTelefone());
         dto.setCpf(entity.getCpf());
-        // dto.setPagamentoPendente(entity.isPagamentoPendente());
 
-        // Mapeia o endereço
+        // Converte o Endereco
         if (entity.getEndereco() != null) {
-            dto.setEnderecoDTO(enderecoMapper.toDTO(entity.getEndereco()));
+            dto.setEndereco(enderecoMapper.toDTO(entity.getEndereco()));
         }
 
-        // Mapeia os veículos
-        if (entity.getVeiculos() != null) {
-            List<VeiculoDTO> veiculosDTO = veiculoMapper.toDTO(entity.getVeiculos());
-            dto.setVeiculosDTO(veiculosDTO);
-        }
+        // Converte os Veiculos
 
-        // Mapeia os planos
-        if (entity.getUsuarioPlanos() != null) {
-            List<UsuarioPlanoDTO> planosDTO = usuarioPlanoMapper.toDTO(entity.getUsuarioPlanos()); // CRIAR LISTA MAPPER
+        // Converte os Planos
 
-            dto.setUsuarioPlanosDto(planosDTO);
-        }
 
         return dto;
     }
 
-    public void updateUsuarioFromDTO(Usuario usuario, UsuarioDTO dto) {
-        if (dto == null) {
-            return;
+    // Atualiza os dados do Usuario a partir de um UsuarioDTO
+    public void updateUsuarioFromDTO(Usuario usuario, UsuarioDTO usuarioDTO) {
+        if (usuarioDTO.getNome() != null) {
+            usuario.setNome(usuarioDTO.getNome());
+        }
+        if (usuarioDTO.getEmail() != null) {
+            usuario.setEmail(usuarioDTO.getEmail());
+        }
+        if (usuarioDTO.getTelefone() != null) {
+            usuario.setTelefone(usuarioDTO.getTelefone());
+        }
+        if (usuarioDTO.getCpf() != null) {
+            usuario.setCpf(usuarioDTO.getCpf());
         }
 
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setTelefone(dto.getTelefone());
-        usuario.setCpf(dto.getCpf());
-        // usuario.setPagamentoPendente(dto.isPagamentoPendente());
-
-        // Atualiza o endereço
-        if (dto.getEnderecoDTO() != null) {
-            if (usuario.getEndereco() == null) {
-                usuario.setEndereco(enderecoMapper.toEntity(dto.getEnderecoDTO()));
-            } else {
-                enderecoMapper.updateEnderecoFromDTO(usuario.getEndereco(), dto.getEnderecoDTO());
-            }
-        } else {
-            usuario.setEndereco(null);
+        // Atualiza o Endereco, se presente no DTO
+        if (usuarioDTO.getEndereco() != null) {
+            usuario.setEndereco(enderecoMapper.toEntity(usuarioDTO.getEndereco()));
         }
 
-        // Atualiza os veículos
-        if (dto.getVeiculosDTO() != null) {
-            if (usuario.getVeiculos() == null) {
-                usuario.setVeiculos(veiculoMapper.toEntity(dto.getVeiculosDTO()));
-            } else {
-                veiculoMapper.updateVeiculoFromDTO(usuario.getVeiculos(), dto.getVeiculosDTO());
-            }
-        } else {
-            usuario.setVeiculos(null); // Define como null se não houver veículos
-        }
+        // Atualiza os Veiculos, se presente no DTO
+
+        // Atualiza os Planos, se presente no DTO
+    }
+
+    // Converte uma lista de Usuario para uma lista de UsuarioDTO
+    public List<UsuarioDTO> toDTOList(List<Usuario> usuarios) {
+        return usuarios.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    // Converte uma lista de UsuarioDTO para uma lista de Usuario (entidade)
+    public List<Usuario> toEntityList(List<UsuarioDTO> usuarioDtos) {
+        return usuarioDtos.stream().map(this::toEntity).collect(Collectors.toList());
     }
 }

@@ -20,6 +20,8 @@ public class FabricanteService {
     @Autowired
     private FabricanteMapper fabricanteMapper;
 
+
+
     public FabricanteDTO criar(FabricanteDTO fabricanteDTO) {
         validarAno(fabricanteDTO.getAno());
         Fabricante fabricante = fabricanteMapper.toEntity(fabricanteDTO);

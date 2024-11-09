@@ -2,6 +2,7 @@ package com.backend.EasyPark.controller;
 
 import java.util.List;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketDTO> criarTicket(@RequestBody TicketDTO ticketDTO) {
+    public ResponseEntity<TicketDTO> criarTicket(@RequestBody TicketDTO ticketDTO) throws EstacionamentoException {
         // Cria um novo ticket
         TicketDTO novoTicket = ticketService.criarTicket(ticketDTO);
         return new ResponseEntity<>(novoTicket, HttpStatus.CREATED);

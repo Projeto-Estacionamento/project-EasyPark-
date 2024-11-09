@@ -1,8 +1,10 @@
 package com.backend.EasyPark.util.validacao;
 
 import com.backend.EasyPark.dto.UsuarioDTO;
+import org.springframework.stereotype.Component;
 
 
+@Component
 public class ValidacaoUsuario {
 
     public void validarUsuario(UsuarioDTO usuarioDTO) {

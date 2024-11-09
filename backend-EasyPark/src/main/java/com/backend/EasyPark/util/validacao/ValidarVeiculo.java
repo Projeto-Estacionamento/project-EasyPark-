@@ -1,19 +1,16 @@
 package com.backend.EasyPark.util.validacao;
 
 
-import com.backend.EasyPark.dto.PlanoDTO;
+
 import com.backend.EasyPark.dto.TicketDTO;
-import com.backend.EasyPark.dto.UsuarioPlanoDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.*;
 import com.backend.EasyPark.enums.TipoTicket;
-
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.repository.TicketRepository;
 import com.backend.EasyPark.repository.VeiculoRepository;
 import com.backend.EasyPark.util.TicketMapper;
 import com.backend.EasyPark.util.VeiculoMapper;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +27,11 @@ public class ValidarVeiculo {
     private TicketRepository ticketRepository;
     @Autowired
     private VeiculoRepository veiculoRepository;
+    @Autowired
     private TicketMapper ticketMapper;
+    @Autowired
     private VeiculoMapper veiculoMapper;
+
 
 //    public TicketDTO criarTicketPorPlaca(String placaVeiculo) {
 //        try {
@@ -44,7 +44,7 @@ public class ValidarVeiculo {
 //
 //    }
 
-    public TicketDTO criarTicketMensalista(String placaVeiculo) {
+   /* public TicketDTO criarTicketMensalista(String placaVeiculo) {
         Ticket ticket = new Ticket();
         ticket.setPlacaVeiculo(placaVeiculo);
         ticket.setHoraChegada(LocalDateTime.now());
@@ -54,8 +54,8 @@ public class ValidarVeiculo {
         veiculoRepository.save(veiculo);
         ticketRepository.save(ticket);
 
-        return ticketMapper.toDTO(ticket);
-    }
+        return TicketMapper.toDTO(ticket);
+    }*/
 
     public TicketDTO criarTicketAvulso(String placaVeiculo) {
         Ticket ticket = new Ticket();
@@ -72,32 +72,32 @@ public class ValidarVeiculo {
         return veiculoMapper.toDTO(veiculo);
     }
 
-    public TicketDTO buscarTicketPorPlaca(String placaVeiculo){
+    public TicketDTO buscarTicketPorPlaca(String placaVeiculo) throws EstacionamentoException {
         Optional<Ticket> ticketAtivo = ticketRepository.findByPlacaVeiculoAndHoraSaidaIsNull(placaVeiculo);
         if (ticketAtivo.isPresent()) {
-            throw new RuntimeException("Já existe um ticket ativo para esta placa");
+            throw new EstacionamentoException("Já existe um ticket ativo para esta placa");
         }
         return ticketMapper.toDTO(ticketAtivo.get());
     }
 
-    public void validarExpiracaoPagamento(String placaVeiculo) throws EstacionamentoException {
+    /*public void validarExpiracaoPagamento(String placaVeiculo) throws EstacionamentoException {
         VeiculoDTO veiculoDTO = buscarVeiculoPorPlaca(placaVeiculo);
 
         //plano associado ao usuario que recebe um veiculo
-        List<UsuarioPlanoDTO> usuarioPlano = veiculoDTO.getUsuarioDTO().getUsuarioPlanosDto();
+        List<UsuarioPlanoDTO> usuarioPlanoDTO = veiculoDTO.getUsuarioDTO().getUsuarioPlanosDto();
 
         LocalDateTime dataAtual = LocalDateTime.now();
-        LocalDateTime dataVencimento = usuarioPlano.get(usuarioPlano.size() - 1).getDataVencimento();
+        LocalDateTime dataVencimento = usuarioPlanoDTO.get(usuarioPlanoDTO.size() - 1).getDataVencimento();
         if (dataVencimento.isBefore(dataAtual)) {
-            throw new EntityNotFoundException("Plano vencido. Favor regularizar o pagamento.");
+            throw new EstacionamentoException("Plano vencido. Favor regularizar o pagamento.");
         }
         if (veiculoDTO.isOcupandoVaga()) {
-            throw new EntityNotFoundException("O veículo já está ocupando uma vaga no estacionamento.");
+            throw new EstacionamentoException("O veículo já está ocupando uma vaga no estacionamento.");
         }
+    }*/
 
-    }
     //Metodo para verificar se o
-    private VeiculoDTO planoAssociadoAoUsuarioPlano(VeiculoDTO veiculo) {
+    /*private VeiculoDTO planoAssociadoAoUsuarioPlano(VeiculoDTO veiculo) {
 
         if (veiculo.getUsuarioDTO().getUsuarioPlanosDto() == null || veiculo.getUsuarioDTO().getUsuarioPlanosDto().isEmpty()) {
             throw new EntityNotFoundException("Não existe plano associado ao usuário");
@@ -109,16 +109,20 @@ public class ValidarVeiculo {
         }
         return null;
 
-    }
+    }*/
 
-    private VeiculoDTO planoAssociadoAoUsuario(String placaVeiculo) throws EstacionamentoException {// Buscando o veículo pela placa
+   /* public VeiculoDTO verificarSeExisteUmPlano(String placaVeiculo) throws EstacionamentoException {// Buscando o veículo pela placa
         VeiculoDTO veiculo = buscarVeiculoPorPlaca(placaVeiculo);
 
         // Verifica se o usuário possui planos associados
         if (veiculo.getUsuarioDTO().getUsuarioPlanosDto() == null || veiculo.getUsuarioDTO().getUsuarioPlanosDto().isEmpty()) {
             throw new EntityNotFoundException("Não existe plano associado ao usuário");
         }
-
+        return veiculo;
+    }
+*/
+  /*  public VeiculoDTO verificarOtipoPlanoIgualTipoVeiculo(String placaVeiculo) throws EstacionamentoException {
+        VeiculoDTO veiculo = buscarVeiculoPorPlaca(placaVeiculo);
         // Loop para verificar se algum plano é compatível com o tipo de veículo
         for (UsuarioPlanoDTO usuarioPlanoDto : veiculo.getUsuarioDTO().getUsuarioPlanosDto()) {
             // Verifica se o tipo do plano do usuário é igual ao tipo do veículo
@@ -127,10 +131,8 @@ public class ValidarVeiculo {
                         + ". Tipo do veículo: " + veiculo.getTipoVeiculo());
             }
         }
-
         return veiculo;
-    }
-
+    }*/
 
     public void validarCampoVeiculo(VeiculoDTO veiculo) throws EstacionamentoException{
         // Valida o campo 'placa'
@@ -148,7 +150,7 @@ public class ValidarVeiculo {
             throw new EstacionamentoException("O fabricante do veículo é obrigatório.");
         }
 
-        if (veiculo.getUsuarioDTO() == null) {
+        if (veiculo.getIdUsuarioDTO() == null) {
             throw new EstacionamentoException("O usuário do veículo é obrigatório.");
         }
 

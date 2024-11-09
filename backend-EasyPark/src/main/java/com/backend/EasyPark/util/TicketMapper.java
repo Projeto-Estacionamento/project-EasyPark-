@@ -27,8 +27,6 @@ public class TicketMapper {
         return dto;
     }
 
-
-
     public void updateEntityFromDTO(Ticket ticket, TicketDTO dto) {
         if (dto == null) {
             return;

@@ -1,7 +1,8 @@
+/*
 package com.backend.EasyPark.entities;
 
-import com.backend.EasyPark.enums.TipoPlano;
-import com.backend.EasyPark.enums.TipoVeiculo;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -20,16 +21,17 @@ public class UsuarioPlano {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private LocalDateTime dataPagamento; //CRIAR LOGICA:quando for pago, tem que fazer o preenchimento desta variavel
-    private LocalDateTime dataVencimento; //Aqui é preciso definir uma DataVencimento, que vai ser de acordo do dia que foi pago o plano
-
-    private boolean Status;
+    private LocalDateTime dataPagamento;
+    private LocalDateTime dataVencimento;
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private Usuario usuario;
+    private Usuario usuario; // Referência ao usuário do plano
 
     @ManyToOne
-    @JoinColumn(name = "plano_id", referencedColumnName = "id")
+    @JoinColumn(name = "plano_id")
     private Plano plano;
 }
+
+*/

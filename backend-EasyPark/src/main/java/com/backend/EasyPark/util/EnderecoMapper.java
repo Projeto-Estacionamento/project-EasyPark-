@@ -8,7 +8,7 @@ import com.backend.EasyPark.entities.Endereco;
 @Component
 public class EnderecoMapper {
 
-    public Endereco toEntity(EnderecoDTO dto) {
+    public  Endereco toEntity(EnderecoDTO dto) {
         Endereco endereco = new Endereco(dto.getId(), dto.getCidade(), dto.getEstado(),
                 dto.getCep());
 

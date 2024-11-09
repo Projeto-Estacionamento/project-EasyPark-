@@ -1,3 +1,4 @@
+/*
 package com.backend.EasyPark.controller;
 
 
@@ -9,4 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/tickets")
 public class UsuarioPlanoController {
 
+
 }
+*/
