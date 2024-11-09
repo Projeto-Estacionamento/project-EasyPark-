@@ -10,3 +10,14 @@
   .menu {
     margin: 20px 0;
   }
+  
+  .logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #dc3545;
+  }
+  
+  .logout-button:hover {
+    background-color: #c82333;
+  }

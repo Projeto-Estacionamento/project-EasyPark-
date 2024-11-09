@@ -6,6 +6,11 @@ import './CaixaPage.css';
 export function CaixaPage() {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    // Lógica para logout
+    navigate('/');
+  };
+
   return (
     <div className="home-page">
       <h1>Bem-vindo ao EasyPark!</h1>
@@ -17,6 +22,9 @@ export function CaixaPage() {
           Relatório de Usuários
         </Button>
       </div>
+      <Button className="logout-button" onClick={handleLogout}>
+        Logout
+      </Button>
     </div>
   );
 } 
