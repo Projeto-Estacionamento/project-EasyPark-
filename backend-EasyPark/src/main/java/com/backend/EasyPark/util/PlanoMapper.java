@@ -61,6 +61,7 @@ public class PlanoMapper {
             usuarioDTO.setId(plano.getUsuario().getId());
             usuarioDTO.setNome(plano.getUsuario().getNome());
             usuarioDTO.setEmail(plano.getUsuario().getEmail());
+            usuarioDTO.setTelefone(plano.getUsuario().getTelefone());
             usuarioDTO.setCpf(plano.getUsuario().getCpf());
             planoDTO.setUsuarioDTO(usuarioDTO);
         }
