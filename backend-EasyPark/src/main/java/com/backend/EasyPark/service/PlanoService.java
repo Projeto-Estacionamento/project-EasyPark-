@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+import com.backend.EasyPark.util.PlanoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -23,28 +24,37 @@ public class PlanoService {
     @Autowired
     @Lazy
     private UsuarioService usuarioService;
+    @Autowired
+    private PlanoMapper planoMapper;
 
 
     // Criar um novo plano
     @Transactional
     public PlanoDTO criarPlano(PlanoDTO planoDTO) {
+        // Validação dos campos
         validarPlano(planoDTO);
-        Plano plano = convertToEntity(planoDTO);
-        Plano savedPlano = planoRepository.save(plano);
-        return convertToDTO(savedPlano);
+
+        // Conversão para entidade
+        Plano plano = PlanoMapper.convertToEntity(planoDTO);
+
+        // Salva no banco de dados
+        Plano planoSalvo = planoRepository.save(plano);
+
+        // Converte de volta para DTO e retorna
+        return PlanoMapper.convertToDTO(planoSalvo);
     }
 
     // Buscar plano pelo ID
     public PlanoDTO buscarPlanoPorId(Integer id) {
         return planoRepository.findById(id)
-                .map(this::convertToDTO)
+                .map(PlanoMapper::convertToDTO)
                 .orElseThrow(() -> new RuntimeException("Plano não encontrado"));
     }
 
     // Listar todos os planos
     public List<PlanoDTO> listarPlanos() {
         return planoRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(PlanoMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -54,8 +64,8 @@ public class PlanoService {
         validarPlano(planoDTO);
         return planoRepository.findById(id)
                 .map(plano -> {
-                    updatePlanoFromDTO(plano, planoDTO);
-                    return convertToDTO(planoRepository.save(plano));
+                    PlanoMapper.updatePlanoFromDTO(plano, planoDTO);
+                    return PlanoMapper.convertToDTO(planoRepository.save(plano));
                 })
                 .orElseThrow(() -> new RuntimeException("Plano não encontrado"));
     }
@@ -64,48 +74,6 @@ public class PlanoService {
     @Transactional
     public void deletarPlano(Integer id) {
         planoRepository.deleteById(id);
-    }
-
-    // Método de conversão de DTO para entidade
-    Plano convertToEntity(PlanoDTO planoDTO) {
-        Plano plano = new Plano();
-        plano.setId(planoDTO.getId());
-        plano.setTipoPlano(planoDTO.getTipoPlano());
-        plano.setTipoVeiculo(planoDTO.getTipoVeiculo());
-        plano.setDataPagamento(planoDTO.getDataPagamento());
-        plano.setDataVencimento(planoDTO.getDataVencimento());
-        plano.setStatus(planoDTO.isStatus());
-        plano.setValorPlano(planoDTO.getValorPlano());
-
-
-        return plano;
-    }
-
-    // Método de conversão de entidade para DTO
-    PlanoDTO convertToDTO(Plano plano) {
-        PlanoDTO planoDTO = new PlanoDTO();
-        planoDTO.setId(plano.getId());
-        planoDTO.setTipoPlano(plano.getTipoPlano());
-        planoDTO.setTipoVeiculo(plano.getTipoVeiculo());
-        planoDTO.setDataPagamento(plano.getDataPagamento());
-        planoDTO.setDataVencimento(plano.getDataVencimento());
-        planoDTO.setStatus(plano.isStatus());
-        planoDTO.setValorPlano(plano.getValorPlano());
-
-
-        return planoDTO;
-    }
-
-    // Método para atualizar dados de um plano a partir de um DTO
-    private void updatePlanoFromDTO(Plano plano, PlanoDTO planoDTO) {
-        plano.setTipoPlano(planoDTO.getTipoPlano());
-        plano.setTipoVeiculo(planoDTO.getTipoVeiculo());
-        plano.setDataPagamento(planoDTO.getDataPagamento());
-        plano.setDataVencimento(planoDTO.getDataVencimento());
-        plano.setStatus(planoDTO.isStatus());
-        plano.setValorPlano(planoDTO.getValorPlano());
-
-
     }
 
     // Validação básica de plano
@@ -127,11 +95,4 @@ public class PlanoService {
         }
     }
 
-    public UsuarioService getUsuarioService() {
-        return usuarioService;
-    }
-
-    public void setUsuarioService(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
 }

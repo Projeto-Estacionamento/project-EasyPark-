@@ -26,10 +26,11 @@ public class Veiculo {
     private boolean ocupandoVaga;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private Usuario usuario;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "fabricante_id")
     private Fabricante fabricante;
 }

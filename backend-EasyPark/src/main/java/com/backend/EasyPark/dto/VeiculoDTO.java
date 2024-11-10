@@ -16,7 +16,7 @@ public class VeiculoDTO {
     private String placa;
     private TipoVeiculo tipoVeiculo;
     private boolean ocupandoVaga;
-    private Integer idUsuarioDTO; // Relacionamento com o usuário
+    private UsuarioDTO usuarioDTO; // Relacionamento com o usuário
     private FabricanteDTO fabricanteDTO;
 }
 

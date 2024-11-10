@@ -44,9 +44,9 @@ public class VeiculoController {
 
     @GetMapping
     public ResponseEntity<List<VeiculoDTO>> listarVeiculos() {
-        // Lógica para listar todos os veículos
-        // List<VeiculoDTO> veiculos = veiculoService.listarVeiculos();
-        return ResponseEntity.ok(new ArrayList<>());
+        // Chama o serviço para listar todos os veículos e converte para DTOs
+        List<VeiculoDTO> veiculos = veiculoService.listarVeiculos();
+        return ResponseEntity.ok(veiculos);
     }
 
     @PutMapping("/{id}")

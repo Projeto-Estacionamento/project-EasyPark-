@@ -2,6 +2,7 @@ package com.backend.EasyPark.util.validacao;
 
 
 
+import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.dto.TicketDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.*;
@@ -80,21 +81,19 @@ public class ValidarVeiculo {
         return ticketMapper.toDTO(ticketAtivo.get());
     }
 
-    /*public void validarExpiracaoPagamento(String placaVeiculo) throws EstacionamentoException {
+    public void validarExpiracaoPagamentoIsOcupando(String placaVeiculo) throws EstacionamentoException {
         VeiculoDTO veiculoDTO = buscarVeiculoPorPlaca(placaVeiculo);
-
         //plano associado ao usuario que recebe um veiculo
-        List<UsuarioPlanoDTO> usuarioPlanoDTO = veiculoDTO.getUsuarioDTO().getUsuarioPlanosDto();
-
+        List<PlanoDTO> planoDTOs = veiculoDTO.getUsuarioDTO().getPlanosDTO();
         LocalDateTime dataAtual = LocalDateTime.now();
-        LocalDateTime dataVencimento = usuarioPlanoDTO.get(usuarioPlanoDTO.size() - 1).getDataVencimento();
+        LocalDateTime dataVencimento = planoDTOs.get(planoDTOs.size() - 1).getDataVencimento();
         if (dataVencimento.isBefore(dataAtual)) {
             throw new EstacionamentoException("Plano vencido. Favor regularizar o pagamento.");
         }
         if (veiculoDTO.isOcupandoVaga()) {
             throw new EstacionamentoException("O veículo já está ocupando uma vaga no estacionamento.");
         }
-    }*/
+    }
 
     //Metodo para verificar se o
     /*private VeiculoDTO planoAssociadoAoUsuarioPlano(VeiculoDTO veiculo) {
@@ -150,7 +149,7 @@ public class ValidarVeiculo {
             throw new EstacionamentoException("O fabricante do veículo é obrigatório.");
         }
 
-        if (veiculo.getIdUsuarioDTO() == null) {
+        if (veiculo.getUsuarioDTO() == null) {
             throw new EstacionamentoException("O usuário do veículo é obrigatório.");
         }
 

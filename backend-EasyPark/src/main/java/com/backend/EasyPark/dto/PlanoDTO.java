@@ -21,7 +21,7 @@ public class PlanoDTO {
     private LocalDateTime dataPagamento;
     private LocalDateTime dataVencimento;
     private boolean status;
-    private Integer idUsuarioDTO;  // ID do usuário (não a entidade completa)
+    private UsuarioDTO usuarioDTO;  // ID do usuário (não a entidade completa)
     private double valorPlano;
 
 }

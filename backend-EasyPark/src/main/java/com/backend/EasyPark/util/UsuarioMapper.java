@@ -1,31 +1,21 @@
+/*
 package com.backend.EasyPark.util;
 
 import com.backend.EasyPark.dto.UsuarioDTO;
+import com.backend.EasyPark.entities.Plano;
 import com.backend.EasyPark.entities.Usuario;
+import com.backend.EasyPark.entities.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
+
 public class UsuarioMapper {
 
-    private final EnderecoMapper enderecoMapper;
-    private final PlanoMapper planoMapper;
 
-    @Autowired
-    public UsuarioMapper(@Lazy VeiculoMapper veiculoMapper,
-                         EnderecoMapper enderecoMapper,
-                         PlanoMapper planoMapper) {
-        this.enderecoMapper = enderecoMapper;
-        this.planoMapper = planoMapper;
-    }
-
-
-
-    // Converte um UsuarioDTO para Usuario (entidade)
     public Usuario toEntity(UsuarioDTO dto) {
         if (dto == null) {
             return null;
@@ -40,15 +30,12 @@ public class UsuarioMapper {
 
         // Converte o Endereco
         if (dto.getEndereco() != null) {
-            usuario.setEndereco(enderecoMapper.toEntity(dto.getEndereco()));
+            usuario.setEndereco(EnderecoMapper.toEntity(dto.getEndereco()));
         }
 
-        // Converte os Veiculos
 
-        // Converte os Planos
-        if (dto.getPlanosDTO() != null) {
-            usuario.setPlanos(planoMapper.toEntityList(dto.getPlanosDTO()));
-        }
+
+
 
         return usuario;
     }
@@ -68,19 +55,32 @@ public class UsuarioMapper {
 
         // Converte o Endereco
         if (entity.getEndereco() != null) {
-            dto.setEndereco(enderecoMapper.toDTO(entity.getEndereco()));
+            dto.setEndereco(EnderecoMapper.toDTO(entity.getEndereco()));
+        }
+
+        if (dto.getVeiculosDTO() != null && !dto.getVeiculosDTO().isEmpty()) {
+            List<Veiculo> veiculo = dto.getVeiculosDTO().stream()
+                    .map(VeiculoMapper::toEntity)
+                    .collect(Collectors.toList());
+            entity.setVeiculos(veiculo);
+        }
+
+        if (dto.getPlanosDTO() != null && !dto.getPlanosDTO().isEmpty()) {
+            List<Plano> planos = dto.getPlanosDTO().stream()
+                    .map(PlanoMapper::convertToEntity)
+                    .collect(Collectors.toList());
+            entity.setPlanos(planos);
         }
 
         // Converte os Veiculos
 
         // Converte os Planos
 
-
         return dto;
     }
 
     // Atualiza os dados do Usuario a partir de um UsuarioDTO
-    public void updateUsuarioFromDTO(Usuario usuario, UsuarioDTO usuarioDTO) {
+    public static void updateUsuarioFromDTO(Usuario usuario, UsuarioDTO usuarioDTO) {
         if (usuarioDTO.getNome() != null) {
             usuario.setNome(usuarioDTO.getNome());
         }
@@ -96,7 +96,7 @@ public class UsuarioMapper {
 
         // Atualiza o Endereco, se presente no DTO
         if (usuarioDTO.getEndereco() != null) {
-            usuario.setEndereco(enderecoMapper.toEntity(usuarioDTO.getEndereco()));
+            usuario.setEndereco(EnderecoMapper.toEntity(usuarioDTO.getEndereco()));
         }
 
         // Atualiza os Veiculos, se presente no DTO
@@ -105,7 +105,7 @@ public class UsuarioMapper {
     }
 
     // Converte uma lista de Usuario para uma lista de UsuarioDTO
-    public List<UsuarioDTO> toDTOList(List<Usuario> usuarios) {
+   public List<UsuarioDTO> toDTOList(List<Usuario> usuarios) {
         return usuarios.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
@@ -113,4 +113,6 @@ public class UsuarioMapper {
     public List<Usuario> toEntityList(List<UsuarioDTO> usuarioDtos) {
         return usuarioDtos.stream().map(this::toEntity).collect(Collectors.toList());
     }
-}
+
+
+}*/

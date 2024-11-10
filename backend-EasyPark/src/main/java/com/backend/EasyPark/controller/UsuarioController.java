@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.List;
 
 import com.backend.EasyPark.exception.EstacionamentoException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
    @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioDTO usuarioDTO) throws EstacionamentoException {
+    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) throws EstacionamentoException {
         UsuarioDTO novoUsuario = usuarioService.criarUsuario(usuarioDTO);
         return new ResponseEntity<>(novoUsuario, HttpStatus.CREATED);
     }
@@ -35,6 +36,7 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Integer id) throws EstacionamentoException {
         UsuarioDTO usuario = usuarioService.buscarUsuarioPorId(id);
+        System.out.println("VeiculosDTO: " + usuario.getVeiculosDTO());
         return ResponseEntity.ok(usuario);
     }
 
@@ -57,7 +59,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorCpf(@PathVariable String cpf) throws EstacionamentoException {
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorCpf(@Valid @PathVariable String cpf) throws EstacionamentoException {
         UsuarioDTO usuarios = usuarioService.buscarUsuarioPorCpf(cpf);
         return ResponseEntity.ok(usuarios);
     }

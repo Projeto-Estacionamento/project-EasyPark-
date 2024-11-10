@@ -1,17 +1,19 @@
 package com.backend.EasyPark.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.dto.EnderecoDTO;
 import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.util.EnderecoMapper;
+import com.backend.EasyPark.util.PlanoMapper;
+import com.backend.EasyPark.util.VeiculoMapper;
+import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.dto.EnderecoDTO;
-import com.backend.EasyPark.dto.VeiculoDTO;
-import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.entities.Usuario;
 import com.backend.EasyPark.entities.Endereco;
 import com.backend.EasyPark.entities.Veiculo;
@@ -24,19 +26,18 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private EnderecoService enderecoService;
+    private final ValidacaoUsuario validacaoUsuario;
 
-    @Autowired
-    private VeiculoService veiculoService;
 
-    @Autowired
-    private PlanoService planoService;
+    public UsuarioService(ValidacaoUsuario validacaoUsuario) {
+        this.validacaoUsuario = validacaoUsuario;
+    }
 
     // Criar um novo usuário
     @Transactional
-    public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
-        validarUsuario(usuarioDTO);
+    public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) throws EstacionamentoException {
+        validacaoUsuario.validarCamposUsuario(usuarioDTO);
+        validacaoUsuario.validarSeExisteCampoNoBancoDados(usuarioDTO);
         Usuario usuario = convertToEntity(usuarioDTO);
         Usuario savedUsuario = usuarioRepository.save(usuario);
         return convertToDTO(savedUsuario);
@@ -45,21 +46,22 @@ public class UsuarioService {
     // Buscar um usuário pelo ID
     public UsuarioDTO buscarUsuarioPorId(Integer id) {
         return usuarioRepository.findById(id)
-                .map(this::convertToDTO)
+                .map(UsuarioService::convertToDTO)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
     // Listar todos os usuários
     public List<UsuarioDTO> listarUsuarios() {
         return usuarioRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(UsuarioService::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     // Atualizar um usuário
     @Transactional
-    public UsuarioDTO atualizarUsuario(Integer id, UsuarioDTO usuarioDTO) {
-        validarUsuario(usuarioDTO);
+    public UsuarioDTO atualizarUsuario(Integer id, UsuarioDTO usuarioDTO) throws EstacionamentoException {
+        validacaoUsuario.validarCamposUsuario(usuarioDTO);
+        validacaoUsuario.validarSeExisteCampoNoBancoDados(usuarioDTO);
         return usuarioRepository.findById(id)
                 .map(usuario -> {
                     updateUsuarioFromDTO(usuario, usuarioDTO);
@@ -83,15 +85,21 @@ public class UsuarioService {
         return convertToDTO(usuario);
     }
 
-    // Buscar usuários por Email
+    //Buscar usuários por Email
     public List<UsuarioDTO> buscarUsuarioPorEmail(String email) {
-        return usuarioRepository.findByEmail(email).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        List<Usuario> usuarios = usuarioRepository.findByEmail(email);
+        List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+
+        for (Usuario usuario : usuarios) {
+            UsuarioDTO usuarioDTO = convertToDTO(usuario);
+            usuariosDTO.add(usuarioDTO);
+        }
+
+        return usuariosDTO;
     }
 
     //Método de conversão de DTO para entidade
-    public Usuario convertToEntity(UsuarioDTO usuarioDTO) {
+    public static Usuario convertToEntity(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
         usuario.setId(usuarioDTO.getId());
         usuario.setNome(usuarioDTO.getNome());
@@ -100,20 +108,20 @@ public class UsuarioService {
         usuario.setCpf(usuarioDTO.getCpf());
 
         if (usuarioDTO.getEndereco() != null) {
-            Endereco endereco = enderecoService.convertToEntity(usuarioDTO.getEndereco());
+            Endereco endereco = EnderecoMapper.toEntity(usuarioDTO.getEndereco());
             usuario.setEndereco(endereco);
         }
 
         if (usuarioDTO.getVeiculosDTO() != null && !usuarioDTO.getVeiculosDTO().isEmpty()) {
-            List<Veiculo> veiculos = usuarioDTO.getVeiculosDTO().stream()
-                    .map(veiculoService::convertToEntity)
+            List<Veiculo> veiculo = usuarioDTO.getVeiculosDTO().stream()
+                    .map(VeiculoMapper::toEntity)
                     .collect(Collectors.toList());
-            usuario.setVeiculos(veiculos);
+            usuario.setVeiculos(veiculo);
         }
 
         if (usuarioDTO.getPlanosDTO() != null && !usuarioDTO.getPlanosDTO().isEmpty()) {
             List<Plano> planos = usuarioDTO.getPlanosDTO().stream()
-                    .map(planoService::convertToEntity)
+                    .map(PlanoMapper::convertToEntity)
                     .collect(Collectors.toList());
             usuario.setPlanos(planos);
         }
@@ -122,7 +130,7 @@ public class UsuarioService {
     }
 
     // Método de conversão de entidade para DTO
-    private UsuarioDTO convertToDTO(Usuario usuario) {
+    public static UsuarioDTO convertToDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setId(usuario.getId());
         usuarioDTO.setNome(usuario.getNome());
@@ -130,20 +138,25 @@ public class UsuarioService {
         usuarioDTO.setTelefone(usuario.getTelefone());
         usuarioDTO.setCpf(usuario.getCpf());
 
-
-        if (usuario.getVeiculos() != null && !usuario.getVeiculos().isEmpty()) {
-            List<VeiculoDTO> veiculosDTO = usuario.getVeiculos().stream()
-                    .map(veiculoService::convertToDTO)
-                    .collect(Collectors.toList());
-            usuarioDTO.setVeiculosDTO(veiculosDTO);
+        if (usuario.getEndereco() != null) {
+            EnderecoDTO enderecoDTO = EnderecoMapper.toDTO(usuario.getEndereco());
+            usuarioDTO.setEndereco(enderecoDTO);
         }
 
-        if (usuario.getPlanos() != null && !usuario.getPlanos().isEmpty()) {
-            List<PlanoDTO> planosDTO = usuario.getPlanos().stream()
-                    .map(planoService::convertToDTO)
-                    .collect(Collectors.toList());
-            usuarioDTO.setPlanosDTO(planosDTO);
-        }
+        // Mapeia os veículos para veiculosDTO
+        usuarioDTO.setVeiculosDTO(usuario.getVeiculos() != null
+                ? usuario.getVeiculos().stream()
+                .map(VeiculoMapper::toDTO)
+                .collect(Collectors.toList())
+                : null);
+
+        // Mapeia os planos para planosDTO
+        usuarioDTO.setPlanosDTO(usuario.getPlanos() != null
+                ? usuario.getPlanos().stream()
+                .map(PlanoMapper::convertToDTO)
+                .collect(Collectors.toList())
+                : null);
+
 
         return usuarioDTO;
     }
@@ -159,21 +172,8 @@ public class UsuarioService {
             if (usuario.getEndereco() == null) {
                 usuario.setEndereco(new Endereco());
             }
-            enderecoService.updateEnderecoFromDTO(usuario.getEndereco(), usuarioDTO.getEndereco());
+            EnderecoMapper.updateEnderecoFromDTO(usuario.getEndereco(), usuarioDTO.getEndereco());
         }
 
-    }
-
-    // Validação básica do usuário
-    private void validarUsuario(UsuarioDTO usuarioDTO) {
-        if (usuarioDTO.getNome() == null || usuarioDTO.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do usuário não pode ser vazio");
-        }
-        if (usuarioDTO.getEmail() == null || !usuarioDTO.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            throw new IllegalArgumentException("Email inválido");
-        }
-        if (usuarioDTO.getCpf() == null || !usuarioDTO.getCpf().matches("\\d{11}")) {
-            throw new IllegalArgumentException("CPF inválido");
-        }
     }
 }

@@ -20,6 +20,5 @@ public interface FabricanteRepository extends JpaRepository<Fabricante, Integer>
     List<Fabricante> findByAno(Integer ano);
     
     List<Fabricante> findByMarcaAndModelo(String marca, String modelo);
-    
-    boolean existsByMarcaAndModeloAndAno(String marca, String modelo, Integer ano);
+
 }
