@@ -6,7 +6,9 @@ import com.backend.EasyPark.enums.TipoPlano;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -22,10 +24,20 @@ public class Plano {
     @Enumerated(EnumType.STRING)
     private TipoPlano tipoPlano;
 
+    @Enumerated(EnumType.STRING)
     private TipoVeiculo tipoVeiculo;
+
+    private LocalDateTime dataPagamento;
+
+    private LocalDateTime dataVencimento;
+
+    private boolean Status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")  // Especifica a coluna de associação
+    private Usuario usuario;
 
     private double valorPlano;
 
-    @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL)
-    private List<UsuarioPlano> usuariosPlanos;
+
 } 

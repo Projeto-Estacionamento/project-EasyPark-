@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FabricanteDTO {
-
     private Integer id;
     private String modelo;
     private String marca;

@@ -17,24 +17,21 @@ public class FabricanteService {
     @Autowired
     private FabricanteRepository fabricanteRepository;
 
-    @Autowired
-    private FabricanteMapper fabricanteMapper;
-
     public FabricanteDTO criar(FabricanteDTO fabricanteDTO) {
         validarAno(fabricanteDTO.getAno());
-        Fabricante fabricante = fabricanteMapper.toEntity(fabricanteDTO);
-        return fabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
+        Fabricante fabricante = FabricanteMapper.toEntity(fabricanteDTO);
+        return FabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
     }
 
     public FabricanteDTO buscarPorId(Integer id) {
         return fabricanteRepository.findById(id)
-                .map(fabricanteMapper::toDTO)
+                .map(FabricanteMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Fabricante não encontrado"));
     }
 
     public List<FabricanteDTO> listarTodos() {
         return fabricanteRepository.findAll().stream()
-                .map(fabricanteMapper::toDTO)
+                .map(FabricanteMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -42,8 +39,8 @@ public class FabricanteService {
         validarAno(fabricanteDTO.getAno());
         Fabricante fabricante = fabricanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fabricante não encontrado"));
-        fabricanteMapper.updateEntityFromDTO(fabricante, fabricanteDTO);
-        return fabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
+        FabricanteMapper.updateEntityFromDTO(fabricante, fabricanteDTO);
+        return FabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
     }
 
     public void deletar(Integer id) {

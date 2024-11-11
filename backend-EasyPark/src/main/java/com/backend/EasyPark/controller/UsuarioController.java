@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.List;
 
 import com.backend.EasyPark.exception.EstacionamentoException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+   @PostMapping
+    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) throws EstacionamentoException {
         UsuarioDTO novoUsuario = usuarioService.criarUsuario(usuarioDTO);
         return new ResponseEntity<>(novoUsuario, HttpStatus.CREATED);
     }
@@ -35,6 +36,7 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Integer id) throws EstacionamentoException {
         UsuarioDTO usuario = usuarioService.buscarUsuarioPorId(id);
+        System.out.println("VeiculosDTO: " + usuario.getVeiculosDTO());
         return ResponseEntity.ok(usuario);
     }
 
@@ -45,25 +47,25 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioDTO usuarioDTO) throws EstacionamentoException {
         UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioDTO);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarUsuario(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarUsuario(@PathVariable Integer id) throws EstacionamentoException {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<List<UsuarioDTO>> buscarUsuarioPorCpf(@PathVariable String cpf) {
-        List<UsuarioDTO> usuarios = usuarioService.buscarUsuarioPorCpf(cpf);
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorCpf(@Valid @PathVariable String cpf) throws EstacionamentoException {
+        UsuarioDTO usuarios = usuarioService.buscarUsuarioPorCpf(cpf);
         return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<List<UsuarioDTO>> buscarUsuarioPorEmail(@PathVariable String email) {
+    public ResponseEntity<List<UsuarioDTO>> buscarUsuarioPorEmail(@PathVariable String email) throws EstacionamentoException {
         List<UsuarioDTO> usuarios = usuarioService.buscarUsuarioPorEmail(email);
         return ResponseEntity.ok(usuarios);
     }
