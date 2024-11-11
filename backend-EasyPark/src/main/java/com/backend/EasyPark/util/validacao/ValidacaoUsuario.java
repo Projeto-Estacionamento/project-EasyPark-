@@ -49,10 +49,5 @@ public class ValidacaoUsuario {
         if (usuarioDTO.getEndereco() == null) {
             throw new EstacionamentoException("Endereço precisa ser informato.");
         }
-
-
     }
-
-
-
 }

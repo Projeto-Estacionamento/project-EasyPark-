@@ -34,6 +34,21 @@ public class ValidarVeiculo {
     private VeiculoMapper veiculoMapper;
 
 
+    public boolean isVeiculoMensalista(String placa) throws EstacionamentoException {
+        // Busca o veículo e verifica se tem plano ativo
+        VeiculoDTO veiculo = buscarVeiculoPorPlaca(placa);
+        if (veiculo != null && veiculo.getUsuarioDTO() != null) {
+            List<PlanoDTO> planos = veiculo.getUsuarioDTO().getPlanosDTO();
+            if (planos != null) {
+                return planos.stream()
+                        .anyMatch(plano -> plano.isStatus() &&
+                                plano.getDataVencimento().isAfter(LocalDateTime.now()));
+            }
+        }
+        return false;
+    }
+
+
 //    public TicketDTO criarTicketPorPlaca(String placaVeiculo) {
 //        try {
 //            this.validarPlanoVeiculo(placaVeiculo);

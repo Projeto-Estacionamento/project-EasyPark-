@@ -30,19 +30,17 @@ public class TicketService {
     private final ConfiguracaoSistemaService configuracaoSistemaService;
     private final ValidarVeiculo validarVeiculo;
     private final VeiculoRepository veiculoRepository;
-    private final VeiculoMapper veiculoMapper;
     private final TicketMapper ticketMapper;
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
                          ConfiguracaoSistemaService configuracaoSistemaService,
                          ValidarVeiculo validarVeiculo,
-                         VeiculoRepository veiculoRepository, VeiculoMapper veiculoMapper, TicketMapper ticketMapper) {
+                         VeiculoRepository veiculoRepository, TicketMapper ticketMapper) {
         this.ticketRepository = ticketRepository;
         this.configuracaoSistemaService = configuracaoSistemaService;
         this.validarVeiculo = validarVeiculo;
         this.veiculoRepository = veiculoRepository;
-        this.veiculoMapper = veiculoMapper;
         this.ticketMapper = ticketMapper;
 
     }
@@ -51,25 +49,36 @@ public class TicketService {
         if (ticket == null || ticket.getPlacaVeiculo() == null) {
             throw new EstacionamentoException("Ticket ou placa do veículo não podem ser nulos");
         }
-        Ticket ticketDTO = new Ticket();
-        try {
-            VeiculoDTO veiculo = validarVeiculo.buscarVeiculoPorPlaca(ticket.getPlacaVeiculo());
-            Veiculo veiculoSalvo = veiculoMapper.toEntity(veiculo);
-            validarVeiculo.buscarTicketPorPlaca(ticket.getPlacaVeiculo());
-            //validarVeiculo.validarPlanoVeiculo(ticket.getPlacaVeiculo());
-            ticketDTO.setPlacaVeiculo(ticket.getPlacaVeiculo());
-            ticketDTO.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
-            ticketDTO.setHoraChegada(LocalDateTime.now());
-            veiculo.setOcupandoVaga(true);
-            veiculoRepository.save(veiculoSalvo);
-            ticketRepository.save(ticketDTO);
-        } catch (EntityNotFoundException e) {
-            validarVeiculo.criarTicketAvulso(ticketDTO.getPlacaVeiculo());
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao criar o ticket: " + e.getMessage());
-        }
 
-        return ticketMapper.toDTO(ticketDTO);
+        Ticket ticketEntity = new Ticket();
+        ticketEntity.setPlacaVeiculo(ticket.getPlacaVeiculo());
+        ticketEntity.setHoraChegada(LocalDateTime.now());
+
+        try {
+            // Verifica se o veículo existe e é mensalista
+            boolean isMensalista = validarVeiculo.isVeiculoMensalista(ticket.getPlacaVeiculo());
+
+            // Define o tipo do ticket baseado na verificação
+            ticketEntity.setTipoTicket(isMensalista ? TipoTicket.TICKET_MENSALISTA : TipoTicket.TICKET_AVULSO);
+
+            // Se for mensalista, atualiza o veículo
+            if (isMensalista) {
+                VeiculoDTO veiculo = validarVeiculo.buscarVeiculoPorPlaca(ticket.getPlacaVeiculo());
+                Veiculo veiculoEntity = VeiculoMapper.toEntity(veiculo);
+                veiculoEntity.setOcupandoVaga(true);
+                veiculoRepository.save(veiculoEntity);
+            }
+
+            // Salva o ticket
+            return ticketMapper.toDTO(ticketRepository.save(ticketEntity));
+
+        } catch (EntityNotFoundException e) {
+            // Se o veículo não for encontrado, cria um ticket avulso
+            ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
+            return ticketMapper.toDTO(ticketRepository.save(ticketEntity));
+        } catch (Exception e) {
+            throw new EstacionamentoException("Erro ao criar o ticket: " + e.getMessage());
+        }
     }
 
 
