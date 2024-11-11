@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import com.backend.EasyPark.entities.Fabricante;
 
 @Repository
-public interface FabricanteRepository extends JpaRepository<Fabricante, Long> {
+public interface FabricanteRepository extends JpaRepository<Fabricante, Integer> {
     
-    Optional<Fabricante> findByMarca(String marca);
+    Fabricante findByMarca(String marca);
     
     List<Fabricante> findByModeloContainingIgnoreCase(String modelo);
     

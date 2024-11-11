@@ -3,6 +3,8 @@ package com.backend.EasyPark.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +26,10 @@ public class UsuarioService {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
-    @Transactional
+    private ValidacaoUsuario validacaoUsuario;
+
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
-        validarUsuario(usuarioDTO);
+       validacaoUsuario.validarUsuario(usuarioDTO);
         if (usuarioDTO.getVeiculosDTO() != null) {
             veiculoService.validarVeiculo(usuarioDTO.getVeiculosDTO());
         }
@@ -35,10 +38,10 @@ public class UsuarioService {
         return usuarioMapper.toDTO(savedUsuario);
     }
 
-    public UsuarioDTO buscarUsuarioPorId(Long id) {
+    public UsuarioDTO buscarUsuarioPorId(Integer id) throws EstacionamentoException {
         return usuarioRepository.findById(id)
                 .map(usuarioMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EstacionamentoException("Usuário não encontrado"));
     }
 
     public List<UsuarioDTO> listarUsuarios() {
@@ -47,9 +50,9 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
-        validarUsuario(usuarioDTO);
+
+    public UsuarioDTO atualizarUsuario(Integer id, UsuarioDTO usuarioDTO) {
+        validacaoUsuario.validarUsuario(usuarioDTO);
         if (usuarioDTO.getVeiculosDTO() != null) {
             veiculoService.validarVeiculo(usuarioDTO.getVeiculosDTO());
         }
@@ -61,8 +64,8 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
-    @Transactional
-    public void deletarUsuario(Long id) {
+
+    public void deletarUsuario(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
@@ -78,15 +81,4 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    private void validarUsuario(UsuarioDTO usuarioDTO) {
-        if (usuarioDTO.getNome() == null || usuarioDTO.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do usuário não pode ser vazio");
-        }
-        if (usuarioDTO.getEmail() == null || !usuarioDTO.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            throw new IllegalArgumentException("Email inválido");
-        }
-        if (usuarioDTO.getCpf() == null || !usuarioDTO.getCpf().matches("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$")) {
-            throw new IllegalArgumentException("CPF inválido. Use o formato: XXX.XXX.XXX-XX");
-        }
-    }
 }

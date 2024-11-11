@@ -18,20 +18,26 @@ import com.backend.EasyPark.dto.TicketDTO;
 import com.backend.EasyPark.service.TicketService;
 
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("/tickets")
 public class TicketController {
 
+    private final TicketService ticketService;
+
     @Autowired
-    private TicketService ticketService;
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 
     @PostMapping
     public ResponseEntity<TicketDTO> criarTicket(@RequestBody TicketDTO ticketDTO) {
+        // Cria um novo ticket
         TicketDTO novoTicket = ticketService.criarTicket(ticketDTO);
         return new ResponseEntity<>(novoTicket, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TicketDTO> buscarTicketPorId(@PathVariable Long id) {
+    public ResponseEntity<TicketDTO> buscarTicketPorId(@PathVariable Integer id) {
+        // Busca um ticket pelo ID
         TicketDTO ticket = ticketService.buscarTicketPorId(id);
         return ResponseEntity.ok(ticket);
     }
@@ -43,15 +49,10 @@ public class TicketController {
     }
 
     @PutMapping("/{id}/finalizar")
-    public ResponseEntity<TicketDTO> finalizarTicket(@PathVariable Long id) {
+    public ResponseEntity<TicketDTO> finalizarTicket(@PathVariable Integer id) {
+        // Finaliza um ticket (registra a saída e calcula o valor)
         TicketDTO ticketFinalizado = ticketService.finalizarTicket(id);
         return ResponseEntity.ok(ticketFinalizado);
-    }
-
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<List<TicketDTO>> buscarTicketsPorUsuario(@PathVariable Long usuarioId) {
-        List<TicketDTO> tickets = ticketService.buscarTicketsPorUsuario(usuarioId);
-        return ResponseEntity.ok(tickets);
     }
 
     @ExceptionHandler(RuntimeException.class)

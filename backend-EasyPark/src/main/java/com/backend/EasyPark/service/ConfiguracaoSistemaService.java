@@ -37,7 +37,7 @@ public class ConfiguracaoSistemaService {
         return configuracaoSistemaMapper.toDTO(configuracao);
     }
 
-    public ConfiguracaoSistemaDTO atualizarConfiguracao(Long id, ConfiguracaoSistemaDTO configuracaoDTO) {
+    public ConfiguracaoSistemaDTO atualizarConfiguracao(Integer id, ConfiguracaoSistemaDTO configuracaoDTO) {
         ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Configuração não encontrada"));
         configuracaoSistemaMapper.updateEntityFromDTO(configuracao, configuracaoDTO);

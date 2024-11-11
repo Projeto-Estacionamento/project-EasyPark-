@@ -9,29 +9,18 @@ import com.backend.EasyPark.entities.Endereco;
 public class EnderecoMapper {
 
     public Endereco toEntity(EnderecoDTO dto) {
-        if (dto == null) {
-            return null;
-        }
+        Endereco endereco = new Endereco(dto.getId(), dto.getCidade(), dto.getEstado(),
+                dto.getCep());
 
-        Endereco endereco = new Endereco();
-        endereco.setId(dto.getId());
-        endereco.setCidade(dto.getCidade());
-        endereco.setEstado(dto.getEstado());
-        endereco.setCep(dto.getCep());
         return endereco;
     }
 
-    public EnderecoDTO toDTO(Endereco entity) {
-        if (entity == null) {
-            return null;
-        }
+    public EnderecoDTO toDTO(Endereco endereco) {
+        EnderecoDTO enderecoDTO = new EnderecoDTO(endereco.getId(),endereco.getCidade()
+                ,endereco.getEstado(),endereco.getCep());
 
-        EnderecoDTO dto = new EnderecoDTO();
-        dto.setId(entity.getId());
-        dto.setCidade(entity.getCidade());
-        dto.setEstado(entity.getEstado());
-        dto.setCep(entity.getCep());
-        return dto;
+
+        return enderecoDTO;
     }
 
     public void updateEntityFromDTO(EnderecoDTO dto, Endereco entity) {

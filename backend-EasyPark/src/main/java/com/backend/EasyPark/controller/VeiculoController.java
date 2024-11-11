@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +27,14 @@ public class VeiculoController {
     private VeiculoService veiculoService;
 
     @PostMapping
-    public ResponseEntity<VeiculoDTO> criarVeiculo(@RequestBody VeiculoDTO veiculoDTO) {
+    public ResponseEntity<VeiculoDTO> criarVeiculo(@RequestBody VeiculoDTO veiculoDTO) throws EstacionamentoException {
         // Lógica para criar um novo veículo
         VeiculoDTO novoVeiculo = veiculoService.criarVeiculo(veiculoDTO);
         return ResponseEntity.ok(novoVeiculo);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VeiculoDTO> buscarVeiculoPorId(@PathVariable Long id) {
+    public ResponseEntity<VeiculoDTO> buscarVeiculoPorId(@PathVariable Integer id) {
         // Lógica para buscar um veículo por ID
         VeiculoDTO veiculo = veiculoService.buscarVeiculoPorId(id);
         if (veiculo != null) {
@@ -51,7 +52,7 @@ public class VeiculoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VeiculoDTO> atualizarVeiculo(@PathVariable Long id, @RequestBody VeiculoDTO veiculoDTO) {
+    public ResponseEntity<VeiculoDTO> atualizarVeiculo(@PathVariable Integer id, @RequestBody VeiculoDTO veiculoDTO) {
         // Lógica para atualizar um veículo
         VeiculoDTO veiculoAtualizado = veiculoService.atualizarVeiculo(id, veiculoDTO);
         if (veiculoAtualizado != null) {

@@ -18,7 +18,7 @@ import com.backend.EasyPark.dto.EnderecoDTO;
 import com.backend.EasyPark.service.EnderecoService;
 
 @RestController
-@RequestMapping("/api/enderecos")
+@RequestMapping("/enderecos")
 public class EnderecoController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class EnderecoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<EnderecoDTO> findById(@PathVariable Integer id) {
         EnderecoDTO endereco = enderecoService.findById(id);
         return ResponseEntity.ok(endereco);
     }
@@ -49,13 +49,13 @@ public class EnderecoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> update(@PathVariable Long id, @RequestBody EnderecoDTO enderecoDTO) {
+    public ResponseEntity<EnderecoDTO> update(@PathVariable Integer id, @RequestBody EnderecoDTO enderecoDTO) {
         EnderecoDTO enderecoAtualizado = enderecoService.update(id, enderecoDTO);
         return ResponseEntity.ok(enderecoAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         enderecoService.delete(id);
         return ResponseEntity.noContent().build();
     }

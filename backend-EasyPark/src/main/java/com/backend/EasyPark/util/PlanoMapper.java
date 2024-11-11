@@ -2,50 +2,52 @@ package com.backend.EasyPark.util;
 
 import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.entities.Plano;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class PlanoMapper {
 
-    // Converte PlanoDTO para Plano
+    private final UsuarioPlanoMapper usuarioPlanoMapper;
+
+    public PlanoMapper(UsuarioPlanoMapper usuarioPlanoMapper) {
+        this.usuarioPlanoMapper = usuarioPlanoMapper;
+    }
+
     public Plano toEntity(PlanoDTO dto) {
         if (dto == null) {
             return null;
         }
-
-        Plano plano = new Plano();
-        plano.setId(dto.getId());
-        plano.setTipoPlano(dto.getTipoPlano());
-        plano.setValorMensal(dto.getValorMensal());
-
-        // Aqui pode associar o usuário, porem vai ser feito no service como boa pratica.
-        // Usuario usuario = new Usuario();
-        // usuario.setId(dto.getUsuarioId());
-        // plano.setUsuario(usuario);
-
-        return plano;
+        return new Plano(dto.getId(),
+                dto.getTipoPlano(),
+                dto.getTipoVeiculo(),
+                dto.getValorPlano(),
+                usuarioPlanoMapper.toEntity(dto.getUsuarioPlanoDTOList()));
     }
 
-    // Converte Plano para PlanoDTO
-    public PlanoDTO toDTO(Plano plano) {
-        if (plano == null) {
+    public PlanoDTO toDTO(Plano entity) {
+        if (entity == null) {
             return null;
         }
-
-        PlanoDTO dto = new PlanoDTO();
-        dto.setId(plano.getId());
-        dto.setTipoPlano(plano.getTipoPlano());
-        dto.setValorMensal(plano.getValorMensal());
-        dto.setIdUsuario(plano.getUsuario() != null ? plano.getUsuario().getId() : null);
-
-        return dto;
+        return new PlanoDTO(entity.getId(),
+                entity.getTipoPlano(),
+                entity.getTipoVeiculo(),
+                entity.getValorPlano(),
+                usuarioPlanoMapper.toDTO(entity.getUsuariosPlanos()));
     }
 
-    // Converte uma lista de Planos para uma lista de PlanoDTOs
-    public List<PlanoDTO> toDTOList(List<Plano> planos) {
-        return planos.stream()
+    public List<Plano> toListEntity(List<PlanoDTO> dtos) {
+        return dtos.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<PlanoDTO> toListDTO(List<Plano> entities) {
+        return entities.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 }
+

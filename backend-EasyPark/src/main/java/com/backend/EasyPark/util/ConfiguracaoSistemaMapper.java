@@ -22,6 +22,8 @@ public class ConfiguracaoSistemaMapper {
         configuracao.setValorDiariaCarro(dto.getValorDiariaCarro());
         configuracao.setValorDiariaMoto(dto.getValorDiariaMoto());
         configuracao.setHoraMaximaAvulso(dto.getHoraMaximaAvulso());
+        configuracao.setValorMensalidadeMoto(dto.getValorMensalidadeMoto());
+        configuracao.setValorMensalidadeCarro(dto.getValorMensalidadeCarro());
 
         return configuracao;
     }
@@ -30,7 +32,6 @@ public class ConfiguracaoSistemaMapper {
         if (entity == null) {
             return null;
         }
-
         return new ConfiguracaoSistemaDTO(
             entity.getId(),
             entity.getQtdMoto(),
@@ -39,7 +40,9 @@ public class ConfiguracaoSistemaMapper {
             entity.getValorHoraCarro(),
             entity.getValorDiariaCarro(),
             entity.getValorDiariaMoto(),
-            entity.getHoraMaximaAvulso()
+            entity.getHoraMaximaAvulso(),
+            entity.getValorMensalidadeCarro(),
+            entity.getValorMensalidadeMoto()
         );
     }
 
@@ -47,7 +50,6 @@ public class ConfiguracaoSistemaMapper {
         if (dto == null) {
             return;
         }
-
         configuracao.setQtdMoto(dto.getQtdMoto());
         configuracao.setQtdCarro(dto.getQtdCarro());
         configuracao.setValorHoraMoto(dto.getValorHoraMoto());
@@ -55,5 +57,7 @@ public class ConfiguracaoSistemaMapper {
         configuracao.setValorDiariaCarro(dto.getValorDiariaCarro());
         configuracao.setValorDiariaMoto(dto.getValorDiariaMoto());
         configuracao.setHoraMaximaAvulso(dto.getHoraMaximaAvulso());
+        configuracao.setValorMensalidadeMoto(dto.getValorMensalidadeCarro());
+        configuracao.setValorMensalidadeMoto(dto.getValorMensalidadeMoto());
     }
 }

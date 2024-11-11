@@ -28,7 +28,7 @@ public class EnderecoService {
     }
 
     @Transactional(readOnly = true)
-    public EnderecoDTO findById(Long id) {
+    public EnderecoDTO findById(Integer id) {
         Endereco endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
         return enderecoMapper.toDTO(endereco);
@@ -40,7 +40,7 @@ public class EnderecoService {
         return enderecos.stream().map(enderecoMapper::toDTO).collect(Collectors.toList());
     }
 
-    @Transactional
+
     public EnderecoDTO create(EnderecoDTO enderecoDTO) {
         validarEndereco(enderecoDTO);
         Endereco endereco = enderecoMapper.toEntity(enderecoDTO);
@@ -48,8 +48,8 @@ public class EnderecoService {
         return enderecoMapper.toDTO(endereco);
     }
 
-    @Transactional
-    public EnderecoDTO update(Long id, EnderecoDTO enderecoDTO) {
+
+    public EnderecoDTO update(Integer id, EnderecoDTO enderecoDTO) {
         Endereco endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
         enderecoMapper.updateEntityFromDTO(enderecoDTO, endereco);
@@ -57,8 +57,8 @@ public class EnderecoService {
         return enderecoMapper.toDTO(endereco);
     }
 
-    @Transactional
-    public void delete(Long id) {
+
+    public void delete(Integer id) {
         enderecoRepository.deleteById(id);
     }
 
