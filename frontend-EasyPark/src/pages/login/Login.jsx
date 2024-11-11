@@ -25,7 +25,7 @@ export function Login() {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/usuario/login`,
+        `${import.meta.env.VITE_API_URL}/api/acesso/login`,
         valores
       );
       if (response.status === 200) {

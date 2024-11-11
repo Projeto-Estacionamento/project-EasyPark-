@@ -18,7 +18,7 @@ export function AdminHome() {
         <Button onClick={() => navigate('/configuracao-estacionamento')}>
           Configuração de Estacionamento
         </Button>
-        <Button onClick={() => navigate('/configuracao-usuarios')}>
+        <Button onClick={() => navigate('/configuracao-acesso')}>
           Configuração de Usuários
         </Button>
       </div>

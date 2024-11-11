@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "../../components/button/Button";
-import './CaixaPage.css';
+import './CaixaHome.css';
 
-export function CaixaPage() {
+export function CaixaHome() {
   const navigate = useNavigate();
 
   const handleLogout = () => {

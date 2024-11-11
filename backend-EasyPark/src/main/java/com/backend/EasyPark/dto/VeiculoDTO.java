@@ -18,6 +18,5 @@ public class VeiculoDTO {
     private boolean ocupandoVaga;
     private UsuarioDTO usuarioDTO; // Relacionamento com o usuário
     private FabricanteDTO fabricanteDTO;
-    private UsuarioDTO usuarioDTO;
 }
 
