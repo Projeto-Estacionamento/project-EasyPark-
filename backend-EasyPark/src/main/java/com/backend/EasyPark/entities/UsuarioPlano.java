@@ -2,6 +2,7 @@ package com.backend.EasyPark.entities;
 
 import com.backend.EasyPark.enums.TipoPlano;
 import com.backend.EasyPark.enums.TipoVeiculo;
+
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;

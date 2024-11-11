@@ -19,8 +19,5 @@ public class UsuarioDTO {
     //private boolean pagamentoPendente;
     private EnderecoDTO enderecoDTO;
     private List<VeiculoDTO> veiculosDTO;
-<<<<<<< Updated upstream
-=======
     private List<UsuarioPlanoDTO> usuarioPlanosDto;
->>>>>>> Stashed changes
 }

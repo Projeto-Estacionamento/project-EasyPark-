@@ -13,8 +13,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> findByCpf(String cpf);
     
     List<Usuario> findByEmail(String email);
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 }
