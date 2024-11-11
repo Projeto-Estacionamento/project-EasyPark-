@@ -20,5 +20,3 @@ public class TicketDTO {
     private TipoTicket tipoTicket;
     private double valorTotalPagar;
 
-
-}
