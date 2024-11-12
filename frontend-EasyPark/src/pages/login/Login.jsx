@@ -5,7 +5,6 @@ import { Input } from "../../components/input/Input";
 import { Button } from "../../components/button/Button";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./Login.css";
 
 export function Login() {
@@ -18,26 +17,29 @@ export function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!valores.username || !valores.senha) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/acesso/login`,
-        valores
-      );
-      if (response.status === 200) {
-        login(response.data);
-        if (response.data.tipoAcesso === "ADMINISTRADOR") {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/acesso/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: valores.username, senha: valores.senha }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        login(data);
+        if (data.tipoAcesso === "ADMINISTRADOR") {
           navigate("/admin");
-        } else if (response.data.tipoAcesso === "CAIXA") {
+        } else if (data.tipoAcesso === "CAIXA") {
           navigate("/caixa");
         }
+      } else {
+        console.error('Erro ao fazer login:', response.statusText);
+        alert("Username ou senha incorretos!");
       }
     } catch (error) {
-      console.error(error);
+      console.error('Erro ao fazer login:', error);
       alert("Username ou senha incorretos!");
     }
   };

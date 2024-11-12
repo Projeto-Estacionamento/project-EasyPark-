@@ -23,9 +23,14 @@ public class AcessoService {
         validacaoAcesso.validarAcesso(acessoDTO);
         
         Acesso acesso = acessoRepository.findByUsername(acessoDTO.getUsername());
-        if (acesso == null || !passwordEncoder.matches(acessoDTO.getSenha(), acesso.getSenha())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas");
+        if (acesso == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nome de usuário não encontrado");
         }
+
+        if (!passwordEncoder.matches(acessoDTO.getSenha(), acesso.getSenha())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Senha incorreta");
+        }
+
         return acessoMapper.toDTO(acesso);
     }
 

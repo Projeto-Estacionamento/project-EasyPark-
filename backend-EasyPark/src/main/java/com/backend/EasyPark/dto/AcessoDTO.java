@@ -1,6 +1,8 @@
 package com.backend.EasyPark.dto;
 
 import com.backend.EasyPark.enums.TipoAcesso;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public class AcessoDTO {
     private String username;
@@ -37,4 +39,6 @@ public class AcessoDTO {
     public void setTipoAcesso(TipoAcesso tipoAcesso) {
         this.tipoAcesso = tipoAcesso;
     }
+
+    
 }
