@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
+import java.util.stream.Collectors;
 @Service
 public class AcessoService {
     @Autowired
@@ -39,5 +41,12 @@ public class AcessoService {
         Acesso acesso = acessoMapper.toEntity(acessoDTO);
         acesso.setSenha(passwordEncoder.encode(acesso.getSenha()));
         acessoRepository.save(acesso);
+    }
+
+    public List<AcessoDTO> listarUsuarios() {
+        List<Acesso> acessos = acessoRepository.findAll();
+        return acessos.stream()
+                      .map(acessoMapper::toDTO)
+                      .collect(Collectors.toList());
     }
 } 

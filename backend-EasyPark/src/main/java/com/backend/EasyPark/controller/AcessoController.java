@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/acesso")
 public class AcessoController {
@@ -16,7 +18,20 @@ public class AcessoController {
 
     @PostMapping("/login")
     public ResponseEntity<AcessoDTO> login(@RequestBody AcessoDTO acessoDTO) {
+        System.out.println("Tentativa de login: " + acessoDTO.getUsername());
         AcessoDTO usuarioLogado = acessoService.login(acessoDTO);
         return new ResponseEntity<>(usuarioLogado, HttpStatus.OK);
+    }
+
+    @PostMapping("/criar")
+    public ResponseEntity<String> criarUsuario(@RequestBody AcessoDTO acessoDTO) {
+        acessoService.criarUsuario(acessoDTO);
+        return new ResponseEntity<>("Usuário criado com sucesso", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<AcessoDTO>> listarUsuarios() {
+        List<AcessoDTO> usuarios = acessoService.listarUsuarios();
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 }
