@@ -13,13 +13,18 @@ public class Acesso {
     private String senha;
     private TipoAcesso tipoAcesso;
 
-    // Construtores, getters e setters
+    // Construtor padrão
+    public Acesso() {
+    }
+
+    // Construtor com parâmetros
     public Acesso(String username, String senha, TipoAcesso tipoAcesso) {
         this.username = username;
         this.senha = senha;
         this.tipoAcesso = tipoAcesso;
     }
 
+    // Getters e Setters
     public String getUsername() {
         return username;
     }
