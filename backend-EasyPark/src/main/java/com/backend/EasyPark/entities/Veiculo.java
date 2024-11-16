@@ -27,7 +27,7 @@ public class Veiculo {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonBackReference
+    @JsonIgnore
     private Usuario usuario;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

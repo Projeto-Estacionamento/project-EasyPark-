@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.backend.EasyPark.dto.VeiculoDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.backend.EasyPark.entities.Veiculo;
@@ -21,4 +23,18 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Integer> {
     Veiculo findByPlaca(String placaVeiculo);
 
     List<Veiculo> findByUsuarioId(Integer usuarioId);
+
+    @Query(value = """
+            SELECT v.*, u.*, ap.*, p.* 
+            FROM veiculo v
+            INNER JOIN usuario u ON v.usuario_id = u.id
+            INNER JOIN assinatura_plano ap ON ap.usuario_id = u.id
+            INNER JOIN plano p ON ap.plano_id = p.id
+            WHERE v.placa = :placa
+            AND ap.ativo = true
+            AND ap.data_vencimento >= NOW()
+            AND p.tipo_veiculo = v.tipo_veiculo
+            """, nativeQuery = true)
+    Optional<Veiculo> buscarVeiculoComAssinaturaValida(@Param("placa") String placa);
+
 }

@@ -4,12 +4,14 @@ package com.backend.EasyPark.util.validacao;
 
 import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.dto.TicketDTO;
+import com.backend.EasyPark.dto.UsuarioDTO;
 import com.backend.EasyPark.dto.VeiculoDTO;
 import com.backend.EasyPark.entities.*;
 import com.backend.EasyPark.enums.TipoTicket;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.repository.TicketRepository;
 import com.backend.EasyPark.repository.VeiculoRepository;
+import com.backend.EasyPark.util.PlanoMapper;
 import com.backend.EasyPark.util.TicketMapper;
 import com.backend.EasyPark.util.VeiculoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,6 @@ import org.springframework.stereotype.Component;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -28,26 +28,26 @@ public class ValidarVeiculo {
     private TicketRepository ticketRepository;
     @Autowired
     private VeiculoRepository veiculoRepository;
-    @Autowired
-    private TicketMapper ticketMapper;
-    @Autowired
-    private VeiculoMapper veiculoMapper;
 
-
-    public boolean isVeiculoMensalista(String placa) throws EstacionamentoException {
-        // Busca o veículo e verifica se tem plano ativo
+  /*  public boolean isVeiculoMensalista(String placa) throws EstacionamentoException {
+        //Busca o veículo e verifica se tem um plano ativo
         VeiculoDTO veiculo = buscarVeiculoPorPlaca(placa);
+
+        //Verifica se o veículo pertence a um usuário
         if (veiculo != null && veiculo.getUsuarioDTO() != null) {
-            List<PlanoDTO> planos = veiculo.getUsuarioDTO().getPlanosDTO();
-            if (planos != null) {
-                return planos.stream()
-                        .anyMatch(plano -> plano.isStatus() &&
-                                plano.getDataVencimento().isAfter(LocalDateTime.now()));
+            UsuarioDTO usuario = veiculo.getUsuarioDTO();
+
+            //Verifica se o usuário possui um plano ativo associado
+            if (usuario.getAssinaturas() != null) {
+                Plano plano = PlanoMapper.convertToEntity(usuario.getAssinaturas());
+                // Verifica se o plano está ativo e se a data de vencimento ainda é válida
+                return plano.isStatus() &&
+                        plano.getDataVencimento().isAfter(LocalDateTime.now());
             }
         }
         return false;
     }
-
+*/
 
 //    public TicketDTO criarTicketPorPlaca(String placaVeiculo) {
 //        try {
@@ -79,13 +79,13 @@ public class ValidarVeiculo {
         ticket.setHoraChegada(LocalDateTime.now());
         ticket.setTipoTicket(TipoTicket.TICKET_AVULSO);
         ticketRepository.save(ticket);
-        return ticketMapper.toDTO(ticket);
+        return TicketMapper.toDTO(ticket);
     }
 
     public VeiculoDTO buscarVeiculoPorPlaca(String placaVeiculo) throws EstacionamentoException {
        Veiculo veiculo = veiculoRepository.findByPlaca(placaVeiculo);
         if (veiculo == null || veiculo.equals("")) {}
-        return veiculoMapper.toDTO(veiculo);
+        return VeiculoMapper.toDTO(veiculo);
     }
 
     public TicketDTO buscarTicketPorPlaca(String placaVeiculo) throws EstacionamentoException {
@@ -93,22 +93,22 @@ public class ValidarVeiculo {
         if (ticketAtivo.isPresent()) {
             throw new EstacionamentoException("Já existe um ticket ativo para esta placa");
         }
-        return ticketMapper.toDTO(ticketAtivo.get());
+        return TicketMapper.toDTO(ticketAtivo.get());
     }
 
-    public void validarExpiracaoPagamentoIsOcupando(String placaVeiculo) throws EstacionamentoException {
+  /*  public void validarExpiracaoPagamentoIsOcupando(String placaVeiculo) throws EstacionamentoException {
         VeiculoDTO veiculoDTO = buscarVeiculoPorPlaca(placaVeiculo);
         //plano associado ao usuario que recebe um veiculo
-        List<PlanoDTO> planoDTOs = veiculoDTO.getUsuarioDTO().getPlanosDTO();
+        PlanoDTO planoDTO = veiculoDTO.getUsuarioDTO().getPlanoDTO();
         LocalDateTime dataAtual = LocalDateTime.now();
-        LocalDateTime dataVencimento = planoDTOs.get(planoDTOs.size() - 1).getDataVencimento();
+        LocalDateTime dataVencimento = planoDTO.getDataVencimento();
         if (dataVencimento.isBefore(dataAtual)) {
             throw new EstacionamentoException("Plano vencido. Favor regularizar o pagamento.");
         }
         if (veiculoDTO.isOcupandoVaga()) {
             throw new EstacionamentoException("O veículo já está ocupando uma vaga no estacionamento.");
         }
-    }
+    }*/
 
     //Metodo para verificar se o
     /*private VeiculoDTO planoAssociadoAoUsuarioPlano(VeiculoDTO veiculo) {
@@ -164,7 +164,7 @@ public class ValidarVeiculo {
             throw new EstacionamentoException("O fabricante do veículo é obrigatório.");
         }
 
-        if (veiculo.getUsuarioDTO() == null) {
+        if (veiculo.getIdUsuarioDTO() == null) {
             throw new EstacionamentoException("O usuário do veículo é obrigatório.");
         }
 

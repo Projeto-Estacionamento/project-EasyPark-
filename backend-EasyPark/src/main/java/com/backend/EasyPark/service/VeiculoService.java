@@ -10,6 +10,7 @@ import com.backend.EasyPark.repository.VeiculoRepository;
 
 import com.backend.EasyPark.util.VeiculoMapper;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +30,6 @@ public class VeiculoService {
     @Autowired
     private FabricanteRepository fabricanteRepository;
 
-    @Autowired
-    private VeiculoMapper veiculoMapper;
 
     private static final Pattern PLACA_ANTIGA = Pattern.compile("^[A-Z]{3}\\d{4}$");
     private static final Pattern PLACA_MERCOSUL = Pattern.compile("^[A-Z]{3}\\d[A-Z]\\d{2}$");
@@ -54,14 +53,10 @@ public class VeiculoService {
     }
 
     @Transactional
-    public VeiculoDTO atualizarVeiculo(Integer id, VeiculoDTO veiculoDTO) {
-        validarPlaca(veiculoDTO.getPlaca());
-        return veiculoRepository.findById(id)
-                .map(veiculo -> {
-                    veiculoMapper.updateVeiculoFromDTO(veiculo, veiculoDTO);
-                    return VeiculoMapper.toDTO(veiculoRepository.save(veiculo));
-                })
-                .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+    public VeiculoDTO atualizarVeiculo(VeiculoDTO veiculoDTO) throws EstacionamentoException {
+       Veiculo veiculoEncontrado = VeiculoMapper.toEntity(buscarVeiculoPorId(veiculoDTO.getId()));
+        BeanUtils.copyProperties(veiculoDTO, veiculoEncontrado);
+      return VeiculoMapper.toDTO(veiculoRepository.save(veiculoEncontrado));
     }
 
     @Transactional
@@ -80,7 +75,6 @@ public class VeiculoService {
                 .map(VeiculoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
 
 
     private void validarPlaca(String placa) {

@@ -24,13 +24,14 @@ public class ValidacaoUsuario {
     public void validarSeExisteCampoNoBancoDados(UsuarioDTO dto) throws EstacionamentoException {
         Usuario usuarioExistente = usuarioRepository.findByCpf(dto.getCpf());
 
-        if(usuarioExistente.getCpf().equals(dto.getCpf())) {
+        if (usuarioExistente != null) {
             throw new EstacionamentoException("CPF JÁ CADASTRADO");
         }
-        if (usuarioExistente.getTelefone().equals(dto.getTelefone())) {
+       //Verifique se já existe um usuário com o mesmo telefone
+        Usuario usuarioComMesmoTelefone = usuarioRepository.findByTelefone(dto.getTelefone());
+        if (usuarioComMesmoTelefone != null) {
             throw new EstacionamentoException("Número de telefone já existe na base de dados");
         }
-
     }
 
     public void validarCamposUsuario(UsuarioDTO usuarioDTO) throws EstacionamentoException {

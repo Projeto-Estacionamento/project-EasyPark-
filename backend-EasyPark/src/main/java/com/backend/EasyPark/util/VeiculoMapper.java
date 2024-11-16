@@ -10,6 +10,7 @@ import com.backend.EasyPark.entities.Fabricante;
 import com.backend.EasyPark.entities.Usuario;
 import com.backend.EasyPark.entities.Veiculo;
 
+import com.backend.EasyPark.repository.UsuarioRepository;
 import com.backend.EasyPark.service.FabricanteService;
 import com.backend.EasyPark.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,20 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class VeiculoMapper {
 
-    @Autowired
-    private FabricanteService fabricanteService;
+    private static UsuarioRepository usuarioRepository;
+    private static FabricanteService fabricanteService;
 
+    @Autowired
+    public VeiculoMapper(UsuarioRepository usuarioRepository, FabricanteService fabricanteService) {
+        VeiculoMapper.usuarioRepository = usuarioRepository;
+        VeiculoMapper.fabricanteService = fabricanteService;
+    }
 
     public static VeiculoDTO toDTO(Veiculo veiculo) {
         if (veiculo == null) {
@@ -36,20 +43,13 @@ public class VeiculoMapper {
         dto.setTipoVeiculo(veiculo.getTipoVeiculo());
         dto.setOcupandoVaga(veiculo.isOcupandoVaga());
 
-        if (veiculo.getFabricante() != null) {
-            FabricanteDTO fabricanteDTO = FabricanteMapper.toDTO(veiculo.getFabricante());
-            dto.setFabricanteDTO(fabricanteDTO);
+        // Seta o ID do usuário se existir
+        if (veiculo.getUsuario() != null) {
+            dto.setIdUsuarioDTO(veiculo.getUsuario().getId());
         }
 
-        // Removendo a conversão circular do usuário
-        if (veiculo.getUsuario() != null) {
-            UsuarioDTO usuarioDTO = new UsuarioDTO();
-            usuarioDTO.setId(veiculo.getUsuario().getId());
-            usuarioDTO.setNome(veiculo.getUsuario().getNome());
-            usuarioDTO.setEmail(veiculo.getUsuario().getEmail());
-            usuarioDTO.setTelefone(veiculo.getUsuario().getTelefone());
-            usuarioDTO.setCpf(veiculo.getUsuario().getCpf());
-            dto.setUsuarioDTO(usuarioDTO);
+        if (veiculo.getFabricante() != null) {
+            dto.setFabricanteDTO(FabricanteMapper.toDTO(veiculo.getFabricante()));
         }
 
         return dto;
@@ -66,53 +66,30 @@ public class VeiculoMapper {
         veiculo.setTipoVeiculo(dto.getTipoVeiculo());
         veiculo.setOcupandoVaga(dto.isOcupandoVaga());
 
-        // Converte FabricanteDTO para Fabricante
-        if (dto.getFabricanteDTO() != null) {
-            Fabricante fabricante = FabricanteMapper.toEntity(dto.getFabricanteDTO());
-            veiculo.setFabricante(fabricante);
+        // Associa o usuário pelo ID
+        if (dto.getIdUsuarioDTO() != null) {
+            Usuario usuario = usuarioRepository.findById(dto.getIdUsuarioDTO())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + dto.getIdUsuarioDTO()));
+            veiculo.setUsuario(usuario);
         }
 
-        // Converte UsuarioDTO para Usuario de forma simplificada
-        if (dto.getUsuarioDTO() != null) {
-            Usuario usuario = new Usuario();
-            usuario.setId(dto.getUsuarioDTO().getId());
-            usuario.setNome(dto.getUsuarioDTO().getNome());
-            usuario.setEmail(dto.getUsuarioDTO().getEmail());
-            usuario.setTelefone(dto.getUsuarioDTO().getTelefone());
-            usuario.setCpf(dto.getUsuarioDTO().getCpf());
-            veiculo.setUsuario(usuario);
+        if (dto.getFabricanteDTO() != null) {
+            veiculo.setFabricante(FabricanteMapper.toEntity(dto.getFabricanteDTO()));
         }
 
         return veiculo;
     }
-
     // Converte uma lista de Veiculo para uma lista de VeiculoDTO
-    public List<VeiculoDTO> toDtoList(List<Veiculo> veiculos) {
-        if (veiculos == null || veiculos.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<VeiculoDTO> veiculosDTO = new ArrayList<>();
-        for (Veiculo veiculo : veiculos) {
-            veiculosDTO.add(toDTO(veiculo));
-        }
-        return veiculosDTO;
+    public static List<VeiculoDTO> toDtoList(List<Veiculo> veiculos) {
+        return veiculos.stream().map(VeiculoMapper::toDTO).toList();
     }
 
     // Converte uma lista de VeiculoDTO para uma lista de Veiculo
-    public List<Veiculo> toEntityList(List<VeiculoDTO> veiculosDTO) {
-        if (veiculosDTO == null || veiculosDTO.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<Veiculo> veiculos = new ArrayList<>();
-        for (VeiculoDTO veiculoDTO : veiculosDTO) {
-            veiculos.add(toEntity(veiculoDTO));
-        }
-        return veiculos;
+    public static List<Veiculo> toEntityList(List<VeiculoDTO> veiculosDTO) {
+        return veiculosDTO.stream().map(VeiculoMapper::toEntity).toList();
     }
 
-    public void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO veiculoDTO) {
+    public static void updateVeiculoFromDTO(Veiculo veiculo, VeiculoDTO veiculoDTO) {
         veiculo.setPlaca(veiculoDTO.getPlaca().toUpperCase()); // Garante que a placa seja atualizada em maiúsculas
         veiculo.setTipoVeiculo(veiculoDTO.getTipoVeiculo());
         veiculo.setOcupandoVaga(veiculoDTO.isOcupandoVaga());

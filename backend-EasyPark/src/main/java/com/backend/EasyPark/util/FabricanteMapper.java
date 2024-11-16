@@ -20,8 +20,6 @@ public class FabricanteMapper {
         return dto;
     }
 
-
-
     public static void updateEntityFromDTO(Fabricante fabricante, FabricanteDTO dto) {
         if (dto == null) {
             return;

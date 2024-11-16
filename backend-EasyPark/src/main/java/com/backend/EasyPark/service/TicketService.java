@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.backend.EasyPark.dto.VeiculoDTO;
@@ -30,52 +31,45 @@ public class TicketService {
     private final ConfiguracaoSistemaService configuracaoSistemaService;
     private final ValidarVeiculo validarVeiculo;
     private final VeiculoRepository veiculoRepository;
-    private final TicketMapper ticketMapper;
+
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
                          ConfiguracaoSistemaService configuracaoSistemaService,
                          ValidarVeiculo validarVeiculo,
-                         VeiculoRepository veiculoRepository, TicketMapper ticketMapper) {
+                         VeiculoRepository veiculoRepository) {
         this.ticketRepository = ticketRepository;
         this.configuracaoSistemaService = configuracaoSistemaService;
         this.validarVeiculo = validarVeiculo;
         this.veiculoRepository = veiculoRepository;
-        this.ticketMapper = ticketMapper;
-
     }
-
     public TicketDTO criarTicket(TicketDTO ticket) throws EstacionamentoException {
         if (ticket == null || ticket.getPlacaVeiculo() == null) {
             throw new EstacionamentoException("Ticket ou placa do veículo não podem ser nulos");
+        }
+        Optional<Veiculo> veiculoOpt = veiculoRepository.buscarVeiculoComAssinaturaValida(ticket.getPlacaVeiculo());
+
+        if (veiculoOpt.isPresent()) {
+
         }
 
         Ticket ticketEntity = new Ticket();
         ticketEntity.setPlacaVeiculo(ticket.getPlacaVeiculo());
         ticketEntity.setHoraChegada(LocalDateTime.now());
-
         try {
-            // Verifica se o veículo existe e é mensalista
-            boolean isMensalista = validarVeiculo.isVeiculoMensalista(ticket.getPlacaVeiculo());
 
-            // Define o tipo do ticket baseado na verificação
-            ticketEntity.setTipoTicket(isMensalista ? TipoTicket.TICKET_MENSALISTA : TipoTicket.TICKET_AVULSO);
-
-            // Se for mensalista, atualiza o veículo
-            if (isMensalista) {
                 VeiculoDTO veiculo = validarVeiculo.buscarVeiculoPorPlaca(ticket.getPlacaVeiculo());
                 Veiculo veiculoEntity = VeiculoMapper.toEntity(veiculo);
                 veiculoEntity.setOcupandoVaga(true);
                 veiculoRepository.save(veiculoEntity);
-            }
 
             // Salva o ticket
-            return ticketMapper.toDTO(ticketRepository.save(ticketEntity));
+            return TicketMapper.toDTO(ticketRepository.save(ticketEntity));
 
         } catch (EntityNotFoundException e) {
             // Se o veículo não for encontrado, cria um ticket avulso
             ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
-            return ticketMapper.toDTO(ticketRepository.save(ticketEntity));
+            return TicketMapper.toDTO(ticketRepository.save(ticketEntity));
         } catch (Exception e) {
             throw new EstacionamentoException("Erro ao criar o ticket: " + e.getMessage());
         }
@@ -84,13 +78,13 @@ public class TicketService {
 
     public TicketDTO buscarTicketPorId(Integer id) {
         return ticketRepository.findById(id)
-                .map(ticketMapper::toDTO)
+                .map(TicketMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
     }
 
     public List<TicketDTO> listarTickets() {
         return ticketRepository.findAll().stream()
-                .map(ticketMapper::toDTO)
+                .map(TicketMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -101,11 +95,11 @@ public class TicketService {
         ticket.setHoraSaida(LocalDateTime.now());
         ticket.setTotalHoras(Duration.between(ticket.getHoraChegada(), ticket.getHoraSaida()));
 
-        BigDecimal valorTotal = calcularValorTicket(ticketMapper.toDTO(ticket));
+        BigDecimal valorTotal = calcularValorTicket(TicketMapper.toDTO(ticket));
         ticket.setValorTotalPagar(valorTotal.doubleValue());
 
         Ticket updatedTicket = ticketRepository.save(ticket);
-        return ticketMapper.toDTO(updatedTicket);
+        return TicketMapper.toDTO(updatedTicket);
     }
 
     public BigDecimal calcularValorTicket(TicketDTO ticket) {
@@ -127,5 +121,6 @@ public class TicketService {
         return valorPorHora.multiply(BigDecimal.valueOf(horasEstacionado));
     }
 
-
 }
+
+

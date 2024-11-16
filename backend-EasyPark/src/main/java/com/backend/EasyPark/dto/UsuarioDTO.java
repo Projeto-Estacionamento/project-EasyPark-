@@ -20,5 +20,6 @@ public class UsuarioDTO {
     private String cpf;
     private EnderecoDTO endereco;          //Representação simplificada do Endereco
     private List<VeiculoDTO> veiculosDTO; // Pode ser o DTO de Veiculo, ou uma lista simples com dados relevantes
-    private List<PlanoDTO> planosDTO;    //
+   /* private PlanoDTO planoDTO; */
+   private List<AssinaturaPlanoDTO> assinaturas;
 }

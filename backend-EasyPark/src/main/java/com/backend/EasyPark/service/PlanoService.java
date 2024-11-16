@@ -21,11 +21,6 @@ public class PlanoService {
     @Autowired
     private PlanoRepository planoRepository;
 
-    @Autowired
-    @Lazy
-    private UsuarioService usuarioService;
-    @Autowired
-    private PlanoMapper planoMapper;
 
 
     // Criar um novo plano
@@ -33,13 +28,10 @@ public class PlanoService {
     public PlanoDTO criarPlano(PlanoDTO planoDTO) {
         // Validação dos campos
         validarPlano(planoDTO);
-
         // Conversão para entidade
         Plano plano = PlanoMapper.convertToEntity(planoDTO);
-
         // Salva no banco de dados
         Plano planoSalvo = planoRepository.save(plano);
-
         // Converte de volta para DTO e retorna
         return PlanoMapper.convertToDTO(planoSalvo);
     }
@@ -87,12 +79,7 @@ public class PlanoService {
         if (planoDTO.getValorPlano() <= 0) {
             throw new IllegalArgumentException("Valor do plano deve ser maior que 0");
         }
-        if (planoDTO.getDataVencimento() == null) {
-            throw new IllegalArgumentException("Data de vencimento não pode ser nula");
-        }
-        if (planoDTO.getDataPagamento() == null) {
-            throw new IllegalArgumentException("Data de pagamento não pode ser nula");
-        }
+
     }
 
 }

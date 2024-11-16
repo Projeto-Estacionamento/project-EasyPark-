@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -35,10 +36,16 @@ public class Usuario {
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Veiculo> veiculos; // Relacionamento de Usuario com Veiculo
+    /*@ManyToOne
+    @JoinColumn(name = "plano_id")  // Especifica a coluna de associação
+    private Plano plano;*/
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<AssinaturaPlano> assinaturas;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Plano> planos;
+    private List<Veiculo> veiculos; // Relacionamento de Usuario com Veiculo
+
+
 }

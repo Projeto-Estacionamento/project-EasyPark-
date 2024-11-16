@@ -50,9 +50,9 @@ public class VeiculoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VeiculoDTO> atualizarVeiculo(@PathVariable Integer id, @RequestBody VeiculoDTO veiculoDTO) {
+    public ResponseEntity<VeiculoDTO> atualizarVeiculo(@PathVariable Integer id, @RequestBody VeiculoDTO veiculoDTO) throws EstacionamentoException {
         // Lógica para atualizar um veículo
-        VeiculoDTO veiculoAtualizado = veiculoService.atualizarVeiculo(id, veiculoDTO);
+        VeiculoDTO veiculoAtualizado = veiculoService.atualizarVeiculo(veiculoDTO);
         if (veiculoAtualizado != null) {
             return ResponseEntity.ok(veiculoAtualizado);
         } else {

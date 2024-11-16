@@ -1,12 +1,14 @@
 package com.backend.EasyPark.entities;
 
 import com.backend.EasyPark.enums.TipoVeiculo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.backend.EasyPark.enums.TipoPlano;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
+import org.springframework.context.annotation.Lazy;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,8 +18,28 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Plano {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Enumerated(EnumType.STRING)
+    private TipoPlano tipoPlano;
+
+    @Enumerated(EnumType.STRING)
+    private TipoVeiculo tipoVeiculo;
+
+    private double valorPlano;
+
+    // Remover campos que agora estarão em AssinaturaPlano
+    // private LocalDateTime dataPagamento;
+    // private LocalDateTime dataVencimento;
+    // private boolean Status;
+
+    @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<AssinaturaPlano> assinaturas;
+
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -33,11 +55,13 @@ public class Plano {
 
     private boolean Status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")  // Especifica a coluna de associação
-    private Usuario usuario;
-
     private double valorPlano;
+
+    @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Lazy
+    @JsonIgnore
+    private List<Usuario> usuarios;*/
+
 
 
 } 

@@ -22,20 +22,7 @@ public class PlanoMapper {
         plano.setId(planoDTO.getId());
         plano.setTipoPlano(planoDTO.getTipoPlano());
         plano.setTipoVeiculo(planoDTO.getTipoVeiculo());
-        plano.setDataPagamento(planoDTO.getDataPagamento());
-        plano.setDataVencimento(planoDTO.getDataVencimento());
-        plano.setStatus(planoDTO.isStatus());
         plano.setValorPlano(planoDTO.getValorPlano());
-
-        // Converte UsuarioDTO para Usuario de forma simplificada
-        if (planoDTO.getUsuarioDTO() != null) {
-            Usuario usuario = new Usuario();
-            usuario.setId(planoDTO.getUsuarioDTO().getId());
-            usuario.setNome(planoDTO.getUsuarioDTO().getNome());
-            usuario.setEmail(planoDTO.getUsuarioDTO().getEmail());
-            usuario.setCpf(planoDTO.getUsuarioDTO().getCpf());
-            plano.setUsuario(usuario);
-        }
 
         return plano;
     }
@@ -45,28 +32,22 @@ public class PlanoMapper {
         if (plano == null) {
             return null;
         }
-
         PlanoDTO planoDTO = new PlanoDTO();
         planoDTO.setId(plano.getId());
         planoDTO.setTipoPlano(plano.getTipoPlano());
         planoDTO.setTipoVeiculo(plano.getTipoVeiculo());
-        planoDTO.setDataPagamento(plano.getDataPagamento());
-        planoDTO.setDataVencimento(plano.getDataVencimento());
-        planoDTO.setStatus(plano.isStatus());
         planoDTO.setValorPlano(plano.getValorPlano());
 
-        // Converte Usuario para UsuarioDTO de forma simplificada
-        if (plano.getUsuario() != null) {
-            UsuarioDTO usuarioDTO = new UsuarioDTO();
-            usuarioDTO.setId(plano.getUsuario().getId());
-            usuarioDTO.setNome(plano.getUsuario().getNome());
-            usuarioDTO.setEmail(plano.getUsuario().getEmail());
-            usuarioDTO.setTelefone(plano.getUsuario().getTelefone());
-            usuarioDTO.setCpf(plano.getUsuario().getCpf());
-            planoDTO.setUsuarioDTO(usuarioDTO);
-        }
 
         return planoDTO;
+    }
+
+    public static List<PlanoDTO> toDTOList(List<Plano> planos) {
+        return planos.stream().map(PlanoMapper::convertToDTO).toList();
+    }
+
+    public static List<Plano> toPlanoList(List<PlanoDTO> planoDTOs) {
+        return planoDTOs.stream().map(PlanoMapper::convertToEntity).toList();
     }
 
     // Método para atualizar dados de um plano
@@ -76,42 +57,9 @@ public class PlanoMapper {
         }
         plano.setTipoPlano(planoDTO.getTipoPlano());
         plano.setTipoVeiculo(planoDTO.getTipoVeiculo());
-        plano.setDataPagamento(planoDTO.getDataPagamento());
-        plano.setDataVencimento(planoDTO.getDataVencimento());
-        plano.setStatus(planoDTO.isStatus());
         plano.setValorPlano(planoDTO.getValorPlano());
 
-        if (planoDTO.getUsuarioDTO() != null) {
-            if (plano.getUsuario() == null) {
-                plano.setUsuario(new Usuario());
-            }
-            plano.getUsuario().setId(planoDTO.getUsuarioDTO().getId());
-        }
     }
 
-    public List<PlanoDTO> toDTOList(List<Plano> planos) {
-        if (planos == null || planos.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<PlanoDTO> planoDTOs = new ArrayList<>();
-        for (Plano plano : planos) {
-            planoDTOs.add(convertToDTO(plano));
-        }
-        return planoDTOs;
-    }
-
-    // Converte uma lista de PlanoDTO para uma lista de Plano
-    public List<Plano> toEntityList(List<PlanoDTO> planoDTOs) {
-        if (planoDTOs == null || planoDTOs.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<Plano> planos = new ArrayList<>();
-        for (PlanoDTO planoDTO : planoDTOs) {
-            planos.add(convertToEntity(planoDTO));
-        }
-        return planos;
-    }
 
 }

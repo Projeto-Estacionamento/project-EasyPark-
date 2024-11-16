@@ -79,4 +79,11 @@ public class UsuarioController {
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+   /* @PutMapping("/{usuarioId}/{planoId}")
+    public ResponseEntity<UsuarioDTO> associarPlano(@PathVariable Integer usuarioId,
+                                                    @PathVariable Integer planoId) throws EstacionamentoException {
+        UsuarioDTO usuarioDTO = usuarioService.associarPlanoAoUsuario(usuarioId, planoId);
+        return ResponseEntity.ok(usuarioDTO);
+    }*/
 }
