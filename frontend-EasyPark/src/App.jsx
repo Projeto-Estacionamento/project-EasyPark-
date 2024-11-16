@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Login } from "./pages/login/login";
+import { Login } from "./pages/login/Login";
 import { AdminHome } from "./pages/AdminHome/AdminHome";
 import { CaixaHome } from "./pages/CaixaHome/CaixaHome";
 import { ProtectedRoute } from "./components/ProtectedRoute";

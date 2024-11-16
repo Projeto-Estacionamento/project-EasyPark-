@@ -21,6 +21,12 @@ export function AdminHome() {
         <Button onClick={() => navigate('/configuracao-acesso')}>
           Configuração de Usuários
         </Button>
+        <Button onClick={() => navigate('/entrada-estacionamento')}>
+          Entrada no Estacionamento
+        </Button>
+        <Button onClick={() => navigate('/relatorio-usuarios')}>
+          Relatório de Usuários
+        </Button>
       </div>
       <Button className="logout-button" onClick={handleLogout}>
         Logout
