@@ -5,7 +5,11 @@ import { CaixaHome } from "./pages/CaixaHome/CaixaHome";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { ConfiguracaoEstacionamento } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamento";
-// import { ConfiguracaoAcesso } from "./pages/ConfiguracaoAcesso/ConfiguracaoAcesso";
+import { GerenciamentoCliente } from "./pages/GerenciamentoCliente/GerenciamentoCliente";
+import { GerenciamentoPlano } from "./pages/GerenciamentoPlano/GerenciamentoPlano";
+import { GerenciamentoAssinaturaPlano } from "./pages/GerenciamentoAssinaturaPlano/GerenciamentoAssinaturaPlano";
+import { Relatorio } from "./pages/Relatorio/Relatorio";
+import { ConfiguracaoAcesso } from "./pages/ConfiguracaoAcesso/ConfiguracaoAcesso";
 
 function App() {
   return (
@@ -32,19 +36,51 @@ function App() {
           <Route
             path="/configuracao-estacionamento"
             element={
-              <ProtectedRoute allowedRoles={['ADMINISTRADOR']}>
-                <ConfiguracaoEstacionamento />
+              <ProtectedRoute allowedRoles={['ADMINISTRADOR', 'CAIXA']}>
+                <ConfiguracaoEstacionamento isAdmin={false} />
               </ProtectedRoute>
             }
           />
-          {/* <Route
+          <Route
+            path="/gerenciamento-cliente"
+            element={
+              <ProtectedRoute allowedRoles={['ADMINISTRADOR', 'CAIXA']}>
+                <GerenciamentoCliente isAdmin={false} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/gerenciamento-plano"
+            element={
+              <ProtectedRoute allowedRoles={['ADMINISTRADOR', 'CAIXA']}>
+                <GerenciamentoPlano isAdmin={false} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/gerenciamento-assinatura"
+            element={
+              <ProtectedRoute allowedRoles={['ADMINISTRADOR', 'CAIXA']}>
+                <GerenciamentoAssinaturaPlano isAdmin={false} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/relatorio"
+            element={
+              <ProtectedRoute allowedRoles={['ADMINISTRADOR', 'CAIXA']}>
+                <Relatorio />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/configuracao-acesso"
             element={
               <ProtectedRoute allowedRoles={['ADMINISTRADOR']}>
                 <ConfiguracaoAcesso />
               </ProtectedRoute>
             }
-          /> */}
+          />
         </Routes>
       </Router>
     </AuthProvider>
