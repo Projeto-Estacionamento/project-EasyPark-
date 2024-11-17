@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "../../components/button/Button";
-import './HomeAdmin.css';
+import './AdminHome.css';
 
-export function HomeAdmin() {
+export function AdminHome() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -42,4 +42,5 @@ export function HomeAdmin() {
       </Button>
     </div>
   );
-} 
+}
+export default AdminHome;  

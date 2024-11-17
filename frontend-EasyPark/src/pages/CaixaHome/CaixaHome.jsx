@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "../../components/button/Button";
-import './HomeCaixa.css';
+import './CaixaHome.css';
 
-export function HomeCaixa() {
+export function CaixaHome() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -40,3 +40,5 @@ export function HomeCaixa() {
     </div>
   );
 } 
+
+export default CaixaHome;  

@@ -16,7 +16,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          {/* <Route path="/" element={<Login />} />
           <Route
             path="/admin"
             element={
@@ -80,7 +80,16 @@ function App() {
                 <ConfiguracaoAcesso />
               </ProtectedRoute>
             }
-          />
+          /> */}
+        <Route path="/" element={<Login />} />
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/caixa" element={<CaixaHome />} />
+          <Route path="/configuracao-estacionamento" element={<ConfiguracaoEstacionamento isAdmin={false} />} />
+          <Route path="/gerenciamento-cliente" element={<GerenciamentoCliente isAdmin={false} />} />
+          <Route path="/gerenciamento-plano" element={<GerenciamentoPlano isAdmin={false} />} />
+          <Route path="/gerenciamento-assinatura" element={<GerenciamentoAssinaturaPlano isAdmin={false} />} />
+          <Route path="/relatorio" element={<Relatorio />} />
+          <Route path="/configuracao-acesso" element={<ConfiguracaoAcesso />} />  
         </Routes>
       </Router>
     </AuthProvider>
