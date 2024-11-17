@@ -1,6 +1,7 @@
 package com.backend.EasyPark.repository;
 
 import com.backend.EasyPark.entities.Plano;
+import com.backend.EasyPark.enums.TipoVeiculo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,5 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface PlanoRepository extends JpaRepository<Plano, Integer> {
-
+    List<Plano>findByTipoVeiculo(TipoVeiculo tipoVeiculo);
 }

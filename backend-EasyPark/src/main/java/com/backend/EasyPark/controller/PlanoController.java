@@ -1,6 +1,7 @@
 package com.backend.EasyPark.controller;
 
 import com.backend.EasyPark.dto.PlanoDTO;
+import com.backend.EasyPark.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.service.PlanoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,11 @@ public class PlanoController {
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> removerPlano(@PathVariable Integer id) throws EstacionamentoException {
         return ResponseEntity.ok(planoService.deletarPlano(id));
+    }
+
+    @GetMapping("/tipo/{tipo}")
+    public ResponseEntity <List<PlanoDTO>> buscarPlanoPorTipo(@PathVariable TipoVeiculo tipo) throws EstacionamentoException {
+        List<PlanoDTO> planos = planoService.listarPorTipoVeiculo(tipo);
+        return ResponseEntity.ok(planos);
     }
 }

@@ -97,7 +97,6 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 
-
     // Deletar um usuário
     public void deletarUsuario(Integer id) {
         usuarioRepository.deleteById(id);

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 
 import com.backend.EasyPark.entities.AssinaturaPlano;
+import com.backend.EasyPark.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.repository.AssinaturaPlanoRepository;
 import com.backend.EasyPark.util.PlanoMapper;
@@ -83,6 +84,11 @@ public class PlanoService {
         }
 
         return retorno;
+    }
+
+    public List<PlanoDTO> listarPorTipoVeiculo(TipoVeiculo tipoVeiculo){
+        List<Plano> planos = planoRepository.findByTipoVeiculo(tipoVeiculo);
+        return planos.stream().map(PlanoMapper::convertToDTO).collect(Collectors.toList());
     }
 
     // Validação básica de plano
