@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "../../components/button/Button";
-import './CaixaHome.css';
+import './HomeCaixa.css';
 
-export function CaixaHome() {
+export function HomeCaixa() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -12,14 +12,26 @@ export function CaixaHome() {
   };
 
   return (
-    <div className="home-page">
+    <div className="caixa-home">
       <h1>Bem-vindo ao EasyPark!</h1>
       <div className="menu">
-        <Button onClick={() => navigate('/entrada-estacionamento')}>
-          Entrada no Estacionamento
+        <Button onClick={() => navigate('/configuracao-estacionamento')}>
+          Configuração de Estacionamento (Visualização)
         </Button>
         <Button onClick={() => navigate('/relatorio-usuarios')}>
           Relatório de Usuários
+        </Button>
+        <Button onClick={() => navigate('/gerenciamento-cliente')}>
+          Gerenciamento de Cliente
+        </Button>
+        <Button onClick={() => navigate('/gerenciamento-plano')}>
+          Gerenciamento de Plano
+        </Button>
+        <Button onClick={() => navigate('/gerenciamento-assinatura')}>
+          Gerenciamento de Assinatura
+        </Button>
+        <Button onClick={() => navigate('/tela-ticket')}>
+          Tela do Ticket
         </Button>
       </div>
       <Button className="logout-button" onClick={handleLogout}>
