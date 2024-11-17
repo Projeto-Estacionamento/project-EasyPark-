@@ -11,6 +11,12 @@ export function ConfiguracaoAcesso() {
     setUsuarios([...usuarios, novoUsuario]);
   };
 
+  const editarSenhaUsuario = (index, novaSenha) => {
+    const usuariosAtualizados = [...usuarios];
+    usuariosAtualizados[index].senha = novaSenha;
+    setUsuarios(usuariosAtualizados);
+  };
+
   return (
     <div className="configuracao-acesso">
       <h1>Configuração de Acesso</h1>
@@ -18,7 +24,7 @@ export function ConfiguracaoAcesso() {
         {mostrarNovoAcesso ? 'Cancelar' : 'Criar Novo Acesso'}
       </button>
       {mostrarNovoAcesso && <NovoAcesso adicionarUsuario={adicionarUsuario} />}
-      <ListaUsuarios usuarios={usuarios} />
+      <ListaUsuarios usuarios={usuarios} editarSenhaUsuario={editarSenhaUsuario} />
     </div>
   );
 }

@@ -4,9 +4,9 @@ import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm
 import { getConfiguracaoAtual, updateConfiguracao } from '../../services/EstacionamentoService';
 import './ConfiguracaoEstacionamento.css';
 
-export function ConfiguracaoEstacionamento() {
+export function ConfiguracaoEstacionamento({ isAdmin }) {
   const [configuracao, setConfiguracao] = useState({
-    id: 1, // Certifique-se de que o ID está correto
+    id: 1,
     qtdMoto: 0,
     qtdCarro: 0,
     valorHoraMoto: 0.0,
@@ -38,12 +38,14 @@ export function ConfiguracaoEstacionamento() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await updateConfiguracao(configuracao);
-      alert('Configuração atualizada com sucesso!');
-      navigate('/admin');
-    } catch (error) {
-      console.error('Erro ao atualizar configuração:', error);
+    if (isAdmin) {
+      try {
+        await updateConfiguracao(configuracao);
+        alert('Configuração atualizada com sucesso!');
+        navigate('/admin');
+      } catch (error) {
+        console.error('Erro ao atualizar configuração:', error);
+      }
     }
   };
 
@@ -54,6 +56,7 @@ export function ConfiguracaoEstacionamento() {
         configuracao={configuracao}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
+        isReadOnly={!isAdmin}
       />
     </div>
   );

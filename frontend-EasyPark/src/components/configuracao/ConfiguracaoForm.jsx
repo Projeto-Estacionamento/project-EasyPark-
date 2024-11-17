@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from '../input/Input';
 import { Button } from '../button/Button';
 
-export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
+export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit, isReadOnly }) {
   return (
     <form onSubmit={handleSubmit}>
       <Input
@@ -11,6 +11,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         name="qtdMoto"
         value={configuracao.qtdMoto}
         onChange={handleChange}
+        readOnly={isReadOnly}
       />
       <Input
         label="Quantidade de Vagas para Carros:"
@@ -18,6 +19,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         name="qtdCarro"
         value={configuracao.qtdCarro}
         onChange={handleChange}
+        readOnly={isReadOnly}
       />
       <Input
         label="Valor da Hora para Motos:"
@@ -26,6 +28,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         name="valorHoraMoto"
         value={configuracao.valorHoraMoto}
         onChange={handleChange}
+        readOnly={isReadOnly}
       />
       <Input
         label="Valor da Hora para Carros:"
@@ -34,6 +37,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         name="valorHoraCarro"
         value={configuracao.valorHoraCarro}
         onChange={handleChange}
+        readOnly={isReadOnly}
       />
       <Input
         label="Valor da Diária para Carros:"
@@ -42,6 +46,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         name="valorDiariaCarro"
         value={configuracao.valorDiariaCarro}
         onChange={handleChange}
+        readOnly={isReadOnly}
       />
       <Input
         label="Valor da Diária para Motos:"
@@ -50,6 +55,7 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         name="valorDiariaMoto"
         value={configuracao.valorDiariaMoto}
         onChange={handleChange}
+        readOnly={isReadOnly}
       />
       <Input
         label="Hora Máxima Avulso:"
@@ -58,8 +64,9 @@ export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit }) {
         name="horaMaximaAvulso"
         value={configuracao.horaMaximaAvulso}
         onChange={handleChange}
+        readOnly={isReadOnly}
       />
-      <Button type="submit">Salvar Configurações</Button>
+      {!isReadOnly && <Button type="submit">Salvar Configurações</Button>}
     </form>
   );
 } 
