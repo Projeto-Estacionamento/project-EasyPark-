@@ -20,21 +20,20 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Integer> {
     
     List<Veiculo> findByTipoVeiculo(String tipoVeiculo);
 
-    Veiculo findByPlaca(String placaVeiculo);
+    Optional<Veiculo> findByPlaca(String placaVeiculo);
 
     List<Veiculo> findByUsuarioId(Integer usuarioId);
 
     @Query(value = """
-            SELECT v.*, u.*, ap.*, p.* 
-            FROM veiculo v
-            INNER JOIN usuario u ON v.usuario_id = u.id
-            INNER JOIN assinatura_plano ap ON ap.usuario_id = u.id
-            INNER JOIN plano p ON ap.plano_id = p.id
-            WHERE v.placa = :placa
-            AND ap.ativo = true
-            AND ap.data_vencimento >= NOW()
-            AND p.tipo_veiculo = v.tipo_veiculo
-            """, nativeQuery = true)
-    Optional<Veiculo> buscarVeiculoComAssinaturaValida(@Param("placa") String placa);
-
+     SELECT v.* 
+     FROM veiculo v
+     INNER JOIN usuario u ON v.usuario_id = u.id
+     INNER JOIN assinatura_plano ap ON ap.usuario_id = u.id
+     INNER JOIN plano p ON ap.plano_id = p.id
+     WHERE v.placa = :placa
+     AND ap.ativo = true
+     AND ap.data_vencimento >= NOW()
+     AND p.tipo_veiculo = v.tipo_veiculo
+     """, nativeQuery = true)
+    List<Veiculo> buscarVeiculoComAssinaturaValida(@Param("placa") String placa);
 }

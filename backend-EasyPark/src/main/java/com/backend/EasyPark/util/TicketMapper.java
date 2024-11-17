@@ -16,16 +16,13 @@ import java.util.List;
 public class TicketMapper {
 
     public static Ticket toEntity(TicketDTO dto) {
-        Ticket ticket = new Ticket(dto.getId(), dto.getPlacaVeiculo(), dto.getHoraChegada(),
-                dto.getHoraSaida(), dto.getTipoTicket(), dto.getTotalHoras(), dto.getValorTotalPagar());
-
-        return ticket;
+        return new Ticket(dto.getId(), dto.getPlacaVeiculo(), dto.getHoraChegada(),
+                dto.getHoraSaida(), dto.getTipoTicket(), dto.getTipoVeiculo(), dto.getTotalHoras(), dto.getValorTotalPagar());
     }
 
     public static TicketDTO toDTO(Ticket entity) {
-        TicketDTO dto = new TicketDTO(entity.getId(), entity.getPlacaVeiculo(), entity.getHoraChegada(), entity.getHoraSaida()
-                , entity.getTotalHoras(), entity.getTipoTicket(), entity.getValorTotalPagar());
-        return dto;
+        return new TicketDTO(entity.getId(), entity.getPlacaVeiculo(), entity.getHoraChegada(), entity.getHoraSaida()
+                , entity.getTotalHoras(), entity.getTipoTicket(),entity.getTipoVeiculo(), entity.getValorTotalPagar());
     }
 
     public static List<TicketDTO> toDtoList(List<Ticket> tickets) {

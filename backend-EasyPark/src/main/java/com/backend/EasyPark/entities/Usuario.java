@@ -45,6 +45,7 @@ public class Usuario {
     private List<AssinaturaPlano> assinaturas;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Veiculo> veiculos; // Relacionamento de Usuario com Veiculo
 
 

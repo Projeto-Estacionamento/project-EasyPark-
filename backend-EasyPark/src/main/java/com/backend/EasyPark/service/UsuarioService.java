@@ -2,6 +2,7 @@ package com.backend.EasyPark.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.backend.EasyPark.dto.EnderecoDTO;
@@ -12,6 +13,7 @@ import com.backend.EasyPark.util.PlanoMapper;
 import com.backend.EasyPark.util.UsuarioMapper;
 import com.backend.EasyPark.util.VeiculoMapper;
 import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,36 +66,43 @@ public class UsuarioService {
     }
 
     // Atualizar um usuário
-    @Transactional
+
     public UsuarioDTO atualizarUsuario(Integer id, UsuarioDTO usuarioDTO) throws EstacionamentoException {
         validacaoUsuario.validarCamposUsuario(usuarioDTO);
-        validacaoUsuario.validarSeExisteCampoNoBancoDados(usuarioDTO);
-        return usuarioRepository.findById(id)
-                .map(usuario -> {
-                   UsuarioMapper.updateUsuarioFromDTO(usuario, usuarioDTO);
-                    return UsuarioMapper.toDTO(usuarioRepository.save(usuario));
-                })
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+
+        if (!usuarioOpt.isPresent()) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+        Usuario usuario = usuarioOpt.get();
+
+        // Copia as propriedades do DTO para o usuário existente, exceto o id
+        BeanUtils.copyProperties(usuarioDTO, usuario, "id");
+        // Atualiza o Endereco, se presente no DTO
+        if (usuarioDTO.getEndereco() != null) {
+            Endereco enderecoExistente = usuario.getEndereco();
+            if (enderecoExistente != null && enderecoExistente.getId() != null) {
+                //Atualiza as propriedades do Endereco sem modificar o id
+                enderecoExistente.setCep(usuarioDTO.getEndereco().getCep());
+                enderecoExistente.setCidade(usuarioDTO.getEndereco().getCidade());
+                enderecoExistente.setEstado(usuarioDTO.getEndereco().getEstado());
+            } else {
+                //Caso o Endereco não exista ou o id seja nulo, cria um novo
+                usuario.setEndereco(EnderecoMapper.toEntity(usuarioDTO.getEndereco()));
+            }
+        }
+
+        // Salva o usuário atualizado
+        return UsuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 
+
     // Deletar um usuário
-    @Transactional
     public void deletarUsuario(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
-  /*  public UsuarioDTO associarPlanoAoUsuario(Integer usuarioId, Integer planoId) throws EstacionamentoException {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new EstacionamentoException("Usuário não encontrado"));
-
-        Plano plano = planoRepository.findById(planoId)
-                .orElseThrow(() -> new EstacionamentoException("Plano não encontrado"));
-
-        usuario.setPlano(plano); //ERRO AQUI
-        Usuario usuarioAtualizado = usuarioRepository.save(usuario);
-
-        return UsuarioMapper.toDTO(usuarioAtualizado);
-    }*/
 
     // Buscar usuários por CPF
     public UsuarioDTO buscarUsuarioPorCpf(String cpf) throws EstacionamentoException {

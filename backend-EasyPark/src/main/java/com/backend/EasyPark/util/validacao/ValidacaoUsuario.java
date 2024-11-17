@@ -44,7 +44,7 @@ public class ValidacaoUsuario {
         if (usuarioDTO.getCpf() == null) {
             throw new EstacionamentoException("CPF inválido");
         }
-        if (usuarioDTO.getTelefone() == null || usuarioDTO.getTelefone().trim().isEmpty()) {
+        if (usuarioDTO.getTelefone() == null) {
             throw new EstacionamentoException("Número de telefone incorreto");
         }
         if (usuarioDTO.getEndereco() == null) {

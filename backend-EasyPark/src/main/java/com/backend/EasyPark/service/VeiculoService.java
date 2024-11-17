@@ -35,8 +35,12 @@ public class VeiculoService {
     private static final Pattern PLACA_MERCOSUL = Pattern.compile("^[A-Z]{3}\\d[A-Z]\\d{2}$");
 
     @Transactional
-    public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO) {
+    public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO) throws EstacionamentoException {
         validarPlaca(veiculoDTO.getPlaca());
+        Optional<Veiculo> validarVeiculoBanco = veiculoRepository.findByPlaca(veiculoDTO.getPlaca());
+        if (validarVeiculoBanco.isPresent()) {
+            throw new EstacionamentoException("Veiculo ja existe na Base de dados com a placa" + veiculoDTO.getPlaca());
+        }
         Veiculo veiculo = VeiculoMapper.toEntity(veiculoDTO);
         Veiculo savedVeiculo = veiculoRepository.save(veiculo);
         return VeiculoMapper.toDTO(savedVeiculo);

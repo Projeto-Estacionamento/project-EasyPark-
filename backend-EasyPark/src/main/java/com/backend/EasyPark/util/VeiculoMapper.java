@@ -47,10 +47,15 @@ public class VeiculoMapper {
         if (veiculo.getUsuario() != null) {
             dto.setIdUsuarioDTO(veiculo.getUsuario().getId());
         }
-
+            FabricanteDTO fabricanteDTO = new FabricanteDTO();
         if (veiculo.getFabricante() != null) {
-            dto.setFabricanteDTO(FabricanteMapper.toDTO(veiculo.getFabricante()));
-        }
+            fabricanteDTO.setId(veiculo.getFabricante().getId());
+            fabricanteDTO.setModelo(veiculo.getFabricante().getModelo());
+            fabricanteDTO.setMarca(veiculo.getFabricante().getMarca());
+            fabricanteDTO.setAno(veiculo.getFabricante().getAno());
+            }
+
+        dto.setFabricanteDTO(fabricanteDTO);
 
         return dto;
     }
@@ -73,9 +78,17 @@ public class VeiculoMapper {
             veiculo.setUsuario(usuario);
         }
 
+        Fabricante fabricante = new Fabricante();
+
         if (dto.getFabricanteDTO() != null) {
-            veiculo.setFabricante(FabricanteMapper.toEntity(dto.getFabricanteDTO()));
+            fabricante.setId(dto.getFabricanteDTO().getId());
+            fabricante.setModelo(dto.getFabricanteDTO().getModelo());
+            fabricante.setMarca(dto.getFabricanteDTO().getMarca());
+            fabricante.setAno(dto.getFabricanteDTO().getAno());
+
         }
+        veiculo.setFabricante(fabricante);
+
 
         return veiculo;
     }

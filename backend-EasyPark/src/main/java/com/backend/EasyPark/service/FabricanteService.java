@@ -16,10 +16,15 @@ public class FabricanteService {
 
     @Autowired
     private FabricanteRepository fabricanteRepository;
+    @Autowired
+    private FabricanteMapper fabricanteMapper;
 
     public FabricanteDTO criar(FabricanteDTO fabricanteDTO) {
         validarAno(fabricanteDTO.getAno());
-        Fabricante fabricante = FabricanteMapper.toEntity(fabricanteDTO);
+        Fabricante fabricante = new Fabricante();
+        fabricante.setModelo(fabricanteDTO.getModelo());
+        fabricante.setMarca(fabricanteDTO.getMarca());
+        fabricante.setAno(fabricanteDTO.getAno());
         return FabricanteMapper.toDTO(fabricanteRepository.save(fabricante));
     }
 

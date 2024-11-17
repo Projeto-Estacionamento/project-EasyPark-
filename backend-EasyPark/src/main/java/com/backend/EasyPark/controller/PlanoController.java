@@ -34,4 +34,14 @@ public class PlanoController {
         List<PlanoDTO> planos = planoService.listarPlanos();
         return ResponseEntity.ok(planos);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<PlanoDTO> atualizarPlano(@PathVariable Integer id, @RequestBody PlanoDTO planoDTO) throws EstacionamentoException {
+        return ResponseEntity.ok(planoService.atualizarPlano(id, planoDTO));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Boolean> removerPlano(@PathVariable Integer id) throws EstacionamentoException {
+        return ResponseEntity.ok(planoService.deletarPlano(id));
+    }
 }

@@ -1,6 +1,7 @@
 package com.backend.EasyPark.controller;
 
 import com.backend.EasyPark.dto.AssinaturaPlanoDTO;
+import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.service.AssinaturaPlanoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class AssinaturaPlanoController {
     }
 
     @PostMapping
-    public ResponseEntity<AssinaturaPlanoDTO> create(@RequestBody AssinaturaPlanoDTO dto) {
+    public ResponseEntity<AssinaturaPlanoDTO> create(@RequestBody AssinaturaPlanoDTO dto) throws EstacionamentoException {
         AssinaturaPlanoDTO created = assinaturaPlanoService.create(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -43,7 +44,7 @@ public class AssinaturaPlanoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) throws EstacionamentoException {
         assinaturaPlanoService.delete(id);
         return ResponseEntity.noContent().build();
     }

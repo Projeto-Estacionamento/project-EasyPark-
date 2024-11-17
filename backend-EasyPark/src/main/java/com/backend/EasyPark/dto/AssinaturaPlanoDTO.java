@@ -19,7 +19,6 @@ public class AssinaturaPlanoDTO {
     private LocalDateTime dataPagamento;
     private LocalDateTime dataVencimento;
     private boolean ativo;
-    private double valorPlano;
 }
 
 

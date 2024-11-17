@@ -4,6 +4,7 @@ package com.backend.EasyPark.entities;
 
 import com.backend.EasyPark.enums.TipoTicket;
 
+import com.backend.EasyPark.enums.TipoVeiculo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     private TipoTicket tipoTicket;
+
+    @Enumerated(EnumType.STRING)
+    private TipoVeiculo tipoVeiculo;
 
     private Duration totalHoras;
     private double valorTotalPagar;

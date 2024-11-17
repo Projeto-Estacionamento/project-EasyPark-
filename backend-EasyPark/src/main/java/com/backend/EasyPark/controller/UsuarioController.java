@@ -46,7 +46,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update")
     public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioDTO usuarioDTO) throws EstacionamentoException {
         UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioDTO);
         return ResponseEntity.ok(usuarioAtualizado);

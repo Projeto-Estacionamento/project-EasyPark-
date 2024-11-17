@@ -30,37 +30,11 @@ public class Plano {
 
     private double valorPlano;
 
-    // Remover campos que agora estarão em AssinaturaPlano
-    // private LocalDateTime dataPagamento;
-    // private LocalDateTime dataVencimento;
-    // private boolean Status;
-
     @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<AssinaturaPlano> assinaturas;
 
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    private TipoPlano tipoPlano;
-
-    @Enumerated(EnumType.STRING)
-    private TipoVeiculo tipoVeiculo;
-
-    private LocalDateTime dataPagamento;
-
-    private LocalDateTime dataVencimento;
-
-    private boolean Status;
-
-    private double valorPlano;
-
-    @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Lazy
-    @JsonIgnore
-    private List<Usuario> usuarios;*/
 
 
 

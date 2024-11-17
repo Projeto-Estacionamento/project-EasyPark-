@@ -1,9 +1,13 @@
 package com.backend.EasyPark.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
+import com.backend.EasyPark.entities.AssinaturaPlano;
+import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.repository.AssinaturaPlanoRepository;
 import com.backend.EasyPark.util.PlanoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -20,7 +24,8 @@ public class PlanoService {
 
     @Autowired
     private PlanoRepository planoRepository;
-
+    @Autowired
+    private AssinaturaPlanoRepository assinaturaPlanoRepository;
 
 
     // Criar um novo plano
@@ -64,8 +69,20 @@ public class PlanoService {
 
     // Deletar um plano
     @Transactional
-    public void deletarPlano(Integer id) {
-        planoRepository.deleteById(id);
+    public boolean deletarPlano(Integer id) throws EstacionamentoException {
+        boolean retorno = false;
+        Optional<List<AssinaturaPlano>> assinantes = assinaturaPlanoRepository.findByPlanoId(id);
+
+        Plano plano = planoRepository.findById(id).orElseThrow(() -> new EstacionamentoException("Plano nao encontrado"));
+
+        if (assinantes.get().isEmpty()) {
+            planoRepository.deleteById(id);
+            retorno = true;
+        } else{
+            throw new EstacionamentoException("Nao pode excluir um plano, pois tem assinantes associado.");
+        }
+
+        return retorno;
     }
 
     // Validação básica de plano
