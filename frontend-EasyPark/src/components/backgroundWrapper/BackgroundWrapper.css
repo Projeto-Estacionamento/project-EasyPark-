@@ -1,0 +1,9 @@
+.background-wrapper {
+  background-color: #f4f4f9; /* Cor de fundo padrão */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+} 
