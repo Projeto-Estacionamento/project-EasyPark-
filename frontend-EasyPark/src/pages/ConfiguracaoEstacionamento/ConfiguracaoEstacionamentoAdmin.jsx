@@ -61,9 +61,6 @@ export function ConfiguracaoEstacionamentoAdmin() {
           handleSubmit={handleSubmit}
           isReadOnly={false}
         />
-        <button className="apply-button" onClick={handleSubmit}>
-          Aplicar Mudanças
-        </button>
       </Card>
     </PageContainer>
   );
