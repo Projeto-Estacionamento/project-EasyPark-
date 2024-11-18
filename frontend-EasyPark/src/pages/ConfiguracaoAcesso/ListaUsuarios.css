@@ -1,6 +1,5 @@
 .lista-usuarios {
   background-color: #f0f0f0;
-  padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,6 +20,15 @@
   color: #333;
 }
 
+.card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.card li {
+  margin-bottom: 10px;
+}
+
 .card button {
   background-color: #000;
   color: #fff;
@@ -28,6 +36,7 @@
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .card button:hover {
