@@ -26,12 +26,13 @@ export function ConfiguracaoAcesso() {
   };
 
   return (
-    <PageContainer darkMode>
     <div className="configuracao-acesso">
       <h1>Configuração de Acesso</h1>
-      <button onClick={() => setMostrarNovoAcesso(!mostrarNovoAcesso)}>
-        {mostrarNovoAcesso ? 'Cancelar' : 'Criar Novo Acesso'}
-      </button>
+      <Card title="Ações">
+        <button onClick={() => setMostrarNovoAcesso(!mostrarNovoAcesso)}>
+          {mostrarNovoAcesso ? 'Cancelar' : 'Criar Novo Acesso'}
+        </button>
+      </Card>
       {mostrarNovoAcesso && (
         <Card title="Novo Acesso">
           <NovoAcesso adicionarUsuario={adicionarUsuario} />
@@ -41,6 +42,5 @@ export function ConfiguracaoAcesso() {
         <ListaUsuarios usuarios={usuarios} editarSenhaUsuario={editarSenhaUsuario} />
       </Card>
     </div>
-    </PageContainer>
   );
 }
