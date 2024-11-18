@@ -1,72 +1,79 @@
 import React from 'react';
-import { Input } from '../input/Input';
-import { Button } from '../button/Button';
 
 export function ConfiguracaoForm({ configuracao, handleChange, handleSubmit, isReadOnly }) {
   return (
     <form onSubmit={handleSubmit}>
-      <Input
-        label="Quantidade de Vagas para Motos:"
+      <label>Quantidade de Motos:</label>
+      <input
         type="number"
         name="qtdMoto"
         value={configuracao.qtdMoto}
         onChange={handleChange}
         readOnly={isReadOnly}
       />
-      <Input
-        label="Quantidade de Vagas para Carros:"
+
+      <label>Quantidade de Carros:</label>
+      <input
         type="number"
         name="qtdCarro"
         value={configuracao.qtdCarro}
         onChange={handleChange}
         readOnly={isReadOnly}
       />
-      <Input
-        label="Valor da Hora para Motos:"
+
+      <label>Valor por Hora para Motos:</label>
+      <input
         type="number"
-        step="0.01"
         name="valorHoraMoto"
         value={configuracao.valorHoraMoto}
         onChange={handleChange}
         readOnly={isReadOnly}
-      />
-      <Input
-        label="Valor da Hora para Carros:"
-        type="number"
         step="0.01"
+      />
+
+      <label>Valor por Hora para Carros:</label>
+      <input
+        type="number"
         name="valorHoraCarro"
         value={configuracao.valorHoraCarro}
         onChange={handleChange}
         readOnly={isReadOnly}
-      />
-      <Input
-        label="Valor da Diária para Carros:"
-        type="number"
         step="0.01"
+      />
+
+      <label>Valor da Diária para Carros:</label>
+      <input
+        type="number"
         name="valorDiariaCarro"
         value={configuracao.valorDiariaCarro}
         onChange={handleChange}
         readOnly={isReadOnly}
-      />
-      <Input
-        label="Valor da Diária para Motos:"
-        type="number"
         step="0.01"
+      />
+
+      <label>Valor da Diária para Motos:</label>
+      <input
+        type="number"
         name="valorDiariaMoto"
         value={configuracao.valorDiariaMoto}
         onChange={handleChange}
         readOnly={isReadOnly}
-      />
-      <Input
-        label="Hora Máxima Avulso:"
-        type="number"
         step="0.01"
+      />
+
+      <label>Hora Máxima Avulso:</label>
+      <input
+        type="number"
         name="horaMaximaAvulso"
         value={configuracao.horaMaximaAvulso}
         onChange={handleChange}
         readOnly={isReadOnly}
+        step="0.01"
       />
-      {!isReadOnly && <Button type="submit">Salvar Configurações</Button>}
+
+      {!isReadOnly && (
+        <button type="submit">Salvar Configuração</button>
+      )}
     </form>
   );
 } 
