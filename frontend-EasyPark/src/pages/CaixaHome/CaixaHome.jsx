@@ -12,15 +12,21 @@ export function CaixaHome() {
   return (
     <BackgroundWrapper>
       <PageContainer darkMode>
-      <Card title="Caixa Home">
-        <div className="menu">
-          <Button onClick={() => navigate('/configuracao-estacionamento-caixa')}>Configuração de Estacionamento (Visualização)</Button>
-          <Button onClick={() => navigate('/gerenciamento-cliente')}>Gerenciamento de Cliente</Button>
-          <Button onClick={() => navigate('/gerenciamento-plano')}>Gerenciamento de Plano</Button>
-          <Button onClick={() => navigate('/gerenciamento-assinatura')}>Gerenciamento de Assinatura</Button>
-          <Button onClick={() => navigate('/relatorio')}>Relatório</Button>
-        </div>
-      </Card>
+        <Card title="Caixa Home">
+          <div className="menu">
+            <Button
+              style={{ backgroundColor: '#dc3545', color: 'white' }}
+              onClick={() => navigate('/')}
+            >
+              Logout
+            </Button>
+            <Button onClick={() => navigate('/configuracao-estacionamento-caixa')}>Configuração de Estacionamento (Visualização)</Button>
+            <Button onClick={() => navigate('/gerenciamento-cliente')}>Gerenciamento de Cliente</Button>
+            <Button onClick={() => navigate('/gerenciamento-plano')}>Gerenciamento de Plano</Button>
+            <Button onClick={() => navigate('/gerenciamento-assinatura')}>Gerenciamento de Assinatura</Button>
+            <Button onClick={() => navigate('/relatorio')}>Relatório</Button>
+          </div>
+        </Card>
       </PageContainer>
     </BackgroundWrapper>
   );

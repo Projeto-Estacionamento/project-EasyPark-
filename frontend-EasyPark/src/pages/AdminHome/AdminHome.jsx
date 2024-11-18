@@ -6,7 +6,6 @@ import { Button } from '../../components/button/Button';
 import './AdminHome.css';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 
-
 export function AdminHome() {
   const navigate = useNavigate();
 
@@ -15,6 +14,12 @@ export function AdminHome() {
       <PageContainer darkMode>
         <Card title="Admin Home">
           <div className="menu">
+            <Button
+              style={{ backgroundColor: '#dc3545', color: 'white' }}
+              onClick={() => navigate('/')}
+            >
+              Logout
+            </Button>
             <Button onClick={() => navigate('/configuracao-estacionamento-admin')}>Configuração de Estacionamento</Button>
             <Button onClick={() => navigate('/gerenciamento-cliente')}>Gerenciamento de Cliente</Button>
             <Button onClick={() => navigate('/gerenciamento-plano')}>Gerenciamento de Plano</Button>
