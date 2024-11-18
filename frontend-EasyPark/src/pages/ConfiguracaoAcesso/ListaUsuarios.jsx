@@ -1,38 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export function ListaUsuarios({ usuarios, editarSenhaUsuario }) {
-  const [senhaEditando, setSenhaEditando] = useState(null);
-  const [novaSenha, setNovaSenha] = useState('');
-
-  const handleEditarSenha = (index) => {
-    editarSenhaUsuario(index, novaSenha);
-    setSenhaEditando(null);
-    setNovaSenha('');
-  };
-
   return (
     <div>
-      <h2>Lista de Usuários</h2>
+      <h2>Usuários</h2>
       <ul>
         {usuarios.map((usuario, index) => (
           <li key={index}>
-            {usuario.username} - {usuario.tipoAcesso}
-            {senhaEditando === index ? (
-              <>
-                <input
-                  type="password"
-                  value={novaSenha}
-                  onChange={(e) => setNovaSenha(e.target.value)}
-                />
-                <button onClick={() => handleEditarSenha(index)}>Salvar</button>
-                <button onClick={() => setSenhaEditando(null)}>Cancelar</button>
-              </>
-            ) : (
-              <button onClick={() => setSenhaEditando(index)}>Editar Senha</button>
-            )}
+            <span>{usuario.username} - {usuario.tipoAcesso}</span>
+            <button onClick={() => {
+              const novaSenha = prompt('Digite a nova senha:');
+              if (novaSenha) {
+                editarSenhaUsuario(index, novaSenha);
+              }
+            }}>
+              Editar Senha
+            </button>
           </li>
         ))}
       </ul>
     </div>
   );
-} 
+}
