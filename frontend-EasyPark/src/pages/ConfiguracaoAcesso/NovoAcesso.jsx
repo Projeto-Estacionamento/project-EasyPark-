@@ -14,6 +14,7 @@ export function NovoAcesso({ adicionarUsuario }) {
 
   return (
     <div>
+      <PageContainer darkMode>
       <h2>Novo Acesso</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -34,6 +35,7 @@ export function NovoAcesso({ adicionarUsuario }) {
         </select>
         <button type="submit">Adicionar</button>
       </form>
+      </PageContainer>
     </div>
   );
 } 
