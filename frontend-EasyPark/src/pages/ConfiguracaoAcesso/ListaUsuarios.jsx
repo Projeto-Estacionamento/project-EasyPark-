@@ -3,7 +3,6 @@ import './ListaUsuarios.css';
 
 export function ListaUsuarios({ usuarios, editarSenhaUsuario }) {
   return (
-    <PageContainer darkMode>
     <div className="lista-usuarios">
       <div className="card">
         <h2>Usuários</h2>
@@ -24,6 +23,5 @@ export function ListaUsuarios({ usuarios, editarSenhaUsuario }) {
         </ul>
       </div>
     </div>
-    </PageContainer>
   );
 }
