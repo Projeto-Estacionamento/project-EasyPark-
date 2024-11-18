@@ -37,7 +37,7 @@ export function ConfiguracaoEstacionamentoCaixa() {
     <PageContainer darkMode>
       <Card title="Configuração de Estacionamento">
         <button className="back-button" onClick={() => navigate('/caixa')}>
-          Voltar para Home
+          Voltar
         </button>
         <ConfiguracaoForm
           configuracao={configuracao}

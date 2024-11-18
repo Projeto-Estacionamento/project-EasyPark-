@@ -1,23 +1,12 @@
 .configuracao-estacionamento {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   height: 100vh;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  gap: 10px;
-}
-
 .back-button {
-  align-self: flex-start;
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #007bff;
+  margin-bottom: 20px;
+  padding: 5px 10px;
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 5px;
@@ -25,7 +14,7 @@ form {
 }
 
 .back-button:hover {
-  background-color: #0056b3;
+  background-color: #c82333;
 }
 
 .apply-button {
@@ -42,16 +31,13 @@ form {
   background-color: #218838;
 }
 
-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  gap: 10px;
 }
 
-button:hover {
-  background-color: #0056b3;
+.card {
+  padding-top: 5px;
 }
