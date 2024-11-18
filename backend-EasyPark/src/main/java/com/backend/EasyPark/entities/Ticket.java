@@ -21,7 +21,10 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false)
     private String placaVeiculo;
+
     private LocalDateTime horaChegada;
     private LocalDateTime horaSaida;
 

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.backend.EasyPark.dto.EnderecoDTO;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.repository.PlanoRepository;
+import com.backend.EasyPark.seletor.UsuarioSeletor;
 import com.backend.EasyPark.util.EnderecoMapper;
 import com.backend.EasyPark.util.PlanoMapper;
 import com.backend.EasyPark.util.UsuarioMapper;
@@ -15,6 +16,7 @@ import com.backend.EasyPark.util.VeiculoMapper;
 import com.backend.EasyPark.util.validacao.ValidacaoUsuario;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.backend.EasyPark.dto.UsuarioDTO;
@@ -123,6 +125,21 @@ public class UsuarioService {
         }
 
         return usuariosDTO;
+    }
+    public List<UsuarioDTO> pesquisarComSeletor(UsuarioSeletor seletor) {
+        if(seletor != null && seletor.temPaginacao()) {
+            int pageNumber = seletor.getPagina();
+            int pageSize = seletor.getLimite();
+
+            //Ler com atenção a documentação:
+            // @param pageNumber zero-based page number, must not be negative.
+            // @param pageSize the size of the page to be returned, must be greater than 0.
+            PageRequest pagina = PageRequest.of(pageNumber - 1, pageSize);
+            return UsuarioMapper.toDTOList(usuarioRepository.findAll(seletor, pagina).toList());
+        }
+
+        //https://www.baeldung.com/spring-data-jpa-query-by-example
+        return UsuarioMapper.toDTOList(usuarioRepository.findAll(seletor));
     }
 
 

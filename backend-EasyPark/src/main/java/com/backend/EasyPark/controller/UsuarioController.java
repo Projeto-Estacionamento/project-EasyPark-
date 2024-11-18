@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.List;
 
 import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.seletor.UsuarioSeletor;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioDTO usuarioDTO) throws EstacionamentoException {
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@Valid @PathVariable Integer id, @RequestBody UsuarioDTO usuarioDTO) throws EstacionamentoException {
         UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioDTO);
         return ResponseEntity.ok(usuarioAtualizado);
     }
@@ -70,6 +71,12 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+
+    @PostMapping("/filtro")
+    public List<UsuarioDTO> pesquisarComSeletor(@RequestBody UsuarioSeletor seletor) {
+        return usuarioService.pesquisarComSeletor(seletor);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -80,10 +87,5 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-   /* @PutMapping("/{usuarioId}/{planoId}")
-    public ResponseEntity<UsuarioDTO> associarPlano(@PathVariable Integer usuarioId,
-                                                    @PathVariable Integer planoId) throws EstacionamentoException {
-        UsuarioDTO usuarioDTO = usuarioService.associarPlanoAoUsuario(usuarioId, planoId);
-        return ResponseEntity.ok(usuarioDTO);
-    }*/
+
 }

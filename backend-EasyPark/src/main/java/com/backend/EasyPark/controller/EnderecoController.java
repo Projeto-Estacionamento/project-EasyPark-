@@ -2,6 +2,7 @@ package com.backend.EasyPark.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,13 +44,13 @@ public class EnderecoController {
     }
 
     @PostMapping
-    public ResponseEntity<EnderecoDTO> create(@RequestBody EnderecoDTO enderecoDTO) {
+    public ResponseEntity<EnderecoDTO> create(@Valid @RequestBody EnderecoDTO enderecoDTO) {
         EnderecoDTO novoEndereco = enderecoService.create(enderecoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoEndereco);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> update(@PathVariable Integer id, @RequestBody EnderecoDTO enderecoDTO) {
+    public ResponseEntity<EnderecoDTO> update(@Valid @PathVariable Integer id, @RequestBody EnderecoDTO enderecoDTO) {
         EnderecoDTO enderecoAtualizado = enderecoService.update(id, enderecoDTO);
         return ResponseEntity.ok(enderecoAtualizado);
     }

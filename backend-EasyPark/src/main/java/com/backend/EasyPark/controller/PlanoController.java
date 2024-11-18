@@ -4,6 +4,7 @@ import com.backend.EasyPark.dto.PlanoDTO;
 import com.backend.EasyPark.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.service.PlanoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class PlanoController {
     private PlanoService planoService;
 
     @PostMapping
-    public ResponseEntity<PlanoDTO> criarPlano(@RequestBody PlanoDTO planoDTO) throws EstacionamentoException {
+    public ResponseEntity<PlanoDTO> criarPlano(@Valid @RequestBody PlanoDTO planoDTO) throws EstacionamentoException {
         PlanoDTO novoPlano = planoService.criarPlano(planoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoPlano);
     }
@@ -37,7 +38,7 @@ public class PlanoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<PlanoDTO> atualizarPlano(@PathVariable Integer id, @RequestBody PlanoDTO planoDTO) throws EstacionamentoException {
+    public ResponseEntity<PlanoDTO> atualizarPlano(@Valid @PathVariable Integer id, @RequestBody PlanoDTO planoDTO) throws EstacionamentoException {
         return ResponseEntity.ok(planoService.atualizarPlano(id, planoDTO));
     }
 

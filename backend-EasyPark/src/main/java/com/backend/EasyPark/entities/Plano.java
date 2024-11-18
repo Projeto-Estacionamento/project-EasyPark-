@@ -4,6 +4,7 @@ import com.backend.EasyPark.enums.TipoVeiculo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.backend.EasyPark.enums.TipoPlano;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Plano {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,6 +30,7 @@ public class Plano {
     @Enumerated(EnumType.STRING)
     private TipoVeiculo tipoVeiculo;
 
+    @NotNull
     private double valorPlano;
 
     @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL)
