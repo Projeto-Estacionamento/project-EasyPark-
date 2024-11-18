@@ -4,12 +4,14 @@ import { BackgroundWrapper } from '../../components/backgroundWrapper/Background
 import { Card } from '../../components/card/Card';
 import { Button } from '../../components/button/Button';
 import './CaixaHome.css';
+import { PageContainer } from '../../components/pageContainer/PageContainer';
 
 export function CaixaHome() {
   const navigate = useNavigate();
 
   return (
     <BackgroundWrapper>
+      <PageContainer darkMode>
       <Card title="Caixa Home">
         <div className="menu">
           <Button onClick={() => navigate('/configuracao-estacionamento-caixa')}>Configuração de Estacionamento (Visualização)</Button>
@@ -19,6 +21,7 @@ export function CaixaHome() {
           <Button onClick={() => navigate('/relatorio')}>Relatório</Button>
         </div>
       </Card>
+      </PageContainer>
     </BackgroundWrapper>
   );
 }

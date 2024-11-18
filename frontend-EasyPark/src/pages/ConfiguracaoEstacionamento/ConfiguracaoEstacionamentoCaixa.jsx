@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
+import { BackgroundWrapper } from '../../components/backgroundWrapper/BackgroundWrapper';
 import { Card } from '../../components/card/Card';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
 import { getConfiguracaoAtual } from '../../services/EstacionamentoService';
@@ -34,18 +35,20 @@ export function ConfiguracaoEstacionamentoCaixa() {
   }, []);
 
   return (
-    <PageContainer darkMode>
-      <Card title="Configuração de Estacionamento">
-        <button className="back-button" onClick={() => navigate('/caixa')}>
-          Voltar
-        </button>
-        <ConfiguracaoForm
-          configuracao={configuracao}
-          handleChange={() => {}}
-          handleSubmit={() => {}}
-          isReadOnly={true}
-        />
-      </Card>
-    </PageContainer>
+    <BackgroundWrapper>
+      <PageContainer darkMode>
+        <Card title="Configuração de Estacionamento">
+          <button className="back-button" onClick={() => navigate('/caixa')}>
+            Voltar
+          </button>
+          <ConfiguracaoForm
+            configuracao={configuracao}
+            handleChange={() => {}}
+            handleSubmit={() => {}}
+            isReadOnly={true}
+          />
+        </Card>
+      </PageContainer>
+    </BackgroundWrapper>
   );
 }
