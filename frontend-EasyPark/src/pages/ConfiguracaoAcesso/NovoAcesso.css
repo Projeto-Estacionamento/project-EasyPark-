@@ -1,10 +1,10 @@
 .novo-acesso-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+  min-height: 100vh;
   padding: 20px;
-  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .novo-acesso-card {
@@ -16,6 +16,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   position: relative;
+  z-index: 10;
 }
 
 form {

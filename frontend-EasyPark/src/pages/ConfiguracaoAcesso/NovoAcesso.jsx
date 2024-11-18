@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
-import { PageContainer } from '../../components/pageContainer/PageContainer';
 import './NovoAcesso.css';
 
 export function NovoAcesso({ adicionarUsuario }) {
   const [username, setUsername] = useState('');
   const [senha, setSenha] = useState('');
   const [tipoAcesso, setTipoAcesso] = useState('caixa');
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     adicionarUsuario({ username, senha, tipoAcesso });
     setUsername('');
     setSenha('');
+    setIsVisible(false);
   };
 
   const handleClose = () => {
     setIsVisible(false);
   };
 
-  if (!isVisible) return null;
-
   return (
-    <div className="novo-acesso-container">
-      <PageContainer darkMode>
+    <div className="lista-usuarios-card">
+      <button onClick={() => setIsVisible(true)}>Criar Novo Acesso</button>
+      <h2>Lista de Usuários</h2>
+      {isVisible && (
         <div className="novo-acesso-card">
           <button className="close-button" onClick={handleClose}>×</button>
           <h2>Novo Acesso</h2>
@@ -44,10 +44,10 @@ export function NovoAcesso({ adicionarUsuario }) {
               <option value="caixa">Caixa</option>
               <option value="administrador">Administrador</option>
             </select>
-            <button type="submit">Adicionar</button>
+            <button type="submit">Criar Novo Acesso</button>
           </form>
         </div>
-      </PageContainer>
+      )}
     </div>
   );
 } 
