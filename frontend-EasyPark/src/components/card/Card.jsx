@@ -1,10 +1,10 @@
 import React from 'react';
 import './Card.css';
 
-export function Card({ children, title }) {
+export function Card({ title, children }) {
   return (
     <div className="card">
-      {title && <h1 className="card-title">{title}</h1>}
+      <h2>{title}</h2>
       {children}
     </div>
   );
