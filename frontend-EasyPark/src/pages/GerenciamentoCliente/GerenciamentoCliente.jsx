@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './GerenciamentoCliente.css';
 import { ListaClientes } from './ListaClientes';
 import { NovoCliente } from './NovoCliente';
 import { AssociarVeiculo } from './AssociarVeiculo';

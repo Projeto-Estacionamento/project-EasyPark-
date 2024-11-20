@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components/button/Button';
-import './EntradaEstacionamento.css';
+import { Button } from '../../components/button/button';
 
 export function EntradaEstacionamento() {
   const navigate = useNavigate();

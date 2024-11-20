@@ -4,7 +4,6 @@ import { PageContainer } from '../../components/pageContainer/PageContainer';
 import { Card } from '../../components/card/Card';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
 import { getConfiguracaoAtual, updateConfiguracao } from '../../services/EstacionamentoService';
-import './ConfiguracaoEstacionamento.css';
 
 export function ConfiguracaoEstacionamentoAdmin() {
   const [configuracao, setConfiguracao] = useState({

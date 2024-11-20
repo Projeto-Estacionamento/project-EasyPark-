@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './GerenciamentoPlano.css';
 import { ListaPlanos } from './ListaPlanos';
 import { NovoPlano } from './NovoPlano';
 import { fetchPlanos, criarPlano } from '../../services/PlanoService';

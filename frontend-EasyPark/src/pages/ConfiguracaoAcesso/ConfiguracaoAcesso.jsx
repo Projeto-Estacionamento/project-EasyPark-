@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './ConfiguracaoAcesso.css';
 
 export function ConfiguracaoAcesso() {
   const [usuarios, setUsuarios] = useState([]);

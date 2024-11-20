@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Relatorio.css';
 import { RelatorioUsuariosClientes } from './RelatorioUsuariosClientes';
 import { RelatorioAssinaturas } from './RelatorioAssinaturas';
 import { RelatorioTickets } from './RelatorioTickets';

@@ -5,7 +5,6 @@ import { BackgroundWrapper } from '../../components/backgroundWrapper/Background
 import { Card } from '../../components/card/Card';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
 import { getConfiguracaoAtual } from '../../services/EstacionamentoService';
-import './ConfiguracaoEstacionamento.css';
 
 export function ConfiguracaoEstacionamentoCaixa() {
   const [configuracao, setConfiguracao] = useState({

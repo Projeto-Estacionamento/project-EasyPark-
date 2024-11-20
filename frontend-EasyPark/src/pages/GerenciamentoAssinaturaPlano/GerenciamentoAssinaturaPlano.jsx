@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './GerenciamentoAssinaturaPlano.css';
 import { ListaAssinaturas } from './ListaAssinaturas';
 import { NovaAssinatura } from './NovaAssinatura';
 import { fetchAssinaturas, criarAssinatura, atualizarStatusAssinatura } from '../../services/AssinaturaService';

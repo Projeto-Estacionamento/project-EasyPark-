@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './NovoAcesso.css';
 
 export function NovoAcesso({ adicionarUsuario }) {
   const [username, setUsername] = useState('');

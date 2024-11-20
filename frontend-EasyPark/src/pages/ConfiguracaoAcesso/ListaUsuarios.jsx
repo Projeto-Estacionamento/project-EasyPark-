@@ -1,5 +1,4 @@
 import React from 'react';
-import './ListaUsuarios.css';
 
 export function ListaUsuarios({ usuarios, editarSenhaUsuario }) {
   return (

@@ -2,10 +2,9 @@ import React, { useContext, useState } from "react";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { Card } from "../../components/card/Card";
 import { Input } from "../../components/input/Input";
-import { Button } from "../../components/button/Button";
+import { Button } from "../../components/button/button";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
 
 export function Login() {
   const { login } = useContext(AuthContext);

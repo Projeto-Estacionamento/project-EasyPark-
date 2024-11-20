@@ -2,8 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackgroundWrapper } from '../../components/backgroundWrapper/BackgroundWrapper';
 import { Card } from '../../components/card/Card';
-import { Button } from '../../components/button/Button';
-import './AdminHome.css';
+import { Button } from '../../components/button/button';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 
 export function AdminHome() {
