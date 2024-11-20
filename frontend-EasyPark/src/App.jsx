@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/login/Login";
-import { AdminHome } from "./pages/AdminHome/AdminHome";
-import { CaixaHome } from "./pages/CaixaHome/CaixaHome";
+import { Home } from "./pages/Home/Home";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-// import { ConfiguracaoEstacionamento } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamento";
 import { GerenciamentoCliente } from "./pages/GerenciamentoCliente/GerenciamentoCliente";
 import { GerenciamentoPlano } from "./pages/GerenciamentoPlano/GerenciamentoPlano";
 import { GerenciamentoAssinaturaPlano } from "./pages/GerenciamentoAssinaturaPlano/GerenciamentoAssinaturaPlano";
@@ -14,6 +12,7 @@ import { ConfiguracaoAcesso } from "./pages/ConfiguracaoAcesso/ConfiguracaoAcess
 import { ConfiguracaoEstacionamentoAdmin } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamentoAdmin";
 import { ConfiguracaoEstacionamentoCaixa } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamentoCaixa";
 import ErrorBoundary from './components/ErrorBoundary';
+import './App.css';
 
 function App() {
   return (
@@ -86,14 +85,13 @@ function App() {
             }
           /> */}
           <Route path="/" element={<Login />} />
-          <Route path="/admin" element={<AdminHome />} />
-          <Route path="/caixa" element={<CaixaHome />} />
+          <Route path="/home" element={<Home />} />
           {/* <Route path="/configuracao-estacionamento" element={<ConfiguracaoEstacionamento isAdmin={false} />} /> */}
           <Route path="/gerenciamento-cliente" element={<GerenciamentoCliente isAdmin={false} />} />
           <Route path="/gerenciamento-plano" element={<GerenciamentoPlano isAdmin={false} />} />
           <Route path="/gerenciamento-assinatura" element={<GerenciamentoAssinaturaPlano isAdmin={false} />} />
           <Route path="/relatorio" element={<Relatorio />} />
-          <Route path="/configuracao-acesso" element={<ConfiguracaoAcesso />} />  
+          <Route path="/configuracao-acesso" element={<ConfiguracaoAcesso />} />
           <Route path="/configuracao-estacionamento-admin" element={
             <ErrorBoundary>
               <ConfiguracaoEstacionamentoAdmin />
