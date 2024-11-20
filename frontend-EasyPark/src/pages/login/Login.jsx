@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
-import { Card } from "../../components/card/Card";
 import { Input } from "../../components/input/Input";
 import { Button } from "../../components/button/button";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import logo from '../../assets/logo.png';
+import './Login.css';
 
 export function Login() {
   const { login } = useContext(AuthContext);
@@ -45,7 +46,8 @@ export function Login() {
 
   return (
     <PageContainer darkMode>
-      <Card title="Login">
+      <div className="card text-center my-3" style={{ backgroundColor: '#00838f', boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)', border: 'none' }}>
+        <img src={logo} alt="Logo" className="img-fluid mb-3 mx-auto" style={{ maxWidth: '150px' }} />
         <form onSubmit={handleLogin}>
           <div className="form-group">
             <Input
@@ -69,11 +71,11 @@ export function Login() {
               darkMode
             />
           </div>
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="outline-light" style={{ width: '100%' }}>
             Entrar
           </Button>
         </form>
-      </Card>
+      </div>
     </PageContainer>
   );
 }
