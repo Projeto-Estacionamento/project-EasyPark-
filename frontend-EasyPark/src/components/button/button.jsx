@@ -15,6 +15,7 @@ export function Button({
       type={type} 
       onClick={onClick}
       className={`btn ${buttonClass} ${fullWidth ? 'w-100' : ''}`}
+      style={{ width: '150px', height: '50px' }}
     >
       {children}
     </button>
