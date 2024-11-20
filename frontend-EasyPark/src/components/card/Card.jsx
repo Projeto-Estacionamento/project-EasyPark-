@@ -1,11 +1,13 @@
 import React from 'react';
-import './Card.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export function Card({ title, children }) {
   return (
-    <div className="card">
-      <h2>{title}</h2>
-      {children}
+    <div className="card text-center my-3">
+      <div className="card-body">
+        <h2 className="card-title">{title}</h2>
+        {children}
+      </div>
     </div>
   );
 } 

@@ -1,6 +1,6 @@
 import React from 'react';
-import './BackgroundWrapper.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export function BackgroundWrapper({ children }) {
-  return <div className="background-wrapper">{children}</div>;
-} 
+  return <div className="d-flex justify-content-center align-items-center min-vh-100">{children}</div>;
+}

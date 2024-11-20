@@ -1,5 +1,5 @@
 import React from 'react';
-import './Button.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export function Button({ 
   children, 
@@ -12,7 +12,7 @@ export function Button({
     <button 
       type={type} 
       onClick={onClick}
-      className={`button ${variant} ${fullWidth ? 'full-width' : ''}`}
+      className={`btn btn-${variant} ${fullWidth ? 'w-100' : ''}`}
     >
       {children}
     </button>
