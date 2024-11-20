@@ -8,11 +8,13 @@ export function Button({
   variant = 'primary',
   fullWidth = false 
 }) {
+  const buttonClass = variant === 'primary' ? 'btn-custom' : `btn-${variant}`;
+
   return (
     <button 
       type={type} 
       onClick={onClick}
-      className={`btn btn-${variant} ${fullWidth ? 'w-100' : ''}`}
+      className={`btn ${buttonClass} ${fullWidth ? 'w-100' : ''}`}
     >
       {children}
     </button>
