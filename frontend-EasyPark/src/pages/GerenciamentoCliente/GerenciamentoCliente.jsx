@@ -3,6 +3,10 @@ import { ListaClientes } from './ListaClientes';
 import { NovoCliente } from './NovoCliente';
 import { AssociarVeiculo } from './AssociarVeiculo';
 import { fetchClientes, criarCliente } from '../../services/ClienteService';
+import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
+import { Card } from '../../components/card/Card';
+import { Button } from '../../components/button/button';
+import './GerenciamentoCliente.css';
 
 export function GerenciamentoCliente() {
   const [clientes, setClientes] = useState([]);
@@ -24,14 +28,18 @@ export function GerenciamentoCliente() {
   };
 
   return (
-    <div className="gerenciamento-cliente">
-      <h1>Gerenciamento de Cliente</h1>
-      <button onClick={() => setMostrarNovoCliente(!mostrarNovoCliente)}>
-        {mostrarNovoCliente ? 'Cancelar' : 'Criar Novo Cliente'}
-      </button>
-      {mostrarNovoCliente && <NovoCliente adicionarCliente={adicionarCliente} />}
-      <ListaClientes clientes={clientes} setClienteSelecionado={setClienteSelecionado} />
-      {clienteSelecionado && <AssociarVeiculo cliente={clienteSelecionado} />}
+    <div className="d-flex home-container">
+      <SidebarMenu />
+      <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+        <Card title="Gerenciamento de Cliente">
+          <Button onClick={() => setMostrarNovoCliente(!mostrarNovoCliente)} variant={mostrarNovoCliente ? 'outline-danger' : 'outline-light'}>
+            {mostrarNovoCliente ? 'Cancelar' : 'Novo Cliente'}
+          </Button>
+          {mostrarNovoCliente && <NovoCliente adicionarCliente={adicionarCliente} />}
+          <ListaClientes clientes={clientes} setClienteSelecionado={setClienteSelecionado} />
+          {clienteSelecionado && <AssociarVeiculo cliente={clienteSelecionado} />}
+        </Card>
+      </div>
     </div>
   );
-} 
+}
