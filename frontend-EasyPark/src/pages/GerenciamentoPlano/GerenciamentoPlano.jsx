@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ListaPlanos } from './ListaPlanos';
 import { NovoPlano } from './NovoPlano';
 import { fetchPlanos, criarPlano } from '../../services/PlanoService';
+import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
+import { Card } from '../../components/card/Card';
+import { Button } from '../../components/button/button';
+import './GerenciamentoPlano.css';
 
 export function GerenciamentoPlano() {
   const [planos, setPlanos] = useState([]);
@@ -27,18 +31,23 @@ export function GerenciamentoPlano() {
   );
 
   return (
-    <div className="gerenciamento-plano">
-      <h1>Gerenciamento de Plano</h1>
-      <select onChange={(e) => setFiltroTipoVeiculo(e.target.value)} value={filtroTipoVeiculo}>
-        <option value="">Todos os Veículos</option>
-        <option value="MOTO">Moto</option>
-        <option value="CARRO">Carro</option>
-      </select>
-      <button onClick={() => setMostrarNovoPlano(!mostrarNovoPlano)}>
-        {mostrarNovoPlano ? 'Cancelar' : 'Criar Novo Plano'}
-      </button>
-      {mostrarNovoPlano && <NovoPlano adicionarPlano={adicionarPlano} />}
-      <ListaPlanos planos={planosFiltrados} />
+    <div className="d-flex home-container">
+      <SidebarMenu />
+      <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+        <Card title="Gerenciamento de Plano">
+          <Button onClick={() => setMostrarNovoPlano(!mostrarNovoPlano)} variant={mostrarNovoPlano ? 'outline-danger' : 'outline-light'}>
+            {mostrarNovoPlano ? 'Cancelar' : 'Novo Plano'}
+          </Button>
+          {mostrarNovoPlano && <NovoPlano adicionarPlano={adicionarPlano} />}
+          <h2>Lista de Planos</h2>
+          <select onChange={(e) => setFiltroTipoVeiculo(e.target.value)} value={filtroTipoVeiculo} className="form-control mb-3">
+            <option value="">Todos os Veículos</option>
+            <option value="MOTO">Moto</option>
+            <option value="CARRO">Carro</option>
+          </select>
+          <ListaPlanos planos={planosFiltrados} />
+        </Card>
+      </div>
     </div>
   );
 } 
