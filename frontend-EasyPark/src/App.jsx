@@ -92,7 +92,7 @@ function App() {
           <Route path="/gerenciamento" element={<Gerenciamento />} />
           <Route path="/gerenciamento-cliente" element={<GerenciamentoCliente isAdmin={false} />} />
           <Route path="/gerenciamento-plano" element={<GerenciamentoPlano isAdmin={false} />} />
-          <Route path="/gerenciamento-assinatura" element={<GerenciamentoAssinaturaPlano isAdmin={false} />} />
+          <Route path="/gerenciamento-assinatura-plano" element={<GerenciamentoAssinaturaPlano isAdmin={false} />} />
           <Route path="/relatorio" element={<Relatorio />} />
           <Route path="/configuracao" element={<Configuracao />} />
           <Route path="/configuracao-acesso" element={<ConfiguracaoAcesso />} />

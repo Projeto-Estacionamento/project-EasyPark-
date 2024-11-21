@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ListaAssinaturas } from './ListaAssinaturas';
 import { NovaAssinatura } from './NovaAssinatura';
 import { fetchAssinaturas, criarAssinatura, atualizarStatusAssinatura } from '../../services/AssinaturaService';
+import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
+import { Card } from '../../components/card/Card';
+import { Button } from '../../components/button/button';
+import './GerenciamentoAssinaturaPlano.css';
 
 export function GerenciamentoAssinaturaPlano() {
   const [assinaturas, setAssinaturas] = useState([]);
@@ -34,18 +38,23 @@ export function GerenciamentoAssinaturaPlano() {
   );
 
   return (
-    <div className="gerenciamento-assinatura-plano">
-      <h1>Gerenciamento de Assinatura de Plano</h1>
-      <select onChange={(e) => setFiltroStatus(e.target.value)} value={filtroStatus}>
-        <option value="">Todos os Status</option>
-        <option value="true">Ativo</option>
-        <option value="false">Inativo</option>
-      </select>
-      <button onClick={() => setMostrarNovaAssinatura(!mostrarNovaAssinatura)}>
-        {mostrarNovaAssinatura ? 'Cancelar' : 'Criar Nova Assinatura'}
-      </button>
-      {mostrarNovaAssinatura && <NovaAssinatura adicionarAssinatura={adicionarAssinatura} />}
-      <ListaAssinaturas assinaturas={assinaturasFiltradas} alterarStatusAssinatura={alterarStatusAssinatura} />
+    <div className="d-flex home-container">
+      <SidebarMenu />
+      <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+        <Card title="Gerenciamento de Assinatura">
+          <Button onClick={() => setMostrarNovaAssinatura(!mostrarNovaAssinatura)} variant={mostrarNovaAssinatura ? 'outline-danger' : 'outline-light'}>
+            {mostrarNovaAssinatura ? 'Cancelar' : 'Nova Assinatura'}
+          </Button>
+          {mostrarNovaAssinatura && <NovaAssinatura adicionarAssinatura={adicionarAssinatura} />}
+          <h2>Lista de Assinaturas</h2>
+          <select onChange={(e) => setFiltroStatus(e.target.value)} value={filtroStatus} className="form-control mb-3">
+            <option value="">Todos os Status</option>
+            <option value="true">Ativo</option>
+            <option value="false">Inativo</option>
+          </select>
+          <ListaAssinaturas assinaturas={assinaturasFiltradas} alterarStatusAssinatura={alterarStatusAssinatura} />
+        </Card>
+      </div>
     </div>
   );
 }
