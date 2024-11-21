@@ -10,7 +10,6 @@ export function Home() {
     <div className="d-flex home-container">
       <SidebarMenu />
       <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
-        <div className="background-image"></div>
         <Card>
           <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '300px', width: '400px' }}>
             <Button variant="outline-light" style={{ width: '100%' }}>
