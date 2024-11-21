@@ -11,6 +11,7 @@ export function Configuracao() {
       <SidebarMenu />
       <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
         <Card>
+          <h2 className="mb-4" style={{ color: 'white' }}>Configuração</h2>
           <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '300px', width: '400px' }}>
             <Button variant="outline-light" style={{ width: '100%' }} onClick={() => window.location.href = '/configuracao-acesso'}>
               Acesso
