@@ -13,6 +13,7 @@ import { ConfiguracaoEstacionamentoAdmin } from "./pages/ConfiguracaoEstacioname
 import { ConfiguracaoEstacionamentoCaixa } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamentoCaixa";
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
+import Configuracao from './pages/Configuracao/Configuracao';
 
 function App() {
   return (
@@ -91,6 +92,7 @@ function App() {
           <Route path="/gerenciamento-plano" element={<GerenciamentoPlano isAdmin={false} />} />
           <Route path="/gerenciamento-assinatura" element={<GerenciamentoAssinaturaPlano isAdmin={false} />} />
           <Route path="/relatorio" element={<Relatorio />} />
+          <Route path="/configuracao" element={<Configuracao />} />
           <Route path="/configuracao-acesso" element={<ConfiguracaoAcesso />} />
           <Route path="/configuracao-estacionamento-admin" element={
             <ErrorBoundary>
