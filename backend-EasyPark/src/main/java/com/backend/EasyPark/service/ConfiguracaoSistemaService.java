@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.backend.EasyPark.dto.ConfiguracaoSistemaDTO;
-import com.backend.EasyPark.entities.ConfiguracaoSistema;
-import com.backend.EasyPark.repository.ConfiguracaoSistemaRepository;
+import com.backend.EasyPark.model.dto.ConfiguracaoSistemaDTO;
+import com.backend.EasyPark.model.entities.ConfiguracaoSistema;
+import com.backend.EasyPark.model.repository.ConfiguracaoSistemaRepository;
 import com.backend.EasyPark.util.ConfiguracaoSistemaMapper;
 
 @Service

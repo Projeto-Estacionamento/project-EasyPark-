@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.EasyPark.dto.EnderecoDTO;
-import com.backend.EasyPark.entities.Endereco;
-import com.backend.EasyPark.repository.EnderecoRepository;
+import com.backend.EasyPark.model.dto.EnderecoDTO;
+import com.backend.EasyPark.model.entities.Endereco;
+import com.backend.EasyPark.model.repository.EnderecoRepository;
 
 @Service
 public class EnderecoService {

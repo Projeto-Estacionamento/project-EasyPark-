@@ -1,6 +1,6 @@
 package com.backend.EasyPark.controller;
 
-import com.backend.EasyPark.dto.FabricanteDTO;
+import com.backend.EasyPark.model.dto.FabricanteDTO;
 import com.backend.EasyPark.service.FabricanteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/fabricantes")
 public class FabricanteController {

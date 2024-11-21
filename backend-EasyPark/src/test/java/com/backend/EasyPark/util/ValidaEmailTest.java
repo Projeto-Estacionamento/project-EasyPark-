@@ -1,6 +1,6 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.dto.UsuarioDTO;
+import com.backend.EasyPark.model.dto.UsuarioDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

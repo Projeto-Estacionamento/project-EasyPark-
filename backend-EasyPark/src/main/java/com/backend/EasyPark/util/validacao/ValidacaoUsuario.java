@@ -1,10 +1,9 @@
 package com.backend.EasyPark.util.validacao;
 
-import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.entities.Usuario;
-import com.backend.EasyPark.entities.Veiculo;
+import com.backend.EasyPark.model.dto.UsuarioDTO;
+import com.backend.EasyPark.model.entities.Usuario;
 import com.backend.EasyPark.exception.EstacionamentoException;
-import com.backend.EasyPark.repository.UsuarioRepository;
+import com.backend.EasyPark.model.repository.UsuarioRepository;
 import com.backend.EasyPark.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

@@ -8,22 +8,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.backend.EasyPark.entities.AssinaturaPlano;
-import com.backend.EasyPark.entities.ConfiguracaoSistema;
-import com.backend.EasyPark.entities.Veiculo;
-import com.backend.EasyPark.enums.TipoTicket;
-import com.backend.EasyPark.enums.TipoVeiculo;
+import com.backend.EasyPark.model.entities.AssinaturaPlano;
+import com.backend.EasyPark.model.entities.ConfiguracaoSistema;
+import com.backend.EasyPark.model.entities.Veiculo;
+import com.backend.EasyPark.model.enums.TipoTicket;
+import com.backend.EasyPark.model.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
-import com.backend.EasyPark.repository.ConfiguracaoSistemaRepository;
-import com.backend.EasyPark.repository.VeiculoRepository;
+import com.backend.EasyPark.model.repository.ConfiguracaoSistemaRepository;
+import com.backend.EasyPark.model.repository.VeiculoRepository;
 import com.backend.EasyPark.util.validacao.ValidarVeiculo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.backend.EasyPark.dto.TicketDTO;
-import com.backend.EasyPark.entities.Ticket;
-import com.backend.EasyPark.repository.TicketRepository;
+import com.backend.EasyPark.model.dto.TicketDTO;
+import com.backend.EasyPark.model.entities.Ticket;
+import com.backend.EasyPark.model.repository.TicketRepository;
 import com.backend.EasyPark.util.TicketMapper;
 // import com.backend.EasyPark.service.ConfiguracaoSistemaService;
 

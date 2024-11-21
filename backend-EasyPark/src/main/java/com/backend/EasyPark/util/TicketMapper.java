@@ -1,15 +1,10 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.enums.TipoTicket;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import org.springframework.stereotype.Component;
 
-import com.backend.EasyPark.dto.TicketDTO;
-import com.backend.EasyPark.entities.Ticket;
+import com.backend.EasyPark.model.dto.TicketDTO;
+import com.backend.EasyPark.model.entities.Ticket;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component

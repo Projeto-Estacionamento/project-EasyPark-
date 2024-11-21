@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.backend.EasyPark.dto.FabricanteDTO;
-import com.backend.EasyPark.entities.Fabricante;
-import com.backend.EasyPark.repository.FabricanteRepository;
+import com.backend.EasyPark.model.dto.FabricanteDTO;
+import com.backend.EasyPark.model.entities.Fabricante;
+import com.backend.EasyPark.model.repository.FabricanteRepository;
 import com.backend.EasyPark.util.FabricanteMapper;
 
 @Service

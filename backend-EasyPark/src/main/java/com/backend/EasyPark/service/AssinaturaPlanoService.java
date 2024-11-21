@@ -1,14 +1,14 @@
 package com.backend.EasyPark.service;
 
-import com.backend.EasyPark.dto.AssinaturaPlanoDTO;
-import com.backend.EasyPark.entities.AssinaturaPlano;
-import com.backend.EasyPark.entities.Plano;
-import com.backend.EasyPark.entities.Usuario;
-import com.backend.EasyPark.enums.TipoPlano;
+import com.backend.EasyPark.model.dto.AssinaturaPlanoDTO;
+import com.backend.EasyPark.model.entities.AssinaturaPlano;
+import com.backend.EasyPark.model.entities.Plano;
+import com.backend.EasyPark.model.entities.Usuario;
+import com.backend.EasyPark.model.enums.TipoPlano;
 import com.backend.EasyPark.exception.EstacionamentoException;
-import com.backend.EasyPark.repository.AssinaturaPlanoRepository;
-import com.backend.EasyPark.repository.PlanoRepository;
-import com.backend.EasyPark.repository.UsuarioRepository;
+import com.backend.EasyPark.model.repository.AssinaturaPlanoRepository;
+import com.backend.EasyPark.model.repository.PlanoRepository;
+import com.backend.EasyPark.model.repository.UsuarioRepository;
 import com.backend.EasyPark.util.AssinaturaPlanoMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

@@ -1,15 +1,12 @@
 package com.backend.EasyPark.service;
 
-import com.backend.EasyPark.dto.FabricanteDTO;
-import com.backend.EasyPark.dto.VeiculoDTO;
-import com.backend.EasyPark.entities.Fabricante;
-import com.backend.EasyPark.entities.Veiculo;
+import com.backend.EasyPark.model.dto.VeiculoDTO;
+import com.backend.EasyPark.model.entities.Veiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
-import com.backend.EasyPark.repository.FabricanteRepository;
-import com.backend.EasyPark.repository.VeiculoRepository;
+import com.backend.EasyPark.model.repository.FabricanteRepository;
+import com.backend.EasyPark.model.repository.VeiculoRepository;
 
 import com.backend.EasyPark.util.VeiculoMapper;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

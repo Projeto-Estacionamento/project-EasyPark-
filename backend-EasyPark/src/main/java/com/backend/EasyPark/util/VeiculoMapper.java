@@ -1,25 +1,17 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.controller.EnderecoController;
-import com.backend.EasyPark.dto.EnderecoDTO;
-import com.backend.EasyPark.dto.FabricanteDTO;
-import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.dto.VeiculoDTO;
-import com.backend.EasyPark.entities.Endereco;
-import com.backend.EasyPark.entities.Fabricante;
-import com.backend.EasyPark.entities.Usuario;
-import com.backend.EasyPark.entities.Veiculo;
+import com.backend.EasyPark.model.dto.FabricanteDTO;
+import com.backend.EasyPark.model.dto.VeiculoDTO;
+import com.backend.EasyPark.model.entities.Fabricante;
+import com.backend.EasyPark.model.entities.Usuario;
+import com.backend.EasyPark.model.entities.Veiculo;
 
-import com.backend.EasyPark.repository.UsuarioRepository;
+import com.backend.EasyPark.model.repository.UsuarioRepository;
 import com.backend.EasyPark.service.FabricanteService;
-import com.backend.EasyPark.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class VeiculoMapper {

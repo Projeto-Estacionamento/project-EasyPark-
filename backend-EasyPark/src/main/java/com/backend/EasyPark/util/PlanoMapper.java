@@ -1,14 +1,10 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.entities.Plano;
-import com.backend.EasyPark.entities.Usuario;
+import com.backend.EasyPark.model.dto.PlanoDTO;
+import com.backend.EasyPark.model.entities.Plano;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PlanoMapper {

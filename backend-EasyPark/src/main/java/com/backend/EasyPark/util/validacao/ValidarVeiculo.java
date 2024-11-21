@@ -2,24 +2,12 @@ package com.backend.EasyPark.util.validacao;
 
 
 
-import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.dto.TicketDTO;
-import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.dto.VeiculoDTO;
-import com.backend.EasyPark.entities.*;
-import com.backend.EasyPark.enums.TipoTicket;
+import com.backend.EasyPark.model.dto.VeiculoDTO;
 import com.backend.EasyPark.exception.EstacionamentoException;
-import com.backend.EasyPark.repository.TicketRepository;
-import com.backend.EasyPark.repository.VeiculoRepository;
-import com.backend.EasyPark.util.PlanoMapper;
-import com.backend.EasyPark.util.TicketMapper;
-import com.backend.EasyPark.util.VeiculoMapper;
+import com.backend.EasyPark.model.repository.TicketRepository;
+import com.backend.EasyPark.model.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Component
 public class ValidarVeiculo {

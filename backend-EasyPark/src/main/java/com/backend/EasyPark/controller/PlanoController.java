@@ -1,7 +1,7 @@
 package com.backend.EasyPark.controller;
 
-import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.enums.TipoVeiculo;
+import com.backend.EasyPark.model.dto.PlanoDTO;
+import com.backend.EasyPark.model.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.service.PlanoService;
 import jakarta.validation.Valid;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/planos")
 public class PlanoController {

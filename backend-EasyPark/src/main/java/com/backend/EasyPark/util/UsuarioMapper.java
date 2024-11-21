@@ -1,7 +1,6 @@
 package com.backend.EasyPark.util;
-import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.dto.VeiculoDTO;
-import com.backend.EasyPark.entities.Usuario;
+import com.backend.EasyPark.model.dto.UsuarioDTO;
+import com.backend.EasyPark.model.entities.Usuario;
 import java.util.List;
 
 public class UsuarioMapper {

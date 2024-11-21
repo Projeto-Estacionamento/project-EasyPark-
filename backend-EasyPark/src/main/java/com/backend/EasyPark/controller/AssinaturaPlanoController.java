@@ -1,6 +1,6 @@
 package com.backend.EasyPark.controller;
 
-import com.backend.EasyPark.dto.AssinaturaPlanoDTO;
+import com.backend.EasyPark.model.dto.AssinaturaPlanoDTO;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.service.AssinaturaPlanoService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/assinaturas")
 @RequiredArgsConstructor

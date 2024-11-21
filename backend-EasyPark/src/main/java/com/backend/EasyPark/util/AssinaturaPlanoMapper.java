@@ -1,11 +1,11 @@
 package com.backend.EasyPark.util;
 
-import com.backend.EasyPark.dto.AssinaturaPlanoDTO;
-import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.dto.UsuarioDTO;
-import com.backend.EasyPark.entities.AssinaturaPlano;
-import com.backend.EasyPark.entities.Plano;
-import com.backend.EasyPark.entities.Usuario;
+import com.backend.EasyPark.model.dto.AssinaturaPlanoDTO;
+import com.backend.EasyPark.model.dto.PlanoDTO;
+import com.backend.EasyPark.model.dto.UsuarioDTO;
+import com.backend.EasyPark.model.entities.AssinaturaPlano;
+import com.backend.EasyPark.model.entities.Plano;
+import com.backend.EasyPark.model.entities.Usuario;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

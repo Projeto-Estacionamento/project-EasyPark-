@@ -2,8 +2,8 @@ package com.backend.EasyPark.util;
 
 import org.springframework.stereotype.Component;
 
-import com.backend.EasyPark.dto.FabricanteDTO;
-import com.backend.EasyPark.entities.Fabricante;
+import com.backend.EasyPark.model.dto.FabricanteDTO;
+import com.backend.EasyPark.model.entities.Fabricante;
 
 @Component
 public class FabricanteMapper {

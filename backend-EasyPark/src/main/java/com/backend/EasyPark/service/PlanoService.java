@@ -5,20 +5,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-import com.backend.EasyPark.entities.AssinaturaPlano;
-import com.backend.EasyPark.enums.TipoVeiculo;
+import com.backend.EasyPark.model.entities.AssinaturaPlano;
+import com.backend.EasyPark.model.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
-import com.backend.EasyPark.repository.AssinaturaPlanoRepository;
+import com.backend.EasyPark.model.repository.AssinaturaPlanoRepository;
 import com.backend.EasyPark.util.PlanoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.EasyPark.dto.PlanoDTO;
-import com.backend.EasyPark.entities.Plano;
+import com.backend.EasyPark.model.dto.PlanoDTO;
+import com.backend.EasyPark.model.entities.Plano;
 
-import com.backend.EasyPark.repository.PlanoRepository;
+import com.backend.EasyPark.model.repository.PlanoRepository;
 
 @Service
 public class PlanoService {

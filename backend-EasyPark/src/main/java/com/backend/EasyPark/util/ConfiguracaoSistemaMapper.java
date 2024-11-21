@@ -2,8 +2,8 @@ package com.backend.EasyPark.util;
 
 import org.springframework.stereotype.Component;
 
-import com.backend.EasyPark.dto.ConfiguracaoSistemaDTO;
-import com.backend.EasyPark.entities.ConfiguracaoSistema;
+import com.backend.EasyPark.model.dto.ConfiguracaoSistemaDTO;
+import com.backend.EasyPark.model.entities.ConfiguracaoSistema;
 
 @Component
 public class ConfiguracaoSistemaMapper {

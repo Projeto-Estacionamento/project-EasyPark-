@@ -2,8 +2,8 @@ package com.backend.EasyPark.util;
 
 import org.springframework.stereotype.Component;
 
-import com.backend.EasyPark.dto.EnderecoDTO;
-import com.backend.EasyPark.entities.Endereco;
+import com.backend.EasyPark.model.dto.EnderecoDTO;
+import com.backend.EasyPark.model.entities.Endereco;
 
 @Component
 public class EnderecoMapper {
