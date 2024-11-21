@@ -7,11 +7,12 @@
   background-repeat: no-repeat;
 }
 
-.card {
+.Home-card {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 300px;
+  min-height: 300px;
   width: 400px;
   background-color: #00838f;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);

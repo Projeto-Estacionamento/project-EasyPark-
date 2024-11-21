@@ -12,7 +12,7 @@ export function SidebarMenu() {
 
   return (
     <div className="d-flex flex-column vh-100 p-3" style={{ width: '250px', backgroundColor: '#00838f', borderRight: '2px solid white' }}>
-      <Link to="/" className="mb-4 text-center">
+      <Link to="/home" className="mb-4 text-center">
         <img src={logo} alt="Logo" className="img-fluid mb-3" style={{ maxWidth: '100px' }} />
       </Link>
       <div className="flex-grow-1 d-flex flex-column justify-content-evenly">

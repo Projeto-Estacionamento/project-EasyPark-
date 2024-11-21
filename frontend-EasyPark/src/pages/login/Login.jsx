@@ -46,7 +46,7 @@ export function Login() {
 
   return (
     <PageContainer darkMode>
-      <div className="card text-center my-3" style={{ backgroundColor: '#00838f', boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)', border: 'none', borderRadius: '8px' }}>
+      <div className="login-card text-center my-3" style={{ backgroundColor: '#00838f', boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)', border: 'none', borderRadius: '8px' }}>
         <img src={logo} alt="Logo" className="img-fluid mb-3 mx-auto" style={{ maxWidth: '150px' }} />
         <form onSubmit={handleLogin}>
           <div className="form-group">
