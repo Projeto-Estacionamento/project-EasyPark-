@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { RelatorioBase } from '../../components/RelatorioBase/RelatorioBase';
 
 export function RelatorioTickets() {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
-    // Fetch tickets do backend
     const fetchTickets = async () => {
-      // Simulação de fetch
       const data = await fetch('/api/tickets').then(res => res.json());
       setTickets(data);
     };
@@ -17,13 +16,12 @@ export function RelatorioTickets() {
   const ticketsOrdenados = tickets.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
 
   return (
-    <div>
-      <h2>Tickets</h2>
-      <ul>
+    <RelatorioBase title="Tickets">
+      <ul className="list-group">
         {ticketsOrdenados.map((ticket, index) => (
-          <li key={index}>{ticket.descricao} - {new Date(ticket.dataCriacao).toLocaleString()}</li>
+          <li key={index} className="list-group-item">{ticket.descricao} - {new Date(ticket.dataCriacao).toLocaleString()}</li>
         ))}
       </ul>
-    </div>
+    </RelatorioBase>
   );
 } 
