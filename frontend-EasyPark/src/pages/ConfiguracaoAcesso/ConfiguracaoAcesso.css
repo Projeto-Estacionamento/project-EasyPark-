@@ -1,0 +1,44 @@
+.configuracao-acesso-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: calc(100vw - 250px); /* Subtraia a largura da sidebar */
+  background-image: url('../../assets/estacionamento.png'); /* Certifique-se de que o caminho está correto */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.card-novo-acesso {
+  width: 80%; /* Ajuste conforme necessário */
+  max-width: 600px;
+  background-color: rgba(0, 131, 143, 0.9); /* Fundo com opacidade */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white; /* Cor do texto */
+}
+
+.form-novo-acesso {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-acesso {
+  background-color: #00838f; /* Cor do botão */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.btn-acesso:hover {
+  background-color: #006064; /* Cor do botão ao passar o mouse */
+}

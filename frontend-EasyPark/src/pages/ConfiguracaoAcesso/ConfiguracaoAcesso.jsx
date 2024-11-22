@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
+import { Card } from '../../components/card/Card';
+import { Button } from '../../components/button/button';
+import './ConfiguracaoAcesso.css';
 
 export function ConfiguracaoAcesso() {
   const [usuarios, setUsuarios] = useState([]);
@@ -33,15 +37,15 @@ export function ConfiguracaoAcesso() {
   };
 
   return (
-    <div className="configuracao-acesso">
-      <div className="card">
-        <h1>Configuração de Acesso</h1>
-        <button onClick={() => setMostrarNovoAcesso(!mostrarNovoAcesso)}>
-          {mostrarNovoAcesso ? 'Cancelar' : 'Criar Novo Acesso'}
-        </button>
-        {mostrarNovoAcesso && (
-          <div className="novo-acesso-card">
-            <form onSubmit={handleSubmit}>
+    <div className="d-flex">
+      <SidebarMenu />
+      <div className="configuracao-acesso-container">
+        <Card title="Configuração de Acesso">
+          <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoAcesso(!mostrarNovoAcesso)}>
+            {mostrarNovoAcesso ? 'Cancelar' : 'Criar Novo Acesso'}
+          </Button>
+          {mostrarNovoAcesso && (
+            <form onSubmit={handleSubmit} className="form-novo-acesso">
               <input
                 type="text"
                 placeholder="Usuário"
@@ -58,26 +62,28 @@ export function ConfiguracaoAcesso() {
                 <option value="caixa">Caixa</option>
                 <option value="administrador">Administrador</option>
               </select>
-              <button type="submit">Criar Novo Acesso</button>
+              <Button type="submit" variant="outline-light" fullWidth>
+                Novo Acesso
+              </Button>
             </form>
-          </div>
-        )}
-        <h2>Lista de Usuários</h2>
-        <ul>
-          {usuarios.map((usuario, index) => (
-            <li key={index}>
-              <span>{usuario.username} - {usuario.tipoAcesso}</span>
-              <button onClick={() => {
-                const novaSenha = prompt('Digite a nova senha:');
-                if (novaSenha) {
-                  editarSenhaUsuario(index, novaSenha);
-                }
-              }}>
-                Editar Senha
-              </button>
-            </li>
-          ))}
-        </ul>
+          )}
+          <h2>Lista de Usuários</h2>
+          <ul>
+            {usuarios.map((usuario, index) => (
+              <li key={index}>
+                <span>{usuario.username} - {usuario.tipoAcesso}</span>
+                <Button variant="outline-light" onClick={() => {
+                  const novaSenha = prompt('Digite a nova senha:');
+                  if (novaSenha) {
+                    editarSenhaUsuario(index, novaSenha);
+                  }
+                }}>
+                  Editar Senha
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </Card>
       </div>
     </div>
   );
