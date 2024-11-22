@@ -1,12 +1,21 @@
 package com.backend.EasyPark.controller;
 
 import com.backend.EasyPark.auth.AuthenticationService;
+import com.backend.EasyPark.auth.JwtService;
+import com.backend.EasyPark.model.dto.LoginDTO;
+import com.backend.EasyPark.model.dto.RegisterDTO;
 import com.backend.EasyPark.model.entities.Acesso;
 import com.backend.EasyPark.model.enums.TipoAcesso;
-import com.backend.EasyPark.service.AcessoService;
-import com.backend.EasyPark.util.AcessoMapper;
+import com.backend.EasyPark.model.repository.AcessoRepository;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +35,17 @@ public class AuthenticationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     @Autowired
-    private AcessoService acessoService;
+    private AuthenticationManager authenticationManager;
+
+
+    @Autowired
+    private AcessoRepository repository;
+
+
+    @Autowired
+    private JwtService jwtService;
 
     /**
      * Método de login padronizado -> Basic Auth
@@ -41,17 +59,45 @@ public class AuthenticationController {
     public String authenticate(Authentication authentication) {
         return authenticationService.authenticate(authentication);
     }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid LoginDTO data) {
+        // Cria um objeto de autenticação com o login e a senha
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getSenha());
 
-    @PostMapping("/novo-acesso")
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public void registrarJogador(@RequestBody Acesso novoAcesso) {
+        // Autentica o usuário usando o AuthenticationManager
+        Authentication authentication = authenticationManager.authenticate(usernamePassword);
 
-        String senhaCifrada = passwordEncoder.encode(novoAcesso.getSenha());
+        // Gera o token JWT
+        var token = jwtService.getGenerateToken(authentication);
 
-        novoAcesso.setSenha(senhaCifrada);
-        novoAcesso.setTipoAcesso(TipoAcesso.CAIXA);
-
-       acessoService.save(AcessoMapper.toDTO(novoAcesso));
+        // Retorna o token na resposta
+        return ResponseEntity.ok(token);
     }
+
+
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO registerDTO) {
+        if (repository.existsByEmail(registerDTO.email())) {
+            return ResponseEntity.badRequest().body("E-mail já cadastrado");
+        }
+
+        String encryptedPassword = passwordEncoder.encode(registerDTO.senha());
+        Acesso novoAcesso = new Acesso(registerDTO.nome(), encryptedPassword, registerDTO.email(), registerDTO.tipoAcesso());
+
+        repository.save(novoAcesso);
+
+        return ResponseEntity.ok().build();
+    }
+
+   /* private String username;
+
+    @Size(min = 0, max = 999)
+    private String senha;
+
+    private String email;
+    @Enumerated(EnumType.STRING)
+    private TipoAcesso tipoAcesso;*/
 
 }
