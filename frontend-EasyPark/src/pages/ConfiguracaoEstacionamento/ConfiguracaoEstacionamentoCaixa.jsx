@@ -5,6 +5,7 @@ import { BackgroundWrapper } from '../../components/backgroundWrapper/Background
 import { Card } from '../../components/card/Card';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
 import { getConfiguracaoAtual } from '../../services/EstacionamentoService';
+import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu'; // Adicione esta linha
 
 export function ConfiguracaoEstacionamentoCaixa() {
   const [configuracao, setConfiguracao] = useState({
@@ -34,20 +35,18 @@ export function ConfiguracaoEstacionamentoCaixa() {
   }, []);
 
   return (
-    <BackgroundWrapper>
-      <PageContainer darkMode>
-        <Card title="Configuração de Estacionamento">
-          <button className="back-button" onClick={() => navigate('/caixa')}>
-            Voltar
-          </button>
+    <div className="d-flex">
+      <SidebarMenu />
+      <div className="configuracao-container">
+        <Card title="Configuração de Estacionamento" className="card-config-estacionamento">
           <ConfiguracaoForm
             configuracao={configuracao}
-            handleChange={() => {}}
-            handleSubmit={() => {}}
-            isReadOnly={true}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            isReadOnly={false}
           />
         </Card>
-      </PageContainer>
-    </BackgroundWrapper>
+      </div>
+    </div>
   );
 }

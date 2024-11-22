@@ -4,6 +4,7 @@ import { PageContainer } from '../../components/pageContainer/PageContainer';
 import { Card } from '../../components/card/Card';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
 import { getConfiguracaoAtual, updateConfiguracao } from '../../services/EstacionamentoService';
+import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu'; // Adicione esta linha
 
 export function ConfiguracaoEstacionamentoAdmin() {
   const [configuracao, setConfiguracao] = useState({
@@ -49,18 +50,18 @@ export function ConfiguracaoEstacionamentoAdmin() {
   };
 
   return (
-    <PageContainer darkMode>
-      <Card title="Configuração de Estacionamento">
-        <button className="back-button" onClick={() => navigate('/admin')}>
-          Voltar
-        </button>
-        <ConfiguracaoForm
-          configuracao={configuracao}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          isReadOnly={false}
-        />
-      </Card>
-    </PageContainer>
+    <div className="d-flex">
+      <SidebarMenu />
+      <div className="configuracao-container">
+        <Card title="Configuração de Estacionamento" className="card-config-estacionamento">
+          <ConfiguracaoForm
+            configuracao={configuracao}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            isReadOnly={false}
+          />
+        </Card>
+      </div>
+    </div>
   );
 }

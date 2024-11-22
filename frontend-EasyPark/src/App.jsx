@@ -96,7 +96,7 @@ function App() {
           <Route path="/relatorio" element={<Relatorio />} />
           <Route path="/configuracao" element={<Configuracao />} />
           <Route path="/configuracao-acesso" element={<ConfiguracaoAcesso />} />
-          <Route path="/configuracao-estacionamento-admin" element={
+          <Route path="/configuracao-estacionamento" element={
             <ErrorBoundary>
               <ConfiguracaoEstacionamentoAdmin />
             </ErrorBoundary>
