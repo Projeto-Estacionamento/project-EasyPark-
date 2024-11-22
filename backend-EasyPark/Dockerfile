@@ -1,21 +1,21 @@
 # Build stage
-FROM maven:3.8.3-openjdk-17 AS build
+FROM maven:3.8.4-openjdk-17 AS build
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY pom.xml .
-# COPY src ./src
+COPY pom.xml .
+COPY src ./src
 
 # Build do Maven SEM testes unitarios
-# RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Package stage
-# FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY --from=build /app/target/EasyPark-0.0.1-SNAPSHOT.jar EasyPark.jar
+COPY --from=build /app/target/EasyPark-0.0.1-SNAPSHOT.jar EasyPark.jar
 
-# EXPOSE 8080
+EXPOSE 8080
 
-# ENTRYPOINT ["java","-jar","/app/EasyPark.jar"]
+ENTRYPOINT ["java","-jar","/app/EasyPark.jar"]

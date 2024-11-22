@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
+
     private final JwtEncoder jwtEncoder;
 
     @Autowired

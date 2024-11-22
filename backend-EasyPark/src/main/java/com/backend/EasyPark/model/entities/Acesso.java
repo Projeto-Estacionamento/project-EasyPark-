@@ -2,6 +2,7 @@ package com.backend.EasyPark.model.entities;
 
 import com.backend.EasyPark.model.enums.TipoAcesso;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,10 @@ public class Acesso implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
+
+    @Size(min = 0, max = 999)
     private String senha;
+
     private String email;
     @Enumerated(EnumType.STRING)
     private TipoAcesso tipoAcesso;
