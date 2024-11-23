@@ -13,6 +13,7 @@ import com.backend.EasyPark.model.enums.TipoTicket;
 import com.backend.EasyPark.model.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.model.repository.ConfiguracaoSistemaRepository;
+import com.backend.EasyPark.model.repository.RelatorioTicketsFechadosRepository;
 import com.backend.EasyPark.model.repository.VeiculoRepository;
 import com.backend.EasyPark.util.validacao.ValidarVeiculo;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,15 +32,17 @@ public class TicketService {
     private final ValidarVeiculo validarVeiculo;
     private final VeiculoRepository veiculoRepository;
     private final ConfiguracaoSistemaRepository configuracaoSistemaRepository;
+    private final RelatorioTicketsFechadosRepository relatorioTicketsFechadosRepository;
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
                          ValidarVeiculo validarVeiculo,
-                         VeiculoRepository veiculoRepository, ConfiguracaoSistemaRepository configuracaoSistemaRepository) {
+                         VeiculoRepository veiculoRepository, ConfiguracaoSistemaRepository configuracaoSistemaRepository, RelatorioTicketsFechadosRepository relatorioTicketsFechadosRepository) {
         this.ticketRepository = ticketRepository;
         this.validarVeiculo = validarVeiculo;
         this.veiculoRepository = veiculoRepository;
         this.configuracaoSistemaRepository = configuracaoSistemaRepository;
+        this.relatorioTicketsFechadosRepository = relatorioTicketsFechadosRepository;
     }
     public TicketDTO criarTicket(TicketDTO ticket) throws EstacionamentoException {
         // Verifica se os dados básicos são válidos
@@ -89,13 +92,11 @@ public class TicketService {
 //                Ele busca o tipo do plano e pega o horario definido no enum e compara com a hora atual
 //                Só continua se bater o horario
                 if (assinatura.getPlano().getTipoPlano().contemHorario(horaAtual)) {
-                    if (assinatura.getPlano().getTipoPlano().equals(veiculoEncontrado.get().getTipoVeiculo())) {
                         //Se encontrar um plano válido, define o ticket como mensalista
                         ticketEntity.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
                         veiculo.setOcupandoVaga(true);
                         veiculoRepository.save(veiculo);  //Salva o estado do veículo
                         break; //Para o loop ao encontrar o primeiro plano válido
-                    }
                 }
 
 
@@ -189,6 +190,17 @@ public class TicketService {
             }
             configuracaoSistemaRepository.save(configuracao); // Atualiza a configuração
         }
+
+        //criando relatorio
+        RelatorioTicketsFechados relatorio = new RelatorioTicketsFechados();
+        relatorio.setHoraEntrada(ticket.getHoraChegada());
+        relatorio.setHoraSaida(ticket.getHoraSaida());
+        relatorio.setTipoVeiculo(ticket.getTipoVeiculo());
+        relatorio.setValorTotalPagar(ticket.getValorTotalPagar());
+
+        // Salva o relatório no banco de dados
+        relatorioTicketsFechadosRepository.save(relatorio);
+
         //Exclui o ticket após finalização para evitar o acúmulo de dados
         ticketRepository.delete(ticket);
         //Retorna o DTO do ticket finalizado, com os dados atualizados
