@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.List;
 
 import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.util.validacao.ValidarTipoAcesso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,12 @@ public class VeiculoController {
     @Autowired
     private VeiculoService veiculoService;
 
+    @Autowired
+    private ValidarTipoAcesso validarTipoAcesso;
+
     @PostMapping
     public ResponseEntity<VeiculoDTO> criarVeiculo(@RequestBody VeiculoDTO veiculoDTO) throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         // Lógica para criar um novo veículo
         VeiculoDTO novoVeiculo = veiculoService.criarVeiculo(veiculoDTO);
         return ResponseEntity.ok(novoVeiculo);
@@ -29,12 +34,14 @@ public class VeiculoController {
     @GetMapping("/{id}")
     public ResponseEntity<VeiculoDTO> buscarVeiculoPorId(@PathVariable Integer id) throws EstacionamentoException {
         // Lógica para buscar um veículo por ID
+        validarTipoAcesso.validarSeExisteUsuario();
         VeiculoDTO veiculo = veiculoService.buscarVeiculoPorId(id);
         return ResponseEntity.ok(veiculo);
     }
 
     @GetMapping
-    public ResponseEntity<List<VeiculoDTO>> listarVeiculos() {
+    public ResponseEntity<List<VeiculoDTO>> listarVeiculos() throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         // Chama o serviço para listar todos os veículos e converte para DTOs
         List<VeiculoDTO> veiculos = veiculoService.listarVeiculos();
         return ResponseEntity.ok(veiculos);
@@ -43,6 +50,7 @@ public class VeiculoController {
     @PutMapping("/{id}")
     public ResponseEntity<VeiculoDTO> atualizarVeiculo(@PathVariable Integer id, @RequestBody VeiculoDTO veiculoDTO) throws EstacionamentoException {
         // Lógica para atualizar um veículo
+        validarTipoAcesso.validarSeExisteUsuario();
         VeiculoDTO veiculoAtualizado = veiculoService.atualizarVeiculo(veiculoDTO);
         if (veiculoAtualizado != null) {
             return ResponseEntity.ok(veiculoAtualizado);
@@ -52,7 +60,8 @@ public class VeiculoController {
     }
 
     @GetMapping("/ocupados")
-    public ResponseEntity<List<VeiculoDTO>> listarVeiculosOcupandoVaga() {
+    public ResponseEntity<List<VeiculoDTO>> listarVeiculosOcupandoVaga() throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         // Lógica para listar veículos ocupando vaga
         List<VeiculoDTO> veiculosOcupados = veiculoService.listarVeiculosOcupandoVaga();
         return ResponseEntity.ok(veiculosOcupados);

@@ -9,8 +9,7 @@ import com.backend.EasyPark.model.entities.ConfiguracaoSistema;
 
 @Repository
 public interface ConfiguracaoSistemaRepository extends JpaRepository<ConfiguracaoSistema, Integer> {
-    
-    Optional<ConfiguracaoSistema> findTopByOrderByIdAsc();
+
     
     Optional<ConfiguracaoSistema> findByQtdMotoAndQtdCarro(int qtdMoto, int qtdCarro);
     

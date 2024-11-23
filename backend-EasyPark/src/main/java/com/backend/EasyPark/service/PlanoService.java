@@ -27,7 +27,6 @@ public class PlanoService {
     @Autowired
     private AssinaturaPlanoRepository assinaturaPlanoRepository;
 
-
     // Criar um novo plano
     @Transactional
     public PlanoDTO criarPlano(PlanoDTO planoDTO) {

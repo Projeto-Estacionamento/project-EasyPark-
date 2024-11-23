@@ -25,8 +25,8 @@ public class PlanoController {
 
     @PostMapping
     public ResponseEntity<PlanoDTO> criarPlano(@Valid @RequestBody PlanoDTO planoDTO) throws EstacionamentoException {
-        PlanoDTO novoPlano = planoService.criarPlano(planoDTO);
         validarTipoAcesso.validarAcessoAdmin();
+        PlanoDTO novoPlano = planoService.criarPlano(planoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoPlano);
     }
 

@@ -32,7 +32,7 @@ public class ConfiguracaoSistemaService {
     }
 
     public ConfiguracaoSistemaDTO buscarConfiguracaoAtual() {
-        ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdAsc()
+        ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
                 .orElseThrow(() -> new RuntimeException("Nenhuma configuração encontrada"));
         return configuracaoSistemaMapper.toDTO(configuracao);
     }

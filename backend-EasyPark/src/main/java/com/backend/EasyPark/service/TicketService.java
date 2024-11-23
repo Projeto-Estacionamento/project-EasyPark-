@@ -31,19 +31,17 @@ import com.backend.EasyPark.util.TicketMapper;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
-    private final ConfiguracaoSistemaService configuracaoSistemaService;
     private final ValidarVeiculo validarVeiculo;
     private final VeiculoRepository veiculoRepository;
     private final ConfiguracaoSistemaRepository configuracaoSistemaRepository;
 
 
+
     @Autowired
     public TicketService(TicketRepository ticketRepository,
-                         ConfiguracaoSistemaService configuracaoSistemaService,
                          ValidarVeiculo validarVeiculo,
                          VeiculoRepository veiculoRepository, ConfiguracaoSistemaRepository configuracaoSistemaRepository) {
         this.ticketRepository = ticketRepository;
-        this.configuracaoSistemaService = configuracaoSistemaService;
         this.validarVeiculo = validarVeiculo;
         this.veiculoRepository = veiculoRepository;
         this.configuracaoSistemaRepository = configuracaoSistemaRepository;
@@ -53,6 +51,12 @@ public class TicketService {
         if (ticket == null || ticket.getPlacaVeiculo() == null) {
             throw new EstacionamentoException("Ticket ou placa do veículo não podem ser nulos");
         }
+
+        ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada," +
+                        " portando não é possivel criar um ticket"));
+
+
 
         Optional<Ticket> ticketExistente = ticketRepository.findByPlacaVeiculo(ticket.getPlacaVeiculo());
 
