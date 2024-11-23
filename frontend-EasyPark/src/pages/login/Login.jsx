@@ -17,23 +17,21 @@ export function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const credentials = btoa(`${valores.email}:${valores.senha}`);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/acesso/login`, {
+      const response = await fetch('http://localhost:8080/easypark/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Basic ${credentials}`
         },
-        body: JSON.stringify({ email: valores.email, senha: valores.senha }),
+        body: JSON.stringify({ login: valores.email, senha: valores.senha }),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        login(data);
-        if (data.tipoAcesso === "ADMINISTRADOR") {
-          navigate("/admin");
-        } else if (data.tipoAcesso === "CAIXA") {
-          navigate("/caixa");
-        }
+        const token = await response.text();
+        login(token);
+        navigate("/home");
       } else {
         console.error('Erro ao fazer login:', response.statusText);
         alert("Email ou senha incorretos!");
