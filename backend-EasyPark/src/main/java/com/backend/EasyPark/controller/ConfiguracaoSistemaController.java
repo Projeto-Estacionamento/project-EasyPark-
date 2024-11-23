@@ -49,4 +49,14 @@ public class ConfiguracaoSistemaController {
         List<ConfiguracaoSistemaDTO> configuracoes = configuracaoSistemaService.listarTodasConfiguracoes();
         return ResponseEntity.ok(configuracoes);
     }
+
+    @PostMapping("/ativar-contagem")
+    public boolean ativarContagemEMostrar(@RequestParam boolean mostrar) {
+        boolean retorno = false;
+        if (mostrar) {
+            configuracaoSistemaService.ativarContagemEMostrar(mostrar);
+            retorno = true;
+        }
+        return retorno;
+    }
 }

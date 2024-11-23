@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.backend.EasyPark.model.entities.Ticket;
+import com.backend.EasyPark.model.enums.TipoVeiculo;
+import com.backend.EasyPark.model.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +20,14 @@ public class ConfiguracaoSistemaService {
 
     private final ConfiguracaoSistemaRepository configuracaoSistemaRepository;
     private final ConfiguracaoSistemaMapper configuracaoSistemaMapper;
+    private final TicketRepository ticketRepository;
 
     @Autowired
     public ConfiguracaoSistemaService(ConfiguracaoSistemaRepository configuracaoSistemaRepository,
-                                      ConfiguracaoSistemaMapper configuracaoSistemaMapper) {
+                                      ConfiguracaoSistemaMapper configuracaoSistemaMapper, TicketRepository ticketRepository) {
         this.configuracaoSistemaRepository = configuracaoSistemaRepository;
         this.configuracaoSistemaMapper = configuracaoSistemaMapper;
+        this.ticketRepository = ticketRepository;
     }
 
     public ConfiguracaoSistemaDTO criarConfiguracao(ConfiguracaoSistemaDTO configuracaoDTO) {
@@ -55,5 +60,40 @@ public class ConfiguracaoSistemaService {
         ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
                 .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada"));
         return BigDecimal.valueOf(configuracao.getValorHoraCarro());
+    }
+
+
+    //METODO PARA ATIVAR O BOTÃO DOS STATUS
+    public void ativarContagemEMostrar(boolean mostrar) {
+        // Busca a configuração do sistema
+        ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada"));
+
+        // Atualiza a configuração para ativar ou desativar a contagem de veículos
+        configuracao.setMostrar(mostrar);
+        configuracaoSistemaRepository.save(configuracao); // Salva a configuração atualizada
+
+        // Se "mostrar" for verdadeiro, inicializa contadores com os valores definidos na configuração
+        if (mostrar) {
+            int qtdCarro = configuracao.getQtdCarro();
+            int qtdMoto = configuracao.getQtdMoto();
+
+            // Busca todos os tickets ativos
+            List<Ticket> ticketsAtivos = ticketRepository.findAll(); // Supondo que todos os tickets são considerados ativos
+
+            // Conta os veículos por tipo
+            for (Ticket ticket : ticketsAtivos) {
+                if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO) {
+                    qtdCarro--;
+                } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO) {
+                    qtdMoto--;
+                }
+            }
+
+            // Atualiza a configuração com as novas quantidades
+            configuracao.setQtdCarro(qtdCarro);
+            configuracao.setQtdMoto(qtdMoto);
+            configuracaoSistemaRepository.save(configuracao); // Salva a configuração atualizada
+        }
     }
 }

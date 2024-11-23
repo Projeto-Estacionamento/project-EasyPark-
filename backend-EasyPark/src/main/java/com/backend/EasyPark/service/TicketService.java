@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.backend.EasyPark.model.dto.VeiculoDTO;
 import com.backend.EasyPark.model.entities.*;
 import com.backend.EasyPark.model.enums.TipoTicket;
 import com.backend.EasyPark.model.enums.TipoVeiculo;
@@ -32,8 +31,6 @@ public class TicketService {
     private final ValidarVeiculo validarVeiculo;
     private final VeiculoRepository veiculoRepository;
     private final ConfiguracaoSistemaRepository configuracaoSistemaRepository;
-
-
 
     @Autowired
     public TicketService(TicketRepository ticketRepository,
@@ -100,11 +97,32 @@ public class TicketService {
                         break; //Para o loop ao encontrar o primeiro plano válido
                     }
                 }
+
+
+                Optional<Veiculo> validarTipoVeiculo = veiculoRepository.findByPlaca(ticket.getPlacaVeiculo());
+
+                if (configuracao.isMostrar()) {
+                    if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.CARRO) {
+                        if (configuracao.getQtdCarro() <= 0) {
+                            throw new EstacionamentoException("Não há vagas disponíveis para carros.");
+                        }
+                        configuracao.setQtdCarro(configuracao.getQtdCarro() - 1);
+                    } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.MOTO) {
+                        if (configuracao.getQtdMoto() <= 0) {
+                            throw new EstacionamentoException("Não há vagas disponíveis para motos.");
+                        }
+                        configuracao.setQtdMoto(configuracao.getQtdMoto() - 1);
+                    }
+                    configuracaoSistemaRepository.save(configuracao); //Atualiza a configuração
+                }
             }
         } else {
             //Se nenhum veículo com assinatura válida for encontrado, cria ticket avulso
             ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
         }
+
+
+
 
         // Tenta salvar o ticket no banco de dados
         try {
@@ -127,7 +145,7 @@ public class TicketService {
                 .collect(Collectors.toList());
     }
 
-    public TicketDTO finalizarTicket(Integer id) {
+    public TicketDTO finalizarTicket(Integer id) throws EstacionamentoException {
         //Finaliza um ticket, calculando o tempo total e o valor a pagar
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ticket não encontrado"));
@@ -150,9 +168,29 @@ public class TicketService {
                 veiculoRepository.save(veiculo.get());
             }
         }
+        //pegando a configuração para aumentar a quantidade de vagas no estacionamento pelo tipo
+        ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada"));
+
+        //Validar o tipo do veiculo do plano tbm, pois o plano necessario precisa colocar o tipo do veiculo
+        Optional<Veiculo> validarTipoVeiculo = veiculoRepository.findByPlaca(ticket.getPlacaVeiculo());
+
+        if (configuracao.isMostrar()) {
+            if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.CARRO) {
+                if (configuracao.getQtdCarro() <= 0) {
+                    throw new EstacionamentoException("Não há vagas disponíveis para carros.");
+                }
+                configuracao.setQtdCarro(configuracao.getQtdCarro() + 1);
+            } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.MOTO) {
+                if (configuracao.getQtdMoto() <= 0) {
+                    throw new EstacionamentoException("Não há vagas disponíveis para motos.");
+                }
+                configuracao.setQtdMoto(configuracao.getQtdMoto() + 1);
+            }
+            configuracaoSistemaRepository.save(configuracao); // Atualiza a configuração
+        }
         //Exclui o ticket após finalização para evitar o acúmulo de dados
         ticketRepository.delete(ticket);
-
         //Retorna o DTO do ticket finalizado, com os dados atualizados
         return TicketMapper.toDTO(updatedTicket);
     }
@@ -241,8 +279,6 @@ public class TicketService {
         //Calcula o valor total a ser pago
         return valorHora.multiply(BigDecimal.valueOf(horasEstacionado));
     }
-
-
 
     public void validarPlaca(String placa) throws EstacionamentoException {
         // Valida o campo 'placa'
