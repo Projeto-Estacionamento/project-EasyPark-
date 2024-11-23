@@ -8,7 +8,7 @@ export function ListaUsuarios({ usuarios, editarSenhaUsuario }) {
         <ul>
           {usuarios.map((usuario, index) => (
             <li key={index}>
-              <span>{usuario.username} - {usuario.tipoAcesso}</span>
+              <span>{usuario.username} - {usuario.email} - {usuario.tipoAcesso}</span>
               <button onClick={() => {
                 const novaSenha = prompt('Digite a nova senha:');
                 if (novaSenha) {

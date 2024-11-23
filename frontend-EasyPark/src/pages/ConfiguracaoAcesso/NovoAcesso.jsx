@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 
 export function NovoAcesso({ adicionarUsuario }) {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [tipoAcesso, setTipoAcesso] = useState('caixa');
   const [isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    adicionarUsuario({ username, senha, tipoAcesso });
+    adicionarUsuario({ username, email, senha, tipoAcesso });
     setUsername('');
+    setEmail('');
     setSenha('');
     setIsVisible(false);
   };
@@ -32,6 +34,12 @@ export function NovoAcesso({ adicionarUsuario }) {
               placeholder="Usuário"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"

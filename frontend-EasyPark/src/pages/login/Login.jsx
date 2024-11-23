@@ -11,7 +11,7 @@ export function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [valores, setValores] = useState({
-    username: "",
+    email: "",
     senha: "",
   });
 
@@ -23,7 +23,7 @@ export function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username: valores.username, senha: valores.senha }),
+        body: JSON.stringify({ email: valores.email, senha: valores.senha }),
       });
 
       if (response.ok) {
@@ -36,11 +36,11 @@ export function Login() {
         }
       } else {
         console.error('Erro ao fazer login:', response.statusText);
-        alert("Username ou senha incorretos!");
+        alert("Email ou senha incorretos!");
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-      alert("Username ou senha incorretos!");
+      alert("Email ou senha incorretos!");
     }
   };
 
@@ -52,11 +52,11 @@ export function Login() {
           <div className="form-group">
             <Input
               type="text"
-              text="Username"
-              name="username"
-              placeholder="Digite seu username"
-              value={valores.username}
-              onChangeFN={(e) => setValores({ ...valores, username: e.target.value })}
+              text="Email"
+              name="email"
+              placeholder="Digite seu email"
+              value={valores.email}
+              onChangeFN={(e) => setValores({ ...valores, email: e.target.value })}
               darkMode
             />
           </div>
