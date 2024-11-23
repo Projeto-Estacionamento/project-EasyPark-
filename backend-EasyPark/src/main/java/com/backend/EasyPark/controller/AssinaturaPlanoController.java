@@ -3,7 +3,9 @@ package com.backend.EasyPark.controller;
 import com.backend.EasyPark.model.dto.AssinaturaPlanoDTO;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.service.AssinaturaPlanoService;
+import com.backend.EasyPark.util.validacao.ValidarTipoAcesso;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,18 +21,24 @@ public class AssinaturaPlanoController {
 
     private final AssinaturaPlanoService assinaturaPlanoService;
 
+    @Autowired
+    private ValidarTipoAcesso validarTipoAcesso;
+
     @GetMapping
-    public ResponseEntity<List<AssinaturaPlanoDTO>> findAll() {
+    public ResponseEntity<List<AssinaturaPlanoDTO>> findAll() throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         return ResponseEntity.ok(assinaturaPlanoService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AssinaturaPlanoDTO> findById(@PathVariable Integer id) {
+    public ResponseEntity<AssinaturaPlanoDTO> findById(@PathVariable Integer id) throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         return ResponseEntity.ok(assinaturaPlanoService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<AssinaturaPlanoDTO> create(@RequestBody AssinaturaPlanoDTO dto) throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         AssinaturaPlanoDTO created = assinaturaPlanoService.create(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -40,12 +48,14 @@ public class AssinaturaPlanoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AssinaturaPlanoDTO> update(@PathVariable Integer id, @RequestBody AssinaturaPlanoDTO dto) {
+    public ResponseEntity<AssinaturaPlanoDTO> update(@PathVariable Integer id, @RequestBody AssinaturaPlanoDTO dto) throws EstacionamentoException {
+        validarTipoAcesso.validarAcessoAdmin();
         return ResponseEntity.ok(assinaturaPlanoService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) throws EstacionamentoException {
+        validarTipoAcesso.validarAcessoAdmin();
         assinaturaPlanoService.delete(id);
         return ResponseEntity.noContent().build();
     }

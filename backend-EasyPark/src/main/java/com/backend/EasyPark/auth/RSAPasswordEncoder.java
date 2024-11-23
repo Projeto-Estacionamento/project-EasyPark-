@@ -53,7 +53,6 @@ public class RSAPasswordEncoder implements PasswordEncoder {
 
             return rawPassword.toString().equals(decryptedPassword);
         } catch (Exception e) {
-            System.out.println("Erro ao criptografar a senha: " + e.getMessage());
             throw new RuntimeException("Erro ao decifrar a senha com RSA", e);
         }
     }

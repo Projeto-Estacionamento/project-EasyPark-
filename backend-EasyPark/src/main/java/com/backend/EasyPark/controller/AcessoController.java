@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.model.dto.AcessoDTO;
 import com.backend.EasyPark.service.AcessoService;
+import com.backend.EasyPark.util.validacao.ValidarTipoAcesso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,19 @@ public class AcessoController {
         @Autowired
         private AcessoService acessoService;
 
+        @Autowired
+        private ValidarTipoAcesso validarTipoAcesso;
+
         @GetMapping("/by-email")
-        public ResponseEntity<AcessoDTO> getUserByEmail(@RequestParam String email) {
+        public ResponseEntity<AcessoDTO> getUserByEmail(@RequestParam String email) throws EstacionamentoException {
+            validarTipoAcesso.validarAcessoAdmin();
             AcessoDTO acessoDTO = acessoService.getByEmail(email);
             return ResponseEntity.ok(acessoDTO);
         }
 
         @PostMapping
-        public ResponseEntity<AcessoDTO> save(@RequestBody AcessoDTO userDTO) {
+        public ResponseEntity<AcessoDTO> save(@RequestBody AcessoDTO userDTO) throws EstacionamentoException {
+            validarTipoAcesso.validarAcessoAdmin();
             AcessoDTO acessoDTO = acessoService.save(userDTO);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(acessoDTO);
@@ -34,6 +40,7 @@ public class AcessoController {
 
         @GetMapping
         public ResponseEntity<List<AcessoDTO>> findAll() throws EstacionamentoException {
+            validarTipoAcesso.validarAcessoAdmin();
             List<AcessoDTO> acessoDTOS = acessoService.findAll();
 
             return ResponseEntity.ok(acessoDTOS);
@@ -41,18 +48,21 @@ public class AcessoController {
 
         @GetMapping("/{id}")
         public ResponseEntity<AcessoDTO> findById(@PathVariable Integer id) throws EstacionamentoException {
+            validarTipoAcesso.validarAcessoAdmin();
             AcessoDTO acessoDTO = acessoService.findById(id);
             return ResponseEntity.ok(acessoDTO);
         }
 
         @PutMapping
-        public ResponseEntity<AcessoDTO> update(@RequestBody AcessoDTO userDTO) {
+        public ResponseEntity<AcessoDTO> update(@RequestBody AcessoDTO userDTO) throws EstacionamentoException {
+            validarTipoAcesso.validarAcessoAdmin();
             AcessoDTO acessoDtoUpdate = acessoService.update(userDTO);
             return ResponseEntity.ok(acessoDtoUpdate);
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+        public ResponseEntity<Void> deleteById(@PathVariable Integer id) throws EstacionamentoException {
+            validarTipoAcesso.validarAcessoAdmin();
             acessoService.deleteById(id);
             return ResponseEntity.noContent().build();
         }

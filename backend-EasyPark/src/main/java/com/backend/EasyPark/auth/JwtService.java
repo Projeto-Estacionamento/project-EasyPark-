@@ -35,7 +35,7 @@ public class JwtService {
                 .collect(Collectors
                         .joining(" "));
 
-        Acesso jogadorAutenticado = (Acesso) authentication.getPrincipal();
+        Acesso acessoAutenticado = (Acesso) authentication.getPrincipal();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("easypark")			                // emissor do token
@@ -43,7 +43,7 @@ public class JwtService {
                 .expiresAt(now.plusSeconds(dezHorasEmSegundos)) // expiração do token, em segundos.
                 .subject(authentication.getName())              // nome do usuário
                 .claim("roles", roles)                           // perfis ou permissões (roles)
-                .claim("idAcesso", jogadorAutenticado.getId()) // mais propriedades adicionais no token
+                .claim("idAcesso", acessoAutenticado.getId()) // mais propriedades adicionais no token
                 .build();
 
         return jwtEncoder.encode(

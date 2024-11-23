@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.List;
 
 import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.util.validacao.ValidarTipoAcesso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,32 +20,38 @@ public class TicketController {
     private final TicketService ticketService;
 
     @Autowired
+    private ValidarTipoAcesso validarTipoAcesso;
+
+    @Autowired
     public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
     }
 
     @PostMapping
     public ResponseEntity<TicketDTO> criarTicket(@RequestBody TicketDTO ticketDTO) throws EstacionamentoException {
-        // Cria um novo ticket
+        validarTipoAcesso.validarSeExisteUsuario();
         TicketDTO novoTicket = ticketService.criarTicket(ticketDTO);
         return new ResponseEntity<>(novoTicket, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TicketDTO> buscarTicketPorId(@PathVariable Integer id) {
+    public ResponseEntity<TicketDTO> buscarTicketPorId(@PathVariable Integer id) throws EstacionamentoException {
         // Busca um ticket pelo ID
+        validarTipoAcesso.validarSeExisteUsuario();
         TicketDTO ticket = ticketService.buscarTicketPorId(id);
         return ResponseEntity.ok(ticket);
     }
 
     @GetMapping
-    public ResponseEntity<List<TicketDTO>> listarTickets() {
+    public ResponseEntity<List<TicketDTO>> listarTickets() throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         List<TicketDTO> tickets = ticketService.listarTickets();
         return ResponseEntity.ok(tickets);
     }
 
     @PutMapping("/{id}/finalizar")
-    public ResponseEntity<TicketDTO> finalizarTicket(@PathVariable Integer id) {
+    public ResponseEntity<TicketDTO> finalizarTicket(@PathVariable Integer id) throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         // Finaliza um ticket (registra a saída e calcula o valor)
         TicketDTO ticketFinalizado = ticketService.finalizarTicket(id);
         return ResponseEntity.ok(ticketFinalizado);

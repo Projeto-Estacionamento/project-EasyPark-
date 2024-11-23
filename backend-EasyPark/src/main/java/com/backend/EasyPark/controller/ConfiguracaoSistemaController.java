@@ -2,6 +2,8 @@ package com.backend.EasyPark.controller;
 
 import java.util.List;
 
+import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.util.validacao.ValidarTipoAcesso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,20 +20,26 @@ public class ConfiguracaoSistemaController {
     @Autowired
     private ConfiguracaoSistemaService configuracaoSistemaService;
 
+    @Autowired
+    private ValidarTipoAcesso validarTipoAcesso;
+
     @PostMapping
-    public ResponseEntity<ConfiguracaoSistemaDTO> criarConfiguracao(@RequestBody ConfiguracaoSistemaDTO configuracaoDTO) {
+    public ResponseEntity<ConfiguracaoSistemaDTO> criarConfiguracao(@RequestBody ConfiguracaoSistemaDTO configuracaoDTO) throws EstacionamentoException {
+        validarTipoAcesso.validarAcessoAdmin();
         ConfiguracaoSistemaDTO novaConfiguracao = configuracaoSistemaService.criarConfiguracao(configuracaoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaConfiguracao);
     }
 
     @GetMapping("/atual")
-    public ResponseEntity<ConfiguracaoSistemaDTO> buscarConfiguracaoAtual() {
+    public ResponseEntity<ConfiguracaoSistemaDTO> buscarConfiguracaoAtual() throws EstacionamentoException {
+        validarTipoAcesso.validarSeExisteUsuario();
         ConfiguracaoSistemaDTO configuracao = configuracaoSistemaService.buscarConfiguracaoAtual();
         return ResponseEntity.ok(configuracao);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ConfiguracaoSistemaDTO> atualizarConfiguracao(@PathVariable Integer id, @RequestBody ConfiguracaoSistemaDTO configuracaoDTO) {
+    public ResponseEntity<ConfiguracaoSistemaDTO> atualizarConfiguracao(@PathVariable Integer id, @RequestBody ConfiguracaoSistemaDTO configuracaoDTO) throws EstacionamentoException {
+        validarTipoAcesso.validarAcessoAdmin();
         ConfiguracaoSistemaDTO configuracaoAtualizada = configuracaoSistemaService.atualizarConfiguracao(id, configuracaoDTO);
         return ResponseEntity.ok(configuracaoAtualizada);
     }
