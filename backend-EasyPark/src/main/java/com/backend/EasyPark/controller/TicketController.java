@@ -30,7 +30,6 @@ public class TicketController {
 
     @PostMapping
     public ResponseEntity<TicketDTO> criarTicket(@RequestBody TicketDTO ticketDTO) throws EstacionamentoException {
-
         validarTipoAcesso.validarSeExisteUsuario();
         TicketDTO novoTicket = ticketService.criarTicket(ticketDTO);
         return new ResponseEntity<>(novoTicket, HttpStatus.CREATED);

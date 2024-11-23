@@ -22,7 +22,7 @@ public class AssinaturaPlanoController {
     private final AssinaturaPlanoService assinaturaPlanoService;
 
     @Autowired
-    private ValidarTipoAcesso validarTipoAcesso;
+    private ValidarTipoAcesso validarTipoAcesso; //Puxando o util para validar o acesso
 
     @GetMapping
     public ResponseEntity<List<AssinaturaPlanoDTO>> findAll() throws EstacionamentoException {
@@ -38,7 +38,7 @@ public class AssinaturaPlanoController {
 
     @PostMapping
     public ResponseEntity<AssinaturaPlanoDTO> create(@RequestBody AssinaturaPlanoDTO dto) throws EstacionamentoException {
-        validarTipoAcesso.validarSeExisteUsuario();
+        validarTipoAcesso.validarSeExisteUsuario(); // VALIDA SE TEM UM TOKEN, SÓ CONTINUA SE HOUVER UM TOKEN
         AssinaturaPlanoDTO created = assinaturaPlanoService.create(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -49,7 +49,7 @@ public class AssinaturaPlanoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AssinaturaPlanoDTO> update(@PathVariable Integer id, @RequestBody AssinaturaPlanoDTO dto) throws EstacionamentoException {
-        validarTipoAcesso.validarAcessoAdmin();
+        validarTipoAcesso.validarAcessoAdmin();  // AQUI SÓ VAI ATUALIZAR SE FOR ADMIN
         return ResponseEntity.ok(assinaturaPlanoService.update(id, dto));
     }
 

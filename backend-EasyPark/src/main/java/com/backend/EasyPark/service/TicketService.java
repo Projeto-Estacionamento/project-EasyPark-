@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.backend.EasyPark.model.entities.AssinaturaPlano;
-import com.backend.EasyPark.model.entities.ConfiguracaoSistema;
-import com.backend.EasyPark.model.entities.Veiculo;
+import com.backend.EasyPark.model.dto.VeiculoDTO;
+import com.backend.EasyPark.model.entities.*;
 import com.backend.EasyPark.model.enums.TipoTicket;
 import com.backend.EasyPark.model.enums.TipoVeiculo;
 import com.backend.EasyPark.exception.EstacionamentoException;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend.EasyPark.model.dto.TicketDTO;
-import com.backend.EasyPark.model.entities.Ticket;
 import com.backend.EasyPark.model.repository.TicketRepository;
 import com.backend.EasyPark.util.TicketMapper;
 // import com.backend.EasyPark.service.ConfiguracaoSistemaService;
@@ -52,19 +50,26 @@ public class TicketService {
             throw new EstacionamentoException("Ticket ou placa do veículo não podem ser nulos");
         }
 
+        //Validar se a placa está no formato correto.
+        this.validarPlaca(ticket.getPlacaVeiculo());
+
+        //Só vai poder criar um ticket se a configuração estiver criad.
         ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
                 .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada," +
                         " portando não é possivel criar um ticket"));
 
 
-
+        //Buscar um veiculo pela placa.
         Optional<Ticket> ticketExistente = ticketRepository.findByPlacaVeiculo(ticket.getPlacaVeiculo());
 
+        //valida se tem um carro no estacionamento.
         if (ticketExistente.isPresent()) {
             throw new EstacionamentoException("Já existe um veículo estacionado com esta placa: " + ticket.getPlacaVeiculo());
         }
 
+        //hora tual
         LocalTime horaAtual = LocalTime.now();
+
         //Busca os veículos com assinatura válida
         List<Veiculo> veiculos = veiculoRepository.buscarVeiculoComAssinaturaValida(ticket.getPlacaVeiculo());
 
@@ -78,26 +83,26 @@ public class TicketService {
         if (!veiculos.isEmpty()) {
             Veiculo veiculo = veiculos.get(0);  //Considerando que pegamos o primeiro veículo válido
 
-            boolean planoValidoEncontrado = false;
 
-            // Verifica as assinaturas do usuário para encontrar um plano válido
+
+            Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlaca(ticket.getPlacaVeiculo());
+
+            //Verifica as assinaturas do usuário para encontrar um plano válido
             for (AssinaturaPlano assinatura : veiculo.getUsuario().getAssinaturas()) {
+//                Ele busca o tipo do plano e pega o horario definido no enum e compara com a hora atual
+//                Só continua se bater o horario
                 if (assinatura.getPlano().getTipoPlano().contemHorario(horaAtual)) {
-                    // Se encontrar um plano válido, define o ticket como mensalista
-                    ticketEntity.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
-                    veiculo.setOcupandoVaga(true);
-                    veiculoRepository.save(veiculo);  // Salva o estado do veículo
-                    planoValidoEncontrado = true;
-                    break;  // Para o loop ao encontrar o primeiro plano válido
+                    if (assinatura.getPlano().getTipoPlano().equals(veiculoEncontrado.get().getTipoVeiculo())) {
+                        //Se encontrar um plano válido, define o ticket como mensalista
+                        ticketEntity.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
+                        veiculo.setOcupandoVaga(true);
+                        veiculoRepository.save(veiculo);  //Salva o estado do veículo
+                        break; //Para o loop ao encontrar o primeiro plano válido
+                    }
                 }
             }
-
-            // Se nenhum plano válido foi encontrado, configura o ticket como avulso
-            if (!planoValidoEncontrado) {
-                ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
-            }
         } else {
-            // Se nenhum veículo com assinatura válida for encontrado, cria ticket avulso
+            //Se nenhum veículo com assinatura válida for encontrado, cria ticket avulso
             ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
         }
 
@@ -145,7 +150,6 @@ public class TicketService {
                 veiculoRepository.save(veiculo.get());
             }
         }
-
         //Exclui o ticket após finalização para evitar o acúmulo de dados
         ticketRepository.delete(ticket);
 
@@ -240,7 +244,15 @@ public class TicketService {
 
 
 
+    public void validarPlaca(String placa) throws EstacionamentoException {
+        // Valida o campo 'placa'
+        if (placa == null || placa.isEmpty()) {
+            throw new EstacionamentoException("A placa do veículo é obrigatória.");
+        } else if (placa.length() != 7 || !placa.matches("[A-Z]{3}[0-9][A-Z0-9][0-9]{2}")) {
+            throw new EstacionamentoException("A placa deve conter 7 caracteres e estar no formato padrão (exemplo: ABC1234 ou ABC1D23).");
+        }
 
+    }
 
 
 
