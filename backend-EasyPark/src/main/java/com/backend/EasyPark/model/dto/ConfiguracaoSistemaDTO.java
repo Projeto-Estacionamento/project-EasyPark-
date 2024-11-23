@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConfiguracaoSistemaDTO {
     private Integer id;
+    private boolean mostrar;
     private int qtdMoto;
     private int qtdCarro;
     private double valorHoraMoto;

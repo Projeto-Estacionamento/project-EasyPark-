@@ -15,6 +15,7 @@ public class ConfiguracaoSistemaMapper {
 
         ConfiguracaoSistema configuracao = new ConfiguracaoSistema();
         configuracao.setId(dto.getId());
+        configuracao.setMostrar(dto.isMostrar());
         configuracao.setQtdMoto(dto.getQtdMoto());
         configuracao.setQtdCarro(dto.getQtdCarro());
         configuracao.setValorHoraMoto(dto.getValorHoraMoto());
@@ -32,6 +33,7 @@ public class ConfiguracaoSistemaMapper {
         }
         return new ConfiguracaoSistemaDTO(
             entity.getId(),
+            entity.isMostrar(),
             entity.getQtdMoto(),
             entity.getQtdCarro(),
             entity.getValorHoraMoto(),
@@ -47,6 +49,7 @@ public class ConfiguracaoSistemaMapper {
         if (dto == null) {
             return;
         }
+        configuracao.setMostrar(dto.isMostrar());
         configuracao.setQtdMoto(dto.getQtdMoto());
         configuracao.setQtdCarro(dto.getQtdCarro());
         configuracao.setValorHoraMoto(dto.getValorHoraMoto());

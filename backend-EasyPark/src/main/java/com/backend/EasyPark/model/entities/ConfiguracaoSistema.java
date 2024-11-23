@@ -15,6 +15,7 @@ public class ConfiguracaoSistema {
 
    @Id
    private Integer id = 1;
+   private boolean mostrar;
    private int qtdMoto;
    private int qtdCarro;
    private double valorHoraMoto;
