@@ -69,7 +69,7 @@ export function Login() {
               darkMode
             />
           </div>
-          <Button type="submit" variant="outline-light" fullWidth>
+          <Button type="submit" variant="outline-light" fullWidth checkAuth={false}>
             Entrar
           </Button>
         </form>

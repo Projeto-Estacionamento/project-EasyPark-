@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../../assets/logo.png';
+import { AuthContext } from '../../context/AuthContext';
 
 export function SidebarMenu() {
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    logout();
     navigate('/');
   };
 

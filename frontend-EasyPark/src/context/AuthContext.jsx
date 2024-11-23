@@ -1,21 +1,30 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+export const AuthProvider = ({ children }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = (userData) => {
-    setUser(userData);
-  };
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        setIsAuthenticated(!!token);
+        console.log('Token:', token);
+        console.log('isAuthenticated:', !!token);
+    }, [isAuthenticated]);
 
-  const logout = () => {
-    setUser(null);
-  };
+    const login = (token) => {
+        sessionStorage.setItem('token', token);
+        setIsAuthenticated(true);
+    };
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-} 
+    const logout = () => {
+        sessionStorage.removeItem('token');
+        setIsAuthenticated(false);
+    };
+
+    return (
+        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
