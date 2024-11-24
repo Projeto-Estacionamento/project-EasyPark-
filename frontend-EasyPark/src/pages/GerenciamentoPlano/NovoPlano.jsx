@@ -8,7 +8,12 @@ export function NovoPlano({ adicionarPlano }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    adicionarPlano({ tipoPlano, tipoVeiculo, valorPlano: parseFloat(valorPlano) });
+    const novoPlano = {
+      tipoPlano,
+      tipoVeiculo,
+      valorPlano: parseFloat(valorPlano)
+    };
+    adicionarPlano(novoPlano);
     setTipoPlano('INTEGRAL');
     setTipoVeiculo('CARRO');
     setValorPlano('');
@@ -22,6 +27,7 @@ export function NovoPlano({ adicionarPlano }) {
           <option value="INTEGRAL">Integral</option>
           <option value="MANHA">Manhã</option>
           <option value="TARDE">Tarde</option>
+          <option value="NOITE">Noite</option>
         </select>
         <select value={tipoVeiculo} onChange={(e) => setTipoVeiculo(e.target.value)} className="form-control mb-3">
           <option value="CARRO">Carro</option>

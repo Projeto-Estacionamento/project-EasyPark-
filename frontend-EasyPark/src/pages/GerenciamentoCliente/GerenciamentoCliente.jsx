@@ -53,7 +53,7 @@ export function GerenciamentoCliente() {
       <SidebarMenu />
       <div className="configuracao-acesso-container">
         <Card title="Gerenciamento de Clientes">
-          <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoCliente(!mostrarNovoCliente)}>
+          <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoCliente(!mostrarNovoCliente) }>
             {mostrarNovoCliente ? 'Cancelar' : 'Novo Cliente'}
           </Button>
           {mostrarNovoCliente && <NovoCliente adicionarCliente={adicionarCliente} />}
