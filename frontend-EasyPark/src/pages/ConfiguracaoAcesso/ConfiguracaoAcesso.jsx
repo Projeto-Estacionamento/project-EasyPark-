@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import { Card } from '../../components/card/Card';
 import { Button } from '../../components/button/button';
+import ListaUsuarios from './ListaUsuarios';
 import './ConfiguracaoAcesso.css';
 
 export function ConfiguracaoAcesso() {
@@ -12,7 +13,7 @@ export function ConfiguracaoAcesso() {
   const [tipoAcesso, setTipoAcesso] = useState('caixa');
 
   useEffect(() => {
-    fetch('http://localhost:8080/acesso/listar')
+    fetch('http://localhost:8080/acesso')
       .then(response => response.json())
       .then(data => setUsuarios(data))
       .catch(error => console.error('Erro ao buscar usuários:', error));
@@ -20,12 +21,6 @@ export function ConfiguracaoAcesso() {
 
   const adicionarUsuario = (novoUsuario) => {
     setUsuarios([...usuarios, novoUsuario]);
-  };
-
-  const editarSenhaUsuario = (index, novaSenha) => {
-    const usuariosAtualizados = [...usuarios];
-    usuariosAtualizados[index].senha = novaSenha;
-    setUsuarios(usuariosAtualizados);
   };
 
   const handleSubmit = (e) => {
@@ -36,14 +31,18 @@ export function ConfiguracaoAcesso() {
     setMostrarNovoAcesso(false);
   };
 
+  const isAdmin = sessionStorage.getItem('accessType') === 'ADMINISTRADOR';
+
   return (
     <div className="d-flex">
       <SidebarMenu />
       <div className="configuracao-acesso-container">
         <Card title="Configuração de Acesso">
-          <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoAcesso(!mostrarNovoAcesso)}>
-            {mostrarNovoAcesso ? 'Cancelar' : 'Criar Novo Acesso'}
-          </Button>
+          {isAdmin && (
+            <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoAcesso(!mostrarNovoAcesso)}>
+              {mostrarNovoAcesso ? 'Cancelar' : 'Criar Novo Acesso'}
+            </Button>
+          )}
           {mostrarNovoAcesso && (
             <form onSubmit={handleSubmit} className="form-novo-acesso">
               <input
@@ -67,22 +66,7 @@ export function ConfiguracaoAcesso() {
               </Button>
             </form>
           )}
-          <h2>Lista de Usuários</h2>
-          <ul>
-            {usuarios.map((usuario, index) => (
-              <li key={index}>
-                <span>{usuario.username} - {usuario.tipoAcesso}</span>
-                <Button variant="outline-light" onClick={() => {
-                  const novaSenha = prompt('Digite a nova senha:');
-                  if (novaSenha) {
-                    editarSenhaUsuario(index, novaSenha);
-                  }
-                }}>
-                  Editar Senha
-                </Button>
-              </li>
-            ))}
-          </ul>
+          <ListaUsuarios usuarios={usuarios} />
         </Card>
       </div>
     </div>
