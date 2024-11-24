@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -60,18 +63,30 @@ public class AuthenticationController {
         return authenticationService.authenticate(authentication);
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginDTO data) {
-        // Cria um objeto de autenticação com o login e a senha
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getSenha());
+    public ResponseEntity<?> login(@RequestBody @Valid LoginDTO data) {
+        try {
+            // Cria um objeto de autenticação com o login e a senha
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getSenha());
 
-        // Autentica o usuário usando o AuthenticationManager
-        Authentication authentication = authenticationManager.authenticate(usernamePassword);
+            // Autentica o usuário usando o AuthenticationManager
+            Authentication authentication = authenticationManager.authenticate(usernamePassword);
 
-        // Gera o token JWT
-        var token = jwtService.getGenerateToken(authentication);
+            // Gera o token JWT
+            var token = jwtService.getGenerateToken(authentication);
 
-        // Retorna o token na resposta
-        return ResponseEntity.ok(token);
+            // Obtém o usuário autenticado
+            Acesso acesso = repository.findByEmail(data.getLogin()).orElseThrow();
+
+            // Cria a resposta com o token e o tipo de acesso
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("accessType", acesso.getTipoAcesso().name());
+
+            // Retorna a resposta
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+        }
     }
 
 

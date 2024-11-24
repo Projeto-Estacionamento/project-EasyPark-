@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import com.backend.EasyPark.model.enums.TipoAcesso;
 
 
 import java.util.List;
@@ -126,5 +127,12 @@ public class AcessoService implements UserDetailsService {
                 .orElseThrow(
                         () -> new UsernameNotFoundException("Usuário não encontrado" + username)
                 );
+    }
+
+    public List<AcessoDTO> findByTipoAcesso(TipoAcesso tipo) {
+        List<Acesso> acessos = repository.findByTipoAcesso(tipo);
+        return acessos.stream()
+                .map(AcessoMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

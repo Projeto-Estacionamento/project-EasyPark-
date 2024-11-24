@@ -83,10 +83,6 @@ public class TicketService {
         if (!veiculos.isEmpty()) {
             Veiculo veiculo = veiculos.get(0);  //Considerando que pegamos o primeiro veículo válido
 
-
-
-            Optional<Veiculo> veiculoEncontrado = veiculoRepository.findByPlaca(ticket.getPlacaVeiculo());
-
             //Verifica as assinaturas do usuário para encontrar um plano válido
             for (AssinaturaPlano assinatura : veiculo.getUsuario().getAssinaturas()) {
 //                Ele busca o tipo do plano e pega o horario definido no enum e compara com a hora atual
@@ -96,34 +92,16 @@ public class TicketService {
                         ticketEntity.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
                         veiculo.setOcupandoVaga(true);
                         veiculoRepository.save(veiculo);  //Salva o estado do veículo
-                        break; //Para o loop ao encontrar o primeiro plano válido
+                         //Para o loop ao encontrar o primeiro plano válido
+                }else {
+                    ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
                 }
 
-
-                Optional<Veiculo> validarTipoVeiculo = veiculoRepository.findByPlaca(ticket.getPlacaVeiculo());
-
-                if (configuracao.isMostrar()) {
-                    if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.CARRO) {
-                        if (configuracao.getQtdCarro() <= 0) {
-                            throw new EstacionamentoException("Não há vagas disponíveis para carros.");
-                        }
-                        configuracao.setQtdCarro(configuracao.getQtdCarro() - 1);
-                    } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.MOTO) {
-                        if (configuracao.getQtdMoto() <= 0) {
-                            throw new EstacionamentoException("Não há vagas disponíveis para motos.");
-                        }
-                        configuracao.setQtdMoto(configuracao.getQtdMoto() - 1);
-                    }
-                    configuracaoSistemaRepository.save(configuracao); //Atualiza a configuração
-                }
             }
         } else {
             //Se nenhum veículo com assinatura válida for encontrado, cria ticket avulso
             ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
         }
-
-
-
 
         // Tenta salvar o ticket no banco de dados
         try {
@@ -157,11 +135,17 @@ public class TicketService {
         BigDecimal valorTotal = calcularValorTicket(TicketMapper.toDTO(ticket));
         ticket.setValorTotalPagar(valorTotal.doubleValue());
 
+        RelatorioTicketsFechados relatorio = new RelatorioTicketsFechados();
+        relatorio.setHoraEntrada(ticket.getHoraChegada());
+        relatorio.setHoraSaida(ticket.getHoraSaida());
+        relatorio.setTipoVeiculo(ticket.getTipoVeiculo());
+        relatorio.setValorTotalPagar(ticket.getValorTotalPagar());
+
         // Salva o ticket com o valor calculado
         Ticket updatedTicket = ticketRepository.save(ticket);
 
         // Caso for mensalista ou avulso, trocamos o status de ocupação do veículo
-        if (ticket.getTipoTicket().equals(TipoTicket.TICKET_MENSALISTA) || ticket.getTipoTicket().equals(TipoTicket.TICKET_AVULSO)) {
+        if (ticket.getTipoTicket().equals(TipoTicket.TICKET_MENSALISTA)) {
             // Quando for mensalista, obrigatório ter um veículo associado ao usuário
             Optional<Veiculo> veiculo = veiculoRepository.findByPlaca(ticket.getPlacaVeiculo());
             if (veiculo.isPresent()) {
@@ -174,15 +158,14 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada"));
 
         //Validar o tipo do veiculo do plano tbm, pois o plano necessario precisa colocar o tipo do veiculo
-        Optional<Veiculo> validarTipoVeiculo = veiculoRepository.findByPlaca(ticket.getPlacaVeiculo());
 
         if (configuracao.isMostrar()) {
-            if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.CARRO) {
+            if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO) {
                 if (configuracao.getQtdCarro() <= 0) {
                     throw new EstacionamentoException("Não há vagas disponíveis para carros.");
                 }
                 configuracao.setQtdCarro(configuracao.getQtdCarro() + 1);
-            } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO || validarTipoVeiculo.get().getTipoVeiculo() == TipoVeiculo.MOTO) {
+            } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO) {
                 if (configuracao.getQtdMoto() <= 0) {
                     throw new EstacionamentoException("Não há vagas disponíveis para motos.");
                 }
@@ -191,18 +174,12 @@ public class TicketService {
             configuracaoSistemaRepository.save(configuracao); // Atualiza a configuração
         }
 
-        //criando relatorio
-        RelatorioTicketsFechados relatorio = new RelatorioTicketsFechados();
-        relatorio.setHoraEntrada(ticket.getHoraChegada());
-        relatorio.setHoraSaida(ticket.getHoraSaida());
-        relatorio.setTipoVeiculo(ticket.getTipoVeiculo());
-        relatorio.setValorTotalPagar(ticket.getValorTotalPagar());
-
         // Salva o relatório no banco de dados
         relatorioTicketsFechadosRepository.save(relatorio);
 
-        //Exclui o ticket após finalização para evitar o acúmulo de dados
         ticketRepository.delete(ticket);
+
+        //Exclui o ticket após finalização para evitar o acúmulo de dado
         //Retorna o DTO do ticket finalizado, com os dados atualizados
         return TicketMapper.toDTO(updatedTicket);
     }
@@ -214,17 +191,14 @@ public class TicketService {
         if (isMenosDe15Minutos || ticket.getTipoTicket().equals(TipoTicket.TICKET_MENSALISTA)) {
             return BigDecimal.ZERO; // Isenção de pagamento
         }
-
         //Se for ticket avulso, procura a placa e determina o tipo de veículo
         BigDecimal valorHora = BigDecimal.ZERO;
 
         if (ticket.getTipoTicket().equals(TipoTicket.TICKET_AVULSO)) {
             //PARA O TICKET AVULSO, NAO PRECISA BUSCAR NO VEICULO, AVULSO NAO CADASTRA VEICULOS
-
             //VERIFICAR SE EXISTE UMA CONFIGURACAO NO SISTEMA
             ConfiguracaoSistema configuracao = configuracaoSistemaRepository.findTopByOrderByIdDesc()
                     .orElseThrow(() -> new RuntimeException("Configuração do sistema não encontrada"));
-
 
             //AQUI TBM DETERMINAR O VALOR DA HORA POR TIPO DO VEICULO
             if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO) {

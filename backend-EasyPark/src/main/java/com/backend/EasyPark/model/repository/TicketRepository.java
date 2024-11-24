@@ -14,12 +14,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     Optional<Ticket> findByPlacaVeiculo(String placaVeiculo);
     
     List<Ticket> findByPlacaVeiculo(Ticket placaVeiculo);
-    
-    //List<Ticket> findByDataEntradaBetween(LocalDateTime inicio, LocalDateTime fim);
-    
-    //List<Ticket> findByStatusPagamento(boolean statusPagamento);
-
-   // String countByTipoVeiculo(TipoVeiculo tipoVeiculo);
 
     Optional<Ticket> findByPlacaVeiculoAndHoraSaidaIsNull(String placaVeiculo);
 }

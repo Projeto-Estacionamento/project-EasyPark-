@@ -3,6 +3,7 @@ package com.backend.EasyPark.controller;
 import java.util.List;
 
 import com.backend.EasyPark.exception.EstacionamentoException;
+import com.backend.EasyPark.model.entities.Ticket;
 import com.backend.EasyPark.util.validacao.ValidarTipoAcesso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
