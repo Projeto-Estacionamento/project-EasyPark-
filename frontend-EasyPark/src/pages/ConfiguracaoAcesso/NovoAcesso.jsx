@@ -7,13 +7,39 @@ export function NovoAcesso({ adicionarUsuario }) {
   const [tipoAcesso, setTipoAcesso] = useState('caixa');
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    adicionarUsuario({ username, email, senha, tipoAcesso });
-    setUsername('');
-    setEmail('');
-    setSenha('');
-    setIsVisible(false);
+
+    try {
+      const response = await fetch('http://localhost:8080/easypark/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: username,
+          email: email,
+          senha: senha,
+          tipoAcesso: tipoAcesso.toUpperCase(),
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Usuário criado com sucesso");
+        adicionarUsuario({ username, email, senha, tipoAcesso });
+        setUsername('');
+        setEmail('');
+        setSenha('');
+        setIsVisible(false);
+      } else {
+        const errorData = await response.json();
+        console.error("Erro ao criar usuário:", errorData);
+        alert(`Erro: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Erro ao criar novo acesso:", error);
+      alert('Erro ao criar novo acesso');
+    }
   };
 
   const handleClose = () => {
