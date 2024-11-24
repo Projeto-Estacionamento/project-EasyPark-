@@ -8,9 +8,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = sessionStorage.getItem('token');
         setIsAuthenticated(!!token);
-        console.log('Token:', token);
-        console.log('isAuthenticated:', !!token);
-    }, [isAuthenticated]);
+    }, []);
 
     const login = (token) => {
         sessionStorage.setItem('token', token);
@@ -19,6 +17,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         sessionStorage.removeItem('token');
+        sessionStorage.removeItem('accessType');
         setIsAuthenticated(false);
     };
 

@@ -29,8 +29,9 @@ export function Login() {
       });
 
       if (response.ok) {
-        const token = await response.text();
-        login(token);
+        const data = await response.json();
+        login(data.token);
+        sessionStorage.setItem('accessType', data.accessType);
         navigate("/home");
       } else {
         console.error('Erro ao fazer login:', response.statusText);
