@@ -1,21 +1,24 @@
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8080/easypark/usuarios';
+
 export const fetchClientes = async () => {
-  const response = await fetch('/api/usuarios');
-  if (!response.ok) {
-    throw new Error('Erro ao buscar clientes');
+  try {
+    const response = await axios.get(API_URL);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar clientes:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const criarCliente = async (cliente) => {
-  const response = await fetch('/api/usuarios', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(cliente),
-  });
-  if (!response.ok) {
-    throw new Error('Erro ao criar cliente');
+  try {
+    const response = await axios.post(API_URL, cliente);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar cliente:', error);
+    throw error;
   }
-  return response.json();
-}; 
+};
+ 

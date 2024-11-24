@@ -15,16 +15,24 @@ export function GerenciamentoCliente() {
 
   useEffect(() => {
     const carregarClientes = async () => {
-      const data = await fetchClientes();
-      setClientes(data);
+      try {
+        const data = await fetchClientes();
+        setClientes(data);
+      } catch (error) {
+        console.error('Erro ao carregar clientes:', error);
+      }
     };
 
     carregarClientes();
   }, []);
 
   const adicionarCliente = async (novoCliente) => {
-    const clienteCriado = await criarCliente(novoCliente);
-    setClientes([...clientes, clienteCriado]);
+    try {
+      const clienteCriado = await criarCliente(novoCliente);
+      setClientes([...clientes, clienteCriado]);
+    } catch (error) {
+      console.error('Erro ao adicionar cliente:', error);
+    }
   };
 
   return (
