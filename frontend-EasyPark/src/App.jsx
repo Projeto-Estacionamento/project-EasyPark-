@@ -10,7 +10,6 @@ import { GerenciamentoAssinaturaPlano } from "./pages/GerenciamentoAssinaturaPla
 import { Relatorio } from "./pages/Relatorio/Relatorio";
 import { ConfiguracaoAcesso } from "./pages/ConfiguracaoAcesso/ConfiguracaoAcesso";
 import { ConfiguracaoEstacionamentoAdmin } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamentoAdmin";
-import { ConfiguracaoEstacionamentoCaixa } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamentoCaixa";
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 import Gerenciamento from './pages/Gerenciamento/Gerenciamento';
@@ -32,7 +31,6 @@ function App() {
             <Route path="/configuracao" element={<ProtectedRoute><Configuracao /></ProtectedRoute>} />
             <Route path="/configuracao-acesso" element={<ProtectedRoute><ConfiguracaoAcesso /></ProtectedRoute>} />
             <Route path="/configuracao-estacionamento" element={<ProtectedRoute><ErrorBoundary><ConfiguracaoEstacionamentoAdmin /></ErrorBoundary></ProtectedRoute>} />
-            <Route path="/configuracao-estacionamento-caixa" element={<ProtectedRoute><ErrorBoundary><ConfiguracaoEstacionamentoCaixa /></ErrorBoundary></ProtectedRoute>} />
           </Routes>
         </div>
       </Router>

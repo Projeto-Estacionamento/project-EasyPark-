@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 import { Card } from '../../components/card/Card';
 import { ConfiguracaoForm } from '../../components/configuracao/ConfiguracaoForm';
-import { getConfiguracaoAtual, updateConfiguracao } from '../../services/EstacionamentoService';
-import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu'; // Adicione esta linha
+import { getConfiguracaoAtual, updateConfiguracao } from '../../services/ConfiguracaoSistemaService';
+import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 
 export function ConfiguracaoEstacionamentoAdmin() {
   const [configuracao, setConfiguracao] = useState({
@@ -49,6 +49,9 @@ export function ConfiguracaoEstacionamentoAdmin() {
     }
   };
 
+  // Obtenha o tipo de usuário do sessionStorage
+  const tipoUsuario = sessionStorage.getItem('accessType');
+
   return (
     <div className="d-flex">
       <SidebarMenu />
@@ -57,8 +60,8 @@ export function ConfiguracaoEstacionamentoAdmin() {
           <ConfiguracaoForm
             configuracao={configuracao}
             handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            isReadOnly={false}
+            handleSubmit={tipoUsuario === 'ADMINISTRADOR' ? handleSubmit : null}
+            isReadOnly={tipoUsuario !== 'ADMINISTRADOR'}
           />
         </Card>
       </div>
