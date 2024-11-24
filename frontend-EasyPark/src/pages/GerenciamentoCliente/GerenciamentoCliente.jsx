@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { ListaClientes } from './ListaClientes';
-import { NovoCliente } from './NovoCliente';
-import { AssociarVeiculo } from './AssociarVeiculo';
-import { fetchClientes, criarCliente } from '../../services/ClienteService';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import { Card } from '../../components/card/Card';
 import { Button } from '../../components/button/button';
+import { ListaClientes } from './ListaClientes';
+import { NovoCliente } from './NovoCliente';
+import { fetchClientes, criarCliente } from '../../services/ClienteService';
 import './GerenciamentoCliente.css';
 
 export function GerenciamentoCliente() {
   const [clientes, setClientes] = useState([]);
-  const [clienteSelecionado, setClienteSelecionado] = useState(null);
   const [mostrarNovoCliente, setMostrarNovoCliente] = useState(false);
 
   useEffect(() => {
@@ -36,18 +34,25 @@ export function GerenciamentoCliente() {
   };
 
   return (
-    <div className="d-flex home-container">
+    <div className="d-flex">
       <SidebarMenu />
-      <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
-        <Card title="Gerenciamento de Cliente">
-          <Button onClick={() => setMostrarNovoCliente(!mostrarNovoCliente)} variant={mostrarNovoCliente ? 'outline-danger' : 'outline-light'}>
+      <div className="configuracao-acesso-container">
+        <Card title="Gerenciamento de Clientes">
+          <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoCliente(!mostrarNovoCliente)}>
             {mostrarNovoCliente ? 'Cancelar' : 'Novo Cliente'}
           </Button>
           {mostrarNovoCliente && <NovoCliente adicionarCliente={adicionarCliente} />}
-          <ListaClientes clientes={clientes} setClienteSelecionado={setClienteSelecionado} />
-          {clienteSelecionado && <AssociarVeiculo cliente={clienteSelecionado} />}
+          <ListaClientes clientes={clientes} />
         </Card>
       </div>
     </div>
   );
+}
+
+function formatarCPF(cpf) {
+  return cpf
+    .replace(/\D/g, '') // Remove caracteres não numéricos
+    .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o primeiro ponto
+    .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
 }

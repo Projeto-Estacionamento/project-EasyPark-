@@ -41,7 +41,8 @@ export function ConfiguracaoEstacionamentoAdmin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateConfiguracao(configuracao.id, configuracao);
+      const token = sessionStorage.getItem('token');
+      await updateConfiguracao(configuracao.id, configuracao, token);
       alert('Configuração atualizada com sucesso!');
       navigate('/admin');
     } catch (error) {
@@ -49,7 +50,6 @@ export function ConfiguracaoEstacionamentoAdmin() {
     }
   };
 
-  // Obtenha o tipo de usuário do sessionStorage
   const tipoUsuario = sessionStorage.getItem('accessType');
 
   return (

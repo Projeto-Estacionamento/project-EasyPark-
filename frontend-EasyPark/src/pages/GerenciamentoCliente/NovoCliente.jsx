@@ -16,6 +16,10 @@ export function NovoCliente({ adicionarCliente }) {
     setCpf('');
   };
 
+  const handleCpfChange = (e) => {
+    setCpf(formatarCPF(e.target.value));
+  };
+
   return (
     <div>
       <h2>Novo Cliente</h2>
@@ -45,11 +49,30 @@ export function NovoCliente({ adicionarCliente }) {
           type="text"
           placeholder="CPF"
           value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
+          onChange={handleCpfChange}
           className="form-control mb-3"
         />
         <Button type="submit" variant="outline-light">Adicionar</Button>
       </form>
     </div>
   );
-} 
+}
+
+function formatarCPF(cpf) {
+  return cpf
+    .replace(/\D/g, '') // Remove caracteres não numéricos
+    .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o primeiro ponto
+    .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
+}
+
+export const criarCliente = async (cliente) => {
+  const token = sessionStorage.getItem('token');
+  const response = await api.post(API_URL, cliente, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.data;
+}; 

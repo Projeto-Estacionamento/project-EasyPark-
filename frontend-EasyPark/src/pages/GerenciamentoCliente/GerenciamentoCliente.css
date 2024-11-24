@@ -1,8 +1,11 @@
-.home-container {
-    position: relative;
-    height: 100vh;
-    background-image: url('../../assets/estacionamento.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+.configuracao-acesso-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: calc(100vw - 250px);
+  background-image: url('../../assets/estacionamento.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
