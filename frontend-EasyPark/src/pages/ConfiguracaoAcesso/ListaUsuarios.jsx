@@ -36,7 +36,7 @@ function ListaUsuarios() {
           <ul>
             {data.map(usuario => (
               <li key={usuario.id}>
-                {usuario.username} - {usuario.email} - {usuario.tipo_acesso}
+                {usuario.email} - {usuario.tipoAcesso}
               </li>
             ))}
           </ul>

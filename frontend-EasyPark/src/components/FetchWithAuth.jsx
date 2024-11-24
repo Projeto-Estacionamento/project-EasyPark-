@@ -7,7 +7,7 @@ function FetchWithAuth({ url, render }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,

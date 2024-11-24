@@ -52,4 +52,8 @@ export function NovoCliente({ adicionarCliente }) {
       </form>
     </div>
   );
+}
+
+export function ListaClientes() {
+    // implementação do componente
 } 
