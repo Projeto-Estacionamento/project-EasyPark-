@@ -6,14 +6,30 @@ export function NovoCliente({ adicionarCliente }) {
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [cpf, setCpf] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cep, setCep] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    adicionarCliente({ nome, email, telefone, cpf });
+    adicionarCliente({
+      nome,
+      email,
+      telefone,
+      cpf,
+      endereco: {
+        cidade,
+        estado,
+        cep,
+      },
+    });
     setNome('');
     setEmail('');
     setTelefone('');
     setCpf('');
+    setCidade('');
+    setEstado('');
+    setCep('');
   };
 
   const handleCpfChange = (e) => {
@@ -50,6 +66,27 @@ export function NovoCliente({ adicionarCliente }) {
           placeholder="CPF"
           value={cpf}
           onChange={handleCpfChange}
+          className="form-control mb-3"
+        />
+        <input
+          type="text"
+          placeholder="Cidade"
+          value={cidade}
+          onChange={(e) => setCidade(e.target.value)}
+          className="form-control mb-3"
+        />
+        <input
+          type="text"
+          placeholder="Estado"
+          value={estado}
+          onChange={(e) => setEstado(e.target.value)}
+          className="form-control mb-3"
+        />
+        <input
+          type="text"
+          placeholder="CEP"
+          value={cep}
+          onChange={(e) => setCep(e.target.value)}
           className="form-control mb-3"
         />
         <Button type="submit" variant="outline-light">Adicionar</Button>

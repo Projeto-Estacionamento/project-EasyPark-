@@ -12,12 +12,14 @@ export function GerenciamentoCliente() {
   const [mostrarNovoCliente, setMostrarNovoCliente] = useState(false);
   const [filtroCpf, setFiltroCpf] = useState('');
   const [filtroEmail, setFiltroEmail] = useState('');
+  const [clientesFiltrados, setClientesFiltrados] = useState([]);
 
   useEffect(() => {
     const carregarClientes = async () => {
       try {
         const data = await fetchClientes();
         setClientes(data);
+        setClientesFiltrados(data); // Inicializa com todos os clientes
       } catch (error) {
         console.error('Erro ao carregar clientes:', error);
       }
@@ -30,30 +32,35 @@ export function GerenciamentoCliente() {
     try {
       const clienteCriado = await criarCliente(novoCliente);
       setClientes([...clientes, clienteCriado]);
+      setClientesFiltrados([...clientes, clienteCriado]); // Atualiza a lista filtrada
     } catch (error) {
       console.error('Erro ao adicionar cliente:', error);
     }
   };
 
   const aplicarFiltro = () => {
-    // Lógica para aplicar o filtro
+    const filtrados = clientes.filter(cliente =>
+      cliente.cpf.includes(filtroCpf) && cliente.email.includes(filtroEmail)
+    );
+    setClientesFiltrados(filtrados);
   };
 
   const limparFiltro = () => {
     setFiltroCpf('');
     setFiltroEmail('');
+    setClientesFiltrados(clientes); // Restaura a lista completa
   };
 
-  const clientesFiltrados = clientes.filter(cliente =>
-    cliente.cpf.includes(filtroCpf) && cliente.email.includes(filtroEmail)
-  );
+  const handleCpfFilterChange = (e) => {
+    setFiltroCpf(formatarCPF(e.target.value));
+  };
 
   return (
     <div className="d-flex">
       <SidebarMenu />
       <div className="configuracao-acesso-container">
         <Card title="Gerenciamento de Clientes">
-          <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoCliente(!mostrarNovoCliente) }>
+          <Button variant="outline-light" fullWidth onClick={() => setMostrarNovoCliente(!mostrarNovoCliente)}>
             {mostrarNovoCliente ? 'Cancelar' : 'Novo Cliente'}
           </Button>
           {mostrarNovoCliente && <NovoCliente adicionarCliente={adicionarCliente} />}
@@ -63,15 +70,15 @@ export function GerenciamentoCliente() {
               type="text"
               placeholder="Filtrar por CPF"
               value={filtroCpf}
-              onChange={(e) => setFiltroCpf(e.target.value)}
-              style={{ marginRight: '10px' }}
+              onChange={handleCpfFilterChange}
+              style={{ marginRight: '10px', width: '150px' }}
             />
             <input
               type="text"
               placeholder="Filtrar por Email"
               value={filtroEmail}
               onChange={(e) => setFiltroEmail(e.target.value)}
-              style={{ marginRight: '10px' }}
+              style={{ marginRight: '10px', width: '150px' }}
             />
             <Button onClick={aplicarFiltro} variant="outline-light" style={{ marginRight: '10px' }}>
               Aplicar
