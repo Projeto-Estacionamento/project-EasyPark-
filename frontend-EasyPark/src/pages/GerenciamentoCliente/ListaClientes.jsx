@@ -54,6 +54,18 @@ export function NovoCliente({ adicionarCliente }) {
   );
 }
 
-export function ListaClientes() {
-    // implementação do componente
+export function ListaClientes({ clientes }) {
+  if (!clientes || clientes.length === 0) {
+    return <p>Nenhum cliente encontrado.</p>;
+  }
+
+  return (
+    <ul>
+      {clientes.map((cliente) => (
+        <li key={cliente.id}>
+          {cliente.nome} - {cliente.email}
+        </li>
+      ))}
+    </ul>
+  );
 } 

@@ -10,6 +10,8 @@ import './GerenciamentoCliente.css';
 export function GerenciamentoCliente() {
   const [clientes, setClientes] = useState([]);
   const [mostrarNovoCliente, setMostrarNovoCliente] = useState(false);
+  const [filtroCpf, setFiltroCpf] = useState('');
+  const [filtroEmail, setFiltroEmail] = useState('');
 
   useEffect(() => {
     const carregarClientes = async () => {
@@ -33,6 +35,19 @@ export function GerenciamentoCliente() {
     }
   };
 
+  const aplicarFiltro = () => {
+    // Lógica para aplicar o filtro
+  };
+
+  const limparFiltro = () => {
+    setFiltroCpf('');
+    setFiltroEmail('');
+  };
+
+  const clientesFiltrados = clientes.filter(cliente =>
+    cliente.cpf.includes(filtroCpf) && cliente.email.includes(filtroEmail)
+  );
+
   return (
     <div className="d-flex">
       <SidebarMenu />
@@ -42,7 +57,30 @@ export function GerenciamentoCliente() {
             {mostrarNovoCliente ? 'Cancelar' : 'Novo Cliente'}
           </Button>
           {mostrarNovoCliente && <NovoCliente adicionarCliente={adicionarCliente} />}
-          <ListaClientes clientes={clientes} />
+          <h3 style={{ marginTop: '20px' }}>Lista de Clientes</h3>
+          <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+            <input
+              type="text"
+              placeholder="Filtrar por CPF"
+              value={filtroCpf}
+              onChange={(e) => setFiltroCpf(e.target.value)}
+              style={{ marginRight: '10px' }}
+            />
+            <input
+              type="text"
+              placeholder="Filtrar por Email"
+              value={filtroEmail}
+              onChange={(e) => setFiltroEmail(e.target.value)}
+              style={{ marginRight: '10px' }}
+            />
+            <Button onClick={aplicarFiltro} variant="outline-light" style={{ marginRight: '10px' }}>
+              Aplicar
+            </Button>
+            <Button onClick={limparFiltro} variant="outline-light">
+              Limpar
+            </Button>
+          </div>
+          <ListaClientes clientes={clientesFiltrados} />
         </Card>
       </div>
     </div>
