@@ -28,8 +28,8 @@ function App() {
             <Route path="/gerenciamento-plano" element={<ProtectedRoute><GerenciamentoPlano isAdmin={false} /></ProtectedRoute>} />
             <Route path="/gerenciamento-assinatura-plano" element={<ProtectedRoute><GerenciamentoAssinaturaPlano isAdmin={false} /></ProtectedRoute>} />
             <Route path="/relatorio" element={<ProtectedRoute><Relatorio /></ProtectedRoute>} />
-            <Route path="/configuracao" element={<ProtectedRoute><Configuracao /></ProtectedRoute>} />
-            <Route path="/configuracao-acesso" element={<ProtectedRoute><ConfiguracaoAcesso /></ProtectedRoute>} />
+            <Route path="/configuracao" element={<ProtectedRoute adminOnly><Configuracao /></ProtectedRoute>} />
+            <Route path="/configuracao-acesso" element={<ProtectedRoute adminOnly><ConfiguracaoAcesso /></ProtectedRoute>} />
             <Route path="/configuracao-estacionamento" element={<ProtectedRoute><ErrorBoundary><ConfiguracaoEstacionamentoAdmin /></ErrorBoundary></ProtectedRoute>} />
           </Routes>
         </div>

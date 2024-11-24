@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import FetchWithAuth from '../../components/FetchWithAuth'; // Ajuste o caminho conforme necessário
+import { Button } from '../../components/button/button';
+import FetchWithAuth from '../../components/FetchWithAuth';
 
 function ListaUsuarios() {
-  const [tipoAcesso, setTipoAcesso] = useState('ADMINISTRADOR'); // Valor padrão
+  const [tipoAcesso, setTipoAcesso] = useState('ADMINISTRADOR');
   const [url, setUrl] = useState('http://localhost:8080/easypark/acesso');
 
   const handleFilter = () => {
@@ -27,8 +28,12 @@ function ListaUsuarios() {
           <option value="ADMINISTRADOR">Administrador</option>
           <option value="CAIXA">Caixa</option>
         </select>
-        <button onClick={handleFilter} style={{ marginRight: '10px' }}>Filtrar</button>
-        <button onClick={handleRemoveFilter}>Remover Filtro</button>
+        <Button onClick={handleFilter} variant="outline-light" style={{ marginRight: '10px' }}>
+          Filtrar
+        </Button>
+        <Button onClick={handleRemoveFilter} variant="outline-light" style={{ marginLeft: '10px' }}>
+          Remover Filtro
+        </Button>
       </div>
       <FetchWithAuth
         url={url}

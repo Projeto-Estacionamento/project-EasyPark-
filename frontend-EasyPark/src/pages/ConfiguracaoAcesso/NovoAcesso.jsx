@@ -1,36 +1,38 @@
 import React, { useState } from 'react';
+import { Button } from '../../components/button/button';
 
 export function NovoAcesso({ adicionarUsuario }) {
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [tipoAcesso, setTipoAcesso] = useState('caixa');
-  const [isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      const token = sessionStorage.getItem('token');
+      console.log('Token:', token);
+
       const response = await fetch('http://localhost:8080/easypark/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          nome: username,
           email: email,
           senha: senha,
           tipoAcesso: tipoAcesso.toUpperCase(),
         }),
       });
 
+      console.log('Response status:', response.status);
+
       if (response.ok) {
         console.log("Usuário criado com sucesso");
-        adicionarUsuario({ username, email, senha, tipoAcesso });
-        setUsername('');
+        adicionarUsuario({ email, senha, tipoAcesso });
         setEmail('');
         setSenha('');
-        setIsVisible(false);
       } else {
         const errorData = await response.json();
         console.error("Erro ao criar usuário:", errorData);
@@ -42,45 +44,31 @@ export function NovoAcesso({ adicionarUsuario }) {
     }
   };
 
-  const handleClose = () => {
-    setIsVisible(false);
-  };
-
   return (
-    <div className="lista-usuarios-card">
-      <button onClick={() => setIsVisible(true)}>Criar Novo Acesso</button>
-      <h2>Lista de Usuários</h2>
-      {isVisible && (
-        <div className="novo-acesso-card">
-          <button className="close-button" onClick={handleClose}>×</button>
-          <h2>Novo Acesso</h2>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Usuário"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-            <select value={tipoAcesso} onChange={(e) => setTipoAcesso(e.target.value)}>
-              <option value="caixa">Caixa</option>
-              <option value="administrador">Administrador</option>
-            </select>
-            <button type="submit">Criar Novo Acesso</button>
-          </form>
-        </div>
-      )}
+    <div className="novo-acesso-card" style={{ padding: '20px' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          autoComplete="new-password"
+        />
+        <select value={tipoAcesso} onChange={(e) => setTipoAcesso(e.target.value)}>
+          <option value="caixa">Caixa</option>
+          <option value="administrador">Administrador</option>
+        </select>
+        <Button type="submit" variant="outline-light" fullWidth>
+          Criar Novo Acesso
+        </Button>
+      </form>
     </div>
   );
 } 
