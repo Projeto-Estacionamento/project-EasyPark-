@@ -9,6 +9,7 @@ import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 export function ConfiguracaoEstacionamentoAdmin() {
   const [configuracao, setConfiguracao] = useState({
     id: 1,
+    mostrar: false,
     qtdMoto: 0,
     qtdCarro: 0,
     valorHoraMoto: 0.0,
@@ -44,7 +45,6 @@ export function ConfiguracaoEstacionamentoAdmin() {
       const token = sessionStorage.getItem('token');
       await updateConfiguracao(configuracao.id, configuracao, token);
       alert('Configuração atualizada com sucesso!');
-      navigate('/admin');
     } catch (error) {
       console.error('Erro ao atualizar configuração:', error);
     }

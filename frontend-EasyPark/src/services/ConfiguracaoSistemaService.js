@@ -16,8 +16,9 @@ export const updateConfiguracao = async (id, configuracao) => {
   const token = sessionStorage.getItem('token');
   const response = await api.put(`${API_URL}/${id}`, configuracao, {
     headers: {
-      'Authorization': `Bearer ${token}`
-    }
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
   });
   return response.data;
 };
