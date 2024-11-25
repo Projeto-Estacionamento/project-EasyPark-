@@ -28,7 +28,7 @@ export function Card({ title, children }) {
   };
 
   return (
-    <div className="card text-center my-3" style={{ backgroundColor: '#00838f', border: '2px solid white' }}>
+    <div className="card text-center my-3" style={{ backgroundColor: '#00838f', maxHeight: '500px', overflowY: 'auto', boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)', borderRadius: '8px' }}>
       <div className="card-body">
         {title && <h2 className="card-title">{title}</h2>}
         {renderChildren()}

@@ -38,10 +38,10 @@ function ListaUsuarios() {
       <FetchWithAuth
         url={url}
         render={data => (
-          <ul>
+          <ul style={{ listStyleType: 'none', padding: 0 }}>
             {data.map(usuario => (
-              <li key={usuario.id}>
-                {usuario.email} - {usuario.tipoAcesso}
+              <li key={usuario.id} style={{ marginBottom: '10px', wordBreak: 'break-word' }}>
+                <strong>{usuario.tipoAcesso}</strong> - {usuario.email}
               </li>
             ))}
           </ul>

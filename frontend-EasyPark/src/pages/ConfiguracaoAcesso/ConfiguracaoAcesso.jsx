@@ -10,15 +10,20 @@ export function ConfiguracaoAcesso() {
   const [usuarios, setUsuarios] = useState([]);
   const [mostrarNovoAcesso, setMostrarNovoAcesso] = useState(false);
 
-  useEffect(() => {
+  const carregarUsuarios = () => {
     fetch('http://localhost:8080/acesso')
       .then(response => response.json())
       .then(data => setUsuarios(data))
       .catch(error => console.error('Erro ao buscar usuários:', error));
+  };
+
+  useEffect(() => {
+    carregarUsuarios();
   }, []);
 
   const adicionarUsuario = (novoUsuario) => {
     setUsuarios([...usuarios, novoUsuario]);
+    carregarUsuarios();
   };
 
   const isAdmin = sessionStorage.getItem('accessType') === 'ADMINISTRADOR';
