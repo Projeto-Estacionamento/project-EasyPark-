@@ -14,6 +14,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 import Gerenciamento from './pages/Gerenciamento/Gerenciamento';
 import Configuracao from './pages/Configuracao/Configuracao';
+import { GerenciamentoVeiculo } from './pages/GerenciamentoVeiculo/GerenciamentoVeiculo';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/configuracao" element={<ProtectedRoute adminOnly><Configuracao /></ProtectedRoute>} />
             <Route path="/configuracao-acesso" element={<ProtectedRoute adminOnly><ConfiguracaoAcesso /></ProtectedRoute>} />
             <Route path="/configuracao-estacionamento" element={<ProtectedRoute><ErrorBoundary><ConfiguracaoEstacionamentoAdmin /></ErrorBoundary></ProtectedRoute>} />
+            <Route path="/gerenciamento-veiculo" element={<ProtectedRoute><GerenciamentoVeiculo /></ProtectedRoute>} />
           </Routes>
         </div>
       </Router>

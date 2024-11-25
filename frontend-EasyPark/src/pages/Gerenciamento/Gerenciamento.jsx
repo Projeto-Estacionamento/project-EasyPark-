@@ -14,11 +14,13 @@ export function Gerenciamento() {
       <SidebarMenu />
       <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
         <Card>
-        <h2 className="mb-4" style={{ color: 'white' }}>Gerenciamento</h2>
-
-          <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '200px', width: '300px' }}>
+          <h2 className="mb-4" style={{ color: 'white' }}>Gerenciamento</h2>
+          <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '250px', width: '300px' }}>
             <Button variant="outline-light" style={{ width: '100%' }} onClick={() => navigate('/gerenciamento-cliente')}>
               Cliente
+            </Button>
+            <Button variant="outline-light" style={{ width: '100%' }} onClick={() => navigate('/gerenciamento-veiculo')}>
+              Veículo
             </Button>
             <Button variant="outline-light" style={{ width: '100%' }} onClick={() => navigate('/gerenciamento-plano')}>
               Plano
