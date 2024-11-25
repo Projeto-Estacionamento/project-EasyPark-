@@ -75,7 +75,7 @@ public class SecurityConfig {
         )); // Cabeçalhos permitidos
 
         configuration.setAllowCredentials(true); // Permite envio de credenciais (cookies, por exemplo)
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:4200/*"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000/*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

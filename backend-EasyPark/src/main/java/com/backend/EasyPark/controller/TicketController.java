@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.EasyPark.model.dto.TicketDTO;
 import com.backend.EasyPark.service.TicketService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {

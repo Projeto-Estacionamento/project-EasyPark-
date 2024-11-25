@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.EasyPark.model.dto.VeiculoDTO;
 import com.backend.EasyPark.service.VeiculoService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/veiculos")
 public class VeiculoController {

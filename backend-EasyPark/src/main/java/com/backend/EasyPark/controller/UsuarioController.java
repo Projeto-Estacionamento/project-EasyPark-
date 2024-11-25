@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.EasyPark.model.dto.UsuarioDTO;
 import com.backend.EasyPark.service.UsuarioService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {

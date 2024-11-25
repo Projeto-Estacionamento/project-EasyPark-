@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.EasyPark.model.dto.ConfiguracaoSistemaDTO;
 import com.backend.EasyPark.service.ConfiguracaoSistemaService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/configuracoes")
 public class ConfiguracaoSistemaController {

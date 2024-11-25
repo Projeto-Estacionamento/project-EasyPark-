@@ -118,6 +118,12 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
     }
 
+    public List<TicketDTO> listarTicketsPorTipo(TipoTicket tipoTicket) {
+        return ticketRepository.findByTipoTicket(tipoTicket).stream()
+                .map(TicketMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<TicketDTO> listarTickets() {
         return ticketRepository.findAll().stream()
                 .map(TicketMapper::toDTO)
