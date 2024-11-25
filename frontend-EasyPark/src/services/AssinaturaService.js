@@ -1,35 +1,51 @@
+import api from './axiosConfig';
+
 export const fetchAssinaturas = async () => {
-  const response = await fetch('/api/assinaturas');
-  if (!response.ok) {
-    throw new Error('Erro ao buscar assinaturas');
+  try {
+    const response = await api.get('/assinaturas');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar assinaturas:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const criarAssinatura = async (assinatura) => {
-  const response = await fetch('/api/assinaturas', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(assinatura),
-  });
-  if (!response.ok) {
-    throw new Error('Erro ao criar assinatura');
+  try {
+    const response = await api.post('/assinaturas', assinatura);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar assinatura:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const atualizarStatusAssinatura = async (id, novoStatus) => {
-  const response = await fetch(`/api/assinaturas/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ativo: novoStatus }),
-  });
-  if (!response.ok) {
-    throw new Error('Erro ao atualizar status da assinatura');
+  try {
+    const response = await api.put(`/assinaturas/${id}`, { ativo: novoStatus });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar status da assinatura:', error);
+    throw error;
   }
-  return response.json();
+};
+
+export const fetchPlanos = async () => {
+  try {
+    const response = await api.get('/planos');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar planos:', error);
+    throw error;
+  }
+};
+
+export const fetchUsuarios = async () => {
+  try {
+    const response = await api.get('/usuarios');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+    throw error;
+  }
 }; 

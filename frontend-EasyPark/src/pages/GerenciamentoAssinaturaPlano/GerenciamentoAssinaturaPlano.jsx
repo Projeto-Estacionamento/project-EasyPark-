@@ -42,7 +42,7 @@ export function GerenciamentoAssinaturaPlano() {
       <SidebarMenu />
       <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
         <Card title="Gerenciamento de Assinatura">
-          <Button onClick={() => setMostrarNovaAssinatura(!mostrarNovaAssinatura)} variant={mostrarNovaAssinatura ? 'outline-danger' : 'outline-light'}>
+          <Button onClick={() => setMostrarNovaAssinatura(!mostrarNovaAssinatura)} variant={mostrarNovaAssinatura ? 'outline-light' : 'outline-light'}>
             {mostrarNovaAssinatura ? 'Cancelar' : 'Nova Assinatura'}
           </Button>
           {mostrarNovaAssinatura && <NovaAssinatura adicionarAssinatura={adicionarAssinatura} />}

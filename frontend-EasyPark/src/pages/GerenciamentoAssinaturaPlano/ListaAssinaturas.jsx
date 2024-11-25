@@ -1,15 +1,20 @@
 import React from 'react';
+import { Button } from '../../components/button/button';
 
 export function ListaAssinaturas({ assinaturas, alterarStatusAssinatura }) {
   return (
     <div>
       <ul>
         {assinaturas.map((assinatura) => (
-          <li key={assinatura.id}>
+          <li key={assinatura.id} style={{ marginBottom: '10px' }}>
             {assinatura.usuarioDTO.nome} - {assinatura.planoDTO.tipoPlano} - {assinatura.ativo ? 'Ativo' : 'Inativo'}
-            <button onClick={() => alterarStatusAssinatura(assinatura.id, !assinatura.ativo)}>
+            <Button
+              onClick={() => alterarStatusAssinatura(assinatura.id, !assinatura.ativo)}
+              variant="outline-light"
+              style={{ marginLeft: '15px' }}
+            >
               {assinatura.ativo ? 'Desativar' : 'Ativar'}
-            </button>
+            </Button>
           </li>
         ))}
       </ul>
