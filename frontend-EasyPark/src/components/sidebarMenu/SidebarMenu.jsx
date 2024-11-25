@@ -7,19 +7,10 @@ import { AuthContext } from '../../context/AuthContext';
 export function SidebarMenu() {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const tipoUsuario = sessionStorage.getItem('accessType');
 
   const handleLogout = () => {
     logout();
     navigate('/');
-  };
-
-  const handleConfiguracaoClick = () => {
-    if (tipoUsuario === 'CAIXA') {
-      navigate('/configuracao-estacionamento');
-    } else {
-      navigate('/configuracao');
-    }
   };
 
   return (
@@ -31,9 +22,9 @@ export function SidebarMenu() {
         <Link to="/relatorio" className="btn btn-outline-light" style={{ width: '100%' }}>
           Relatório
         </Link>
-        <button onClick={handleConfiguracaoClick} className="btn btn-outline-light" style={{ width: '100%' }}>
+        <Link to="/configuracao" className="btn btn-outline-light" style={{ width: '100%' }}>
           Configuração
-        </button>
+        </Link>
         <Link to="/gerenciamento" className="btn btn-outline-light" style={{ width: '100%' }}>
           Gerenciamento
         </Link>

@@ -22,7 +22,7 @@ export function Relatorio() {
   return (
     <div className="d-flex">
       <SidebarMenu />
-      <div className="flex-grow-1">
+      <div className="flex-grow-1" style={{ marginLeft: '0px', backgroundColor: '#f8f9fa', overflowY: 'auto', height: '100vh' }}>
         <div className="d-flex align-items-center justify-content-center" style={{ backgroundColor: '#00838f', color: 'white', padding: '1rem', borderRadius: '0 0 8px 8px' }}>
           <h1 className="m-0" style={{ fontSize: '2rem' }}>Relatório Ticket</h1>
         </div>
