@@ -13,16 +13,16 @@ export function Home() {
   const [tickets, setTickets] = useState([]);
   const [ticketSelecionado, setTicketSelecionado] = useState('');
 
-  useEffect(() => {
-    const carregarTickets = async () => {
-      try {
-        const data = await listarTickets();
-        setTickets(data);
-      } catch (error) {
-        console.error('Erro ao carregar tickets:', error);
-      }
-    };
+  const carregarTickets = async () => {
+    try {
+      const data = await listarTickets();
+      setTickets(data);
+    } catch (error) {
+      console.error('Erro ao carregar tickets:', error);
+    }
+  };
 
+  useEffect(() => {
     carregarTickets();
   }, []);
 
@@ -32,6 +32,7 @@ export function Home() {
       alert('Entrada registrada com sucesso!');
       setPlacaVeiculo('');
       setModoEntrada(false);
+      carregarTickets();
     } catch (error) {
       console.error('Erro ao registrar entrada:', error);
       alert('Erro ao registrar entrada.');
@@ -44,6 +45,7 @@ export function Home() {
       alert('Saída registrada com sucesso!');
       setTicketSelecionado('');
       setModoSaida(false);
+      carregarTickets();
     } catch (error) {
       console.error('Erro ao registrar saída:', error);
       alert('Erro ao registrar saída.');
