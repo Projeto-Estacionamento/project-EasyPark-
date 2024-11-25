@@ -1,24 +1,109 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import { Button } from '../../components/button/button';
 import { Card } from '../../components/card/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
+import { criarTicket, finalizarTicket, listarTickets } from '../../services/TicketService';
 
 export function Home() {
+  const [modoEntrada, setModoEntrada] = useState(false);
+  const [modoSaida, setModoSaida] = useState(false);
+  const [placaVeiculo, setPlacaVeiculo] = useState('');
+  const [tickets, setTickets] = useState([]);
+  const [ticketSelecionado, setTicketSelecionado] = useState('');
+
+  useEffect(() => {
+    const carregarTickets = async () => {
+      try {
+        const data = await listarTickets();
+        setTickets(data);
+      } catch (error) {
+        console.error('Erro ao carregar tickets:', error);
+      }
+    };
+
+    carregarTickets();
+  }, []);
+
+  const handleEntrada = async () => {
+    try {
+      await criarTicket({ placaVeiculo });
+      alert('Entrada registrada com sucesso!');
+      setPlacaVeiculo('');
+      setModoEntrada(false);
+    } catch (error) {
+      console.error('Erro ao registrar entrada:', error);
+      alert('Erro ao registrar entrada.');
+    }
+  };
+
+  const handleSaida = async () => {
+    try {
+      await finalizarTicket(ticketSelecionado);
+      alert('Saída registrada com sucesso!');
+      setTicketSelecionado('');
+      setModoSaida(false);
+    } catch (error) {
+      console.error('Erro ao registrar saída:', error);
+      alert('Erro ao registrar saída.');
+    }
+  };
+
   return (
     <div className="d-flex home-container">
       <SidebarMenu />
       <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
         <Card>
-          <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '300px', width: '400px' }}>
-            <Button variant="outline-light" style={{ width: '100%' }}>
-              Entrada
-            </Button>
-            <Button variant="outline-light" style={{ width: '100%' }}>
-              Saída
-            </Button>
-          </div>
+          {!modoEntrada && !modoSaida ? (
+            <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '300px', width: '400px' }}>
+              <Button variant="outline-light" style={{ width: '100%' }} onClick={() => setModoEntrada(true)}>
+                Entrada
+              </Button>
+              <Button variant="outline-light" style={{ width: '100%' }} onClick={() => setModoSaida(true)}>
+                Saída
+              </Button>
+            </div>
+          ) : modoEntrada ? (
+            <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '300px', width: '400px' }}>
+              <Button variant="outline-light" style={{ width: '100%' }} onClick={() => setModoEntrada(false)}>
+                Fechar
+              </Button>
+              <input
+                type="text"
+                placeholder="Placa do Veículo"
+                value={placaVeiculo}
+                onChange={(e) => setPlacaVeiculo(e.target.value)}
+                className="form-control mb-3"
+                style={{ width: '100%' }}
+              />
+              <Button variant="outline-light" style={{ width: '100%' }} onClick={handleEntrada}>
+                Registrar Entrada
+              </Button>
+            </div>
+          ) : (
+            <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: '300px', width: '400px' }}>
+              <Button variant="outline-light" style={{ width: '100%' }} onClick={() => setModoSaida(false)}>
+                Fechar
+              </Button>
+              <select
+                value={ticketSelecionado}
+                onChange={(e) => setTicketSelecionado(e.target.value)}
+                className="form-control mb-3"
+                style={{ width: '100%' }}
+              >
+                <option value="">Selecione uma Placa</option>
+                {tickets.map((ticket) => (
+                  <option key={ticket.id} value={ticket.id}>
+                    {ticket.placaVeiculo}
+                  </option>
+                ))}
+              </select>
+              <Button variant="outline-light" style={{ width: '100%' }} onClick={handleSaida}>
+                Registrar Saída
+              </Button>
+            </div>
+          )}
         </Card>
       </div>
     </div>
