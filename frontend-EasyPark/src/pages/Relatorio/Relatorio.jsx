@@ -2,22 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { listarTickets } from '../../services/TicketService';
+import { listarTicketsFechados } from '../../services/RelatorioService';
+import { Button } from '../../components/button/button';
 
 export function Relatorio() {
-  const [tickets, setTickets] = useState([]);
+  const [ticketsAbertos, setTicketsAbertos] = useState([]);
+  const [ticketsFechados, setTicketsFechados] = useState([]);
+  const [mostrarFechados, setMostrarFechados] = useState(false);
 
   useEffect(() => {
     const carregarTickets = async () => {
       try {
-        const data = await listarTickets();
-        setTickets(data);
+        if (mostrarFechados) {
+          const dataFechados = await listarTicketsFechados();
+          setTicketsFechados(dataFechados);
+        } else {
+          const dataAbertos = await listarTickets();
+          setTicketsAbertos(dataAbertos);
+        }
       } catch (error) {
         console.error('Erro ao carregar tickets:', error);
       }
     };
 
     carregarTickets();
-  }, []);
+  }, [mostrarFechados]);
+
+  const horarioChegadaAberto = (ticket) => ticket.horaChegada ? new Date(ticket.horaChegada).toLocaleString() : 'N/A';
+  const horarioChegadaFechado = (ticket) => ticket.horaEntrada ? new Date(ticket.horaEntrada).toLocaleString() : 'N/A';
 
   return (
     <div className="d-flex">
@@ -27,20 +39,27 @@ export function Relatorio() {
           <h1 className="m-0" style={{ fontSize: '2rem' }}>Relatório Ticket</h1>
         </div>
         <div className="p-3">
-          <table className="table table-striped">
+          <Button onClick={() => setMostrarFechados(!mostrarFechados)} variant="outline-primary">
+            {mostrarFechados ? 'Mostrar Abertos' : 'Mostrar Fechados'}
+          </Button>
+          <table className="table table-striped mt-3">
             <thead>
               <tr>
                 <th>Placa do Veículo</th>
-                <th>Tipo de Ticket</th>
+                <th>Tipo de Veículo</th>
                 <th>Data e Hora de Chegada</th>
+                {mostrarFechados && <th>Data e Hora de Saída</th>}
+                {mostrarFechados && <th>Valor Total a Pagar</th>}
               </tr>
             </thead>
             <tbody>
-              {tickets.map((ticket) => (
+              {(mostrarFechados ? ticketsFechados : ticketsAbertos).map((ticket) => (
                 <tr key={ticket.id}>
-                  <td>{ticket.placaVeiculo}</td>
-                  <td>{ticket.tipoTicket}</td>
-                  <td>{new Date(ticket.horaChegada).toLocaleString()}</td>
+                  <td>{ticket.placaVeiculo || 'N/A'}</td>
+                  <td>{ticket.tipoVeiculo || 'N/A'}</td>
+                  <td>{mostrarFechados ? horarioChegadaFechado(ticket) : horarioChegadaAberto(ticket)}</td>
+                  {mostrarFechados && <td>{ticket.horaSaida ? new Date(ticket.horaSaida).toLocaleString() : 'N/A'}</td>}
+                  {mostrarFechados && <td>{ticket.valorTotalPagar.toFixed(2)}</td>}
                 </tr>
               ))}
             </tbody>
