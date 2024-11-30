@@ -38,8 +38,7 @@ export function ConfiguracaoEstacionamentoAdmin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = sessionStorage.getItem('token');
-      await updateConfiguracao(configuracao.id, configuracao, token);
+      await updateConfiguracao(configuracao);
       alert('Configuração atualizada com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar configuração:', error);
