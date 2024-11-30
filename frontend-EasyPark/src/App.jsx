@@ -9,18 +9,19 @@ import { GerenciamentoPlano } from "./pages/GerenciamentoPlano/GerenciamentoPlan
 import { GerenciamentoAssinaturaPlano } from "./pages/GerenciamentoAssinaturaPlano/GerenciamentoAssinaturaPlano";
 import { Relatorio } from "./pages/Relatorio/Relatorio";
 import { ConfiguracaoAcesso } from "./pages/ConfiguracaoAcesso/ConfiguracaoAcesso";
+import { EditarAcesso } from "./pages/ConfiguracaoAcesso/EditarAcesso";
 import { ConfiguracaoEstacionamentoAdmin } from "./pages/ConfiguracaoEstacionamento/ConfiguracaoEstacionamentoAdmin";
 import { GerenciamentoVeiculo } from './pages/GerenciamentoVeiculo/GerenciamentoVeiculo';
 import { Cliente } from './pages/novo/Cliente';
 import { Veiculo } from './pages/novo/Veiculo';
 import { Plano } from './pages/novo/Plano';
 import { Assinatura } from './pages/novo/Assinatura';
+import { Acesso } from './pages/novo/Acesso';
 import ErrorBoundary from './components/ErrorBoundary';
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
-import { Acesso } from './pages/novo/Acesso';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path="/novo/plano" element={<ProtectedRoute><Plano /></ProtectedRoute>} /> 
             <Route path="/novo/assinatura" element={<ProtectedRoute><Assinatura /></ProtectedRoute>} />
             <Route path="/novo/acesso" element={<ProtectedRoute><Acesso /></ProtectedRoute>} />
+            <Route path="/editar-acesso/:id" element={<EditarAcesso />} />
           </Routes>
         </div>
       </Router>

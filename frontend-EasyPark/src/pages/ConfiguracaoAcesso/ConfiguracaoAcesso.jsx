@@ -2,57 +2,66 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import { Button } from '../../components/button/button';
-import { FiUsers } from "react-icons/fi";
+import { FiUsers, FiEdit } from "react-icons/fi";
+import { listarAcessos, listarAcessosPorTipo } from '../../services/AcessoService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './ConfiguracaoAcesso.css';
-// import mockData from '../../mock/mockData';
 
 const columns = [
   { field: "tipoAcesso", header: "Tipo de Acesso", width: "150px" },
   { field: "email", header: "Email", width: "200px" },
+  { field: "actions", header: "Ações", width: "100px" }
 ];
 
 export function ConfiguracaoAcesso() {
-  const [mostrarNovoAcesso, setMostrarNovoAcesso] = useState(false);
   const [acessos, setAcessos] = useState([]);
   const [acessosFiltrados, setAcessosFiltrados] = useState([]);
   const [filtroTipoAcesso, setFiltroTipoAcesso] = useState("");
   const navigate = useNavigate();
+  const isAdmin = sessionStorage.getItem('accessType') === 'ADMINISTRADOR';
   
-  const carregarUsuarios = () => {
-    // setAcessos(mockData.acessos);
-    // setAcessosFiltrados(mockData.acessos);
-    fetch('http://localhost:8080/acesso')
-      .then(response => response.json())
-      .then(data => {
-        setAcessos(data);
-        setAcessosFiltrados(data);
-      })
-      .catch(error => console.error('Erro ao buscar usuários:', error));
+  const carregarUsuarios = async () => {
+    try {
+      const data = await listarAcessos();
+      setAcessos(data);
+      setAcessosFiltrados(data);
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+      toast.error('Erro ao carregar usuários');
+    }
   };
 
   useEffect(() => {
     carregarUsuarios();
   }, []);
 
-
   const handleFiltroChange = (e) => {
     setFiltroTipoAcesso(e.target.value);
   };
 
-  const aplicarFiltros = () => {
-    const filtrados = acessos.filter(acesso => 
-      acesso.tipoAcesso === filtroTipoAcesso || filtroTipoAcesso === ''
-    );
-    setAcessosFiltrados(filtrados);
+  const aplicarFiltros = async () => {
+    try {
+      if (filtroTipoAcesso) {
+        const data = await listarAcessosPorTipo(filtroTipoAcesso);
+        setAcessosFiltrados(data);
+      } else {
+        setAcessosFiltrados(acessos);
+      }
+    } catch (error) {
+      console.error('Erro ao aplicar filtros:', error);
+      toast.error('Erro ao aplicar filtros');
+    }
   };
 
   const limparFiltros = () => {
     setFiltroTipoAcesso('');
-    setAcessos(acessos);
     setAcessosFiltrados(acessos);
   };
 
-  const isAdmin = sessionStorage.getItem('accessType') === 'ADMINISTRADOR';
+  const handleEditarAcesso = (id) => {
+    navigate(`/editar-acesso/${id}`);
+  };
 
   return (
     <div className="d-flex">
@@ -66,7 +75,7 @@ export function ConfiguracaoAcesso() {
               onClick={() => navigate('/novo/acesso')}
             >
               <FiUsers style={{ marginRight: '0.5rem' }} size={20} />
-              {mostrarNovoAcesso ? 'Cancelar' : 'Novo Acesso'}
+              Novo Acesso
             </Button>
           )}
         </div>
@@ -107,14 +116,24 @@ export function ConfiguracaoAcesso() {
             <tbody>
               {acessosFiltrados.map((usuario) => (
                 <tr key={usuario.id}>
-                  {columns.map((col) => (
-                    <td key={col.field}>{usuario[col.field]}</td>
-                  ))}
+                  <td>{usuario.tipoAcesso}</td>
+                  <td>{usuario.email}</td>
+                  <td>
+                    {isAdmin && (
+                      <Button 
+                        className="btn-editar"
+                        onClick={() => handleEditarAcesso(usuario.id)}
+                      >
+                        <FiEdit size={18} />
+                      </Button>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        <ToastContainer />
       </div>
     </div>
   );
