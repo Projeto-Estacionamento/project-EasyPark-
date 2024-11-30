@@ -1,47 +1,75 @@
-.input-container {
-  margin-bottom: 1.5rem;
+.modern-input-container {
+  position: relative;
   width: 100%;
+  margin: 1rem 0;
 }
 
-.input-container label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.input-container input {
+.modern-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #3d3d3d;
-  border-radius: 4px;
-  background-color: #3d3d3d;
-  color: white;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--text-color);
   font-size: 1rem;
-}
-
-.input-container input::placeholder {
-  color: #666;
-  text-align: center;
-}
-
-.input-container input:focus {
+  transition: all 0.3s ease;
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-.input-container.dark input::placeholder {
-  color: #888;
+.modern-input:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.2);
 }
 
-.input-container.dark label {
-  color: #fff;
-}
-
-.input-container.dark input {
-  background-color: #3d3d3d;
-  border-color: #3d3d3d;
+.modern-label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary-color);
+  padding: 0 0.5rem;
   color: white;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.modern-input:focus ~ .modern-label,
+.modern-input:not(:placeholder-shown) ~ .modern-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+  background: var(--secondary-color);
+}
+
+.dark-mode .modern-input {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .modern-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .modern-label {
+  color: white;
+  background: var(--primary-color);
+}
+
+.dark-mode .modern-input:focus ~ .modern-label {
+  background: var(--secondary-color);
+}
+
+/* Estilo para o placeholder */
+.modern-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Estilo para o autofill */
+.modern-input:-webkit-autofill,
+.modern-input:-webkit-autofill:hover,
+.modern-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-color);
+  -webkit-box-shadow: 0 0 0px 1000px var(--primary-color) inset;
+  transition: background-color 5000s ease-in-out 0s;
 } 

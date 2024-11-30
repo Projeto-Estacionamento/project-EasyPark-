@@ -1,0 +1,140 @@
+import React, { useState, useEffect } from "react";
+import { Button } from "../../components/button/button";
+import { fetchUsuarios } from "../../services/AssinaturaService";
+import "./veiculo.css";
+import { SidebarMenu } from "../../components/sidebarMenu/SidebarMenu";
+import { FiArrowLeft } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+
+export function Veiculo({ adicionarVeiculo }) {
+  const navigate = useNavigate();
+  const [placa, setPlaca] = useState("");
+  const [tipoVeiculo, setTipoVeiculo] = useState("");
+  const [modelo, setModelo] = useState("");
+  const [marca, setMarca] = useState("");
+  const [ano, setAno] = useState("");
+  const [idUsuario, setIdUsuario] = useState("");
+  const [usuarios, setUsuarios] = useState([]);
+
+  useEffect(() => {
+    const carregarUsuarios = async () => {
+      const usuariosData = await fetchUsuarios();
+      setUsuarios(usuariosData);
+    };
+
+    carregarUsuarios();
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    adicionarVeiculo({
+      placa,
+      tipoVeiculo,
+      ocupandoVaga: false,
+      idUsuarioDTO: idUsuario,
+      fabricanteDTO: { modelo, marca, ano },
+    });
+    setPlaca("");
+    setTipoVeiculo("");
+    setModelo("");
+    setMarca("");
+    setAno("");
+    setIdUsuario("");
+  };
+
+  return (
+    <div className="d-flex">
+      <SidebarMenu />
+      <div className="novo-veiculo-container">
+        <div className="novo-veiculo-header">
+          <Button
+            className="btn-voltar"
+            onClick={() => navigate("/gerenciamento-cliente")}
+          >
+            <FiArrowLeft style={{ marginRight: "0.5rem" }} size={20} />
+            Voltar
+          </Button>
+          <h2 className="novo-veiculo-title">Novo Veículo</h2>
+        </div>
+        <form onSubmit={handleSubmit} className="form-novo-veiculo">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Placa</label>
+              <input
+                type="text"
+                value={placa}
+                onChange={(e) => setPlaca(e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Tipo de Veículo</label>
+              <select
+                value={tipoVeiculo}
+                onChange={(e) => setTipoVeiculo(e.target.value)}
+                className="form-input"
+                required
+              >
+                <option value="">Selecione o Tipo de Veículo</option>
+                <option value="CARRO">Carro</option>
+                <option value="MOTO">Moto</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Modelo</label>
+              <input
+                type="text"
+                value={modelo}
+                onChange={(e) => setModelo(e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Marca</label>
+              <input
+                type="text"
+                value={marca}
+                onChange={(e) => setMarca(e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Ano</label>
+              <input
+                type="text"
+                value={ano}
+                onChange={(e) => setAno(e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Usuário</label>
+              <select
+                value={idUsuario}
+                onChange={(e) => setIdUsuario(e.target.value)}
+                className="form-input"
+                required
+              >
+                <option value="">Selecione um Usuário</option>
+                {usuarios.map((usuario) => (
+                  <option key={usuario.id} value={usuario.id}>
+                    {usuario.email}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="form-actions">
+            <Button type="submit" className="btn-adicionar">
+              Adicionar
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

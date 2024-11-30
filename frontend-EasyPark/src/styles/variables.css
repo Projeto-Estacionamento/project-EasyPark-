@@ -1,0 +1,18 @@
+:root {
+  /* Cores principais */
+  --primary-color: #00838f;
+  --secondary-color: #006064;
+  --background-color: rgba(0, 0, 0, 0.7);
+  --text-color: #ffffff;
+  --error-color: #ff5252;
+  --success-color: #4caf50;
+
+  /* Sombras */
+  --box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  
+  /* Border radius */
+  --border-radius: 12px;
+  
+  /* Transições */
+  --transition-speed: 0.3s;
+} 

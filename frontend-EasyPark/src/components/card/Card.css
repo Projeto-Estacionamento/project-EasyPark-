@@ -1,13 +1,28 @@
-.card {
-  background-color: #2d2d2d;
-  padding: 3rem;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+.modern-card {
+  background: var(--background-color);
+  backdrop-filter: blur(8px);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+  color: var(--text-color);
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+  max-width: 500px;
+  transition: transform var(--transition-speed);
+}
+
+.modern-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.card-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  gap: 1rem;
 } 

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Input.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export function Input({ 
   type, 
@@ -11,8 +11,8 @@ export function Input({
   darkMode = false 
 }) {
   return (
-    <div className={`input-container ${darkMode ? 'dark' : ''}`}>
-      <label htmlFor={name}>{text}</label>
+    <div className={`mb-3 ${darkMode ? 'text-white' : ''}`}>
+      <label htmlFor={name} className="form-label">{text}</label>
       <input
         type={type}
         name={name}
@@ -20,6 +20,7 @@ export function Input({
         placeholder={placeholder}
         value={value}
         onChange={onChangeFN}
+        className={`form-control ${darkMode ? 'bg-dark text-white' : ''}`}
       />
     </div>
   );
