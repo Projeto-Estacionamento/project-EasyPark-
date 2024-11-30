@@ -63,4 +63,21 @@ export const fetchUsuarios = async () => {
     console.error('Erro ao buscar usuários:', error);
     throw error;
   }
+};
+
+export const fetchUsuarioById = async (id) => {
+  const token = sessionStorage.getItem('token');
+  try {
+    const response = await api.get(`/usuarios/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('Dados do usuário:', response.data); // Para debug
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar usuário:', error);
+    throw error;
+  }
 }; 

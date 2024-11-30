@@ -9,6 +9,7 @@ import './GerenciamentoVeiculo.css';
 // import mockData from '../../mock/mockData';
 import { FiAperture } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { fetchUsuarioById } from '../../services/AssinaturaService';
 
 
 
@@ -28,9 +29,10 @@ import { useNavigate } from 'react-router-dom';
 
 const columns = [
   { field: 'placa', header: 'Placa', width: '40px' },
-  { field: 'tipoVeiculo', header: 'tipo Veiculo', width: '40px' },
-  { field: 'ocupandoVaga', header: 'ocupando Vaga', width: '40px' },
-  { field: 'fabricante', header: 'fabricante', width: '40px' },
+  { field: 'tipoVeiculo', header: 'Tipo Veiculo', width: '40px' },
+  { field: 'ocupandoVaga', header: 'Ocupando Vaga', width: '40px' },
+  { field: 'fabricante', header: 'Fabricante', width: '40px' },
+  { field: 'usuario', header: 'Dono', width: '40px' },
 ];
 
 
@@ -40,12 +42,23 @@ const columns = [
 export function GerenciamentoVeiculo() {
   const navigate = useNavigate();
   const [veiculos, setVeiculos] = useState([]);
+  const [usuarios, setUsuarios] = useState({});
 
   useEffect(() => {
     const carregarVeiculos = async () => {
       try {
         const data = await fetchVeiculos(); // Busca os veículos do banco de dados
         setVeiculos(data);
+        
+        // Buscar informações dos usuários
+        const usuariosMap = {};
+        for (const veiculo of data) {
+          if (veiculo.idUsuarioDTO && !usuariosMap[veiculo.idUsuarioDTO]) {
+            const usuario = await fetchUsuarioById(veiculo.idUsuarioDTO);
+            usuariosMap[veiculo.idUsuarioDTO] = usuario;
+          }
+        }
+        setUsuarios(usuariosMap);
       } catch (error) {
         console.error('Erro ao carregar veículos:', error);
       }
@@ -104,6 +117,7 @@ export function GerenciamentoVeiculo() {
                   <td>{veiculo.tipoVeiculo}</td>
                   <td>{veiculo.ocupandoVaga ? 'Sim' : 'Não'}</td>
                   <td>{veiculo.fabricanteDTO?.modelo || 'N/A'}</td>
+                  <td>{usuarios[veiculo.idUsuarioDTO]?.email || veiculo.idUsuarioDTO || 'N/A'}</td>
                 </tr>
               ))}
             </tbody>
