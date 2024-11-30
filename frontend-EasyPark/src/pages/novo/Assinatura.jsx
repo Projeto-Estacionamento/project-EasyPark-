@@ -5,7 +5,7 @@ import { SidebarMenu } from "../../components/sidebarMenu/SidebarMenu";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "./assinatura.css";
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 
 export function Assinatura({ adicionarAssinatura }) {
   const navigate = useNavigate();
@@ -14,20 +14,47 @@ export function Assinatura({ adicionarAssinatura }) {
   const [planos, setPlanos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
 
+  // useEffect(() => {
+  //   const carregarDados = async () => {
+  //     // const planosData = await fetchPlanos();
+  //     const planosData = mockData.planos;
+  //     setPlanos(planosData);
+
+  //     // const usuariosData = await fetchUsuarios();
+  //     const usuariosData = mockData.usuarios;
+  //     setUsuarios(usuariosData);
+  //   };
+
+  //   carregarDados();
+  // }, []);
+
   useEffect(() => {
     const carregarDados = async () => {
-      // const planosData = await fetchPlanos();
-      const planosData = mockData.planos;
-      setPlanos(planosData);
-
-      // const usuariosData = await fetchUsuarios();
-      const usuariosData = mockData.usuarios;
-      setUsuarios(usuariosData);
+      const token = sessionStorage.getItem('token'); // Obtenha o token do sessionStorage
+  
+      try {
+        const responsePlanos = await fetch('http://localhost:8080/api/planos', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const planosData = await responsePlanos.json();
+        setPlanos(planosData);
+  
+        const responseUsuarios = await fetch('http://localhost:8080/api/usuarios', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const usuariosData = await responseUsuarios.json();
+        setUsuarios(usuariosData);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      }
     };
-
+  
     carregarDados();
   }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     adicionarAssinatura({ 

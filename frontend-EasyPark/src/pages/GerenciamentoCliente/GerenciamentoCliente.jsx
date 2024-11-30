@@ -4,7 +4,7 @@ import { Card } from '../../components/card/Card';
 import { Button } from '../../components/button/button';
 import { fetchClientes } from '../../services/ClienteService';
 import './GerenciamentoCliente.css';
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 import { useNavigate } from 'react-router-dom';
 import { FiUserPlus } from 'react-icons/fi';
 
@@ -25,18 +25,31 @@ export function GerenciamentoCliente() {
   ];
 
   useEffect(() => {
+  //   carregarClientes();
+  // }, []);
+
+  // const carregarClientes = async () => {
+  //   try {
+  //     const data = mockData.usuarios;
+  //     setClientes(data);
+  //     setClientesFiltrados(data);
+  //   } catch (error) {
+  //     console.error('Erro ao carregar clientes:', error);
+  //   }
+  // };
+
+    const carregarClientes = async () => {
+      try {
+        const data = await fetchClientes();
+        setClientes(data);
+        setClientesFiltrados(data);
+      } catch (error) {
+        console.error('Erro ao carregar clientes:', error);
+      }
+    };
+
     carregarClientes();
   }, []);
-
-  const carregarClientes = async () => {
-    try {
-      const data = mockData.usuarios;
-      setClientes(data);
-      setClientesFiltrados(data);
-    } catch (error) {
-      console.error('Erro ao carregar clientes:', error);
-    }
-  };
 
   const handleFiltroChange = (e) => {
     const { name, value } = e.target;

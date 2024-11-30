@@ -2,7 +2,12 @@ import api from './axiosConfig';
 
 export const fetchAssinaturas = async () => {
   try {
-    const response = await api.get('/assinaturas');
+    const token = sessionStorage.getItem('token');
+    const response = await api.get('/assinaturas', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar assinaturas:', error);
@@ -12,7 +17,12 @@ export const fetchAssinaturas = async () => {
 
 export const criarAssinatura = async (assinatura) => {
   try {
-    const response = await api.post('/assinaturas', assinatura);
+    const token = sessionStorage.getItem('token');
+    const response = await api.post('/assinaturas', assinatura, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Erro ao criar assinatura:', error);
@@ -22,7 +32,12 @@ export const criarAssinatura = async (assinatura) => {
 
 export const atualizarStatusAssinatura = async (id, novoStatus) => {
   try {
-    const response = await api.put(`/assinaturas/${id}`, { ativo: novoStatus });
+    const token = sessionStorage.getItem('token');
+    const response = await api.put(`/assinaturas/${id}`, { ativo: novoStatus }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar status da assinatura:', error);

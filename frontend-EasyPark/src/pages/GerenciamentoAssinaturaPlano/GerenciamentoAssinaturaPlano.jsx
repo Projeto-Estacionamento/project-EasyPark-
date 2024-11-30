@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchAssinaturas, atualizarStatusAssinatura } from '../../services/AssinaturaService';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import { Button } from '../../components/button/button';
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 import { useNavigate } from 'react-router-dom';
 import { FiClipboard } from 'react-icons/fi';
 import './GerenciamentoAssinaturaPlano.css';
@@ -28,24 +28,49 @@ export function GerenciamentoAssinaturaPlano() {
   const [filtroStatus, setFiltroStatus] = useState('');
   const [assinaturasFiltradas, setAssinaturasFiltradas] = useState([]);
 
+  // useEffect(() => {
+  //   const carregarAssinaturas = async () => {
+  //     // const data = await fetchAssinaturas();
+  //     const data = mockData.assinaturas;
+  //     setAssinaturas(data);
+  //     setAssinaturasFiltradas(data);
+  //   };
+
+  //   carregarAssinaturas();
+  // }, []);
+
+  // const handleUpdateStatus = async (id, novoStatus) => {
+  //   const assinaturaAtualizada = await atualizarStatusAssinatura(id, novoStatus);
+  //   setAssinaturas(assinaturas.map(assinatura => 
+  //     assinatura.id === id ? assinaturaAtualizada : assinatura
+  //   ));
+  // };
+
   useEffect(() => {
     const carregarAssinaturas = async () => {
-      // const data = await fetchAssinaturas();
-      const data = mockData.assinaturas;
-      setAssinaturas(data);
-      setAssinaturasFiltradas(data);
+      try {
+        const data = await fetchAssinaturas(); // Busca as assinaturas do banco de dados
+        setAssinaturas(data);
+        setAssinaturasFiltradas(data);
+      } catch (error) {
+        console.error('Erro ao carregar assinaturas:', error);
+      }
     };
 
     carregarAssinaturas();
   }, []);
 
   const handleUpdateStatus = async (id, novoStatus) => {
-    const assinaturaAtualizada = await atualizarStatusAssinatura(id, novoStatus);
-    setAssinaturas(assinaturas.map(assinatura => 
-      assinatura.id === id ? assinaturaAtualizada : assinatura
-    ));
+    try {
+      const assinaturaAtualizada = await atualizarStatusAssinatura(id, novoStatus);
+      setAssinaturas(assinaturas.map(assinatura => 
+        assinatura.id === id ? assinaturaAtualizada : assinatura
+      ));
+    } catch (error) {
+      console.error('Erro ao atualizar status da assinatura:', error);
+    }
   };
-
+  
   const handleFiltroChange = (e) => {
     setFiltroStatus(e.target.value);
   };

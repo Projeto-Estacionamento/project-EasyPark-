@@ -5,7 +5,7 @@ import { Button } from '../../components/button/button';
 import { FiPackage } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import './GerenciamentoPlano.css';
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 
 const columns = [
   { field: "tipoPlano", header: "Tipo de Plano", width: "150px" },
@@ -28,8 +28,8 @@ export function GerenciamentoPlano() {
   useEffect(() => {
     const carregarPlanos = async () => {
       try {
-        const data = mockData.planos;
-        // const data = await fetchPlanos(); descomentar quando a API estiver pronta
+        // const data = mockData.planos;
+        const data = await fetchPlanos(); 
         setPlanos(data);
         setPlanosFiltrados(data);
       } catch (error) {

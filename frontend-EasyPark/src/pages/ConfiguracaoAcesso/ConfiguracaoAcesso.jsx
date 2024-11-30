@@ -4,7 +4,7 @@ import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import { Button } from '../../components/button/button';
 import { FiUsers } from "react-icons/fi";
 import './ConfiguracaoAcesso.css';
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 
 const columns = [
   { field: "tipoAcesso", header: "Tipo de Acesso", width: "150px" },
@@ -60,7 +60,7 @@ export function ConfiguracaoAcesso() {
       <div className="configuracao-acesso-container">
         <div className="header-container">
           <h2 className="header-title">Gerenciamento de Acessos</h2>
-          {true && (
+          {isAdmin && (
             <Button 
               className="btn-novo-acesso"
               onClick={() => navigate('/novo/acesso')}

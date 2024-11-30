@@ -6,7 +6,7 @@ import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import { Card } from '../../components/card/Card';
 import { Button } from '../../components/button/button';
 import './GerenciamentoVeiculo.css';
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 import { FiAperture } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,20 +35,35 @@ const columns = [
 
 
 
+
+
 export function GerenciamentoVeiculo() {
   const navigate = useNavigate();
   const [veiculos, setVeiculos] = useState([]);
 
   useEffect(() => {
     const carregarVeiculos = async () => {
-      const data = mockData.veiculos;
-      console.log(data);
-      // const data = await fetchVeiculos();
-      setVeiculos(data);
+      try {
+        const data = await fetchVeiculos(); // Busca os veículos do banco de dados
+        setVeiculos(data);
+      } catch (error) {
+        console.error('Erro ao carregar veículos:', error);
+      }
     };
 
     carregarVeiculos();
   }, []);
+
+  // useEffect(() => {
+  //   const carregarVeiculos = async () => {
+  //     const data = mockData.veiculos;
+  //     console.log(data);
+  //     // const data = await fetchVeiculos();
+  //     setVeiculos(data);
+  //   };
+
+  //   carregarVeiculos();
+  // }, []);
 
 
 
@@ -58,19 +73,19 @@ export function GerenciamentoVeiculo() {
 
   return (
     <div className="d-flex">
-    <SidebarMenu />
-    <div className="gerenciamento-veiculo-container">
+      <SidebarMenu />
+      <div className="gerenciamento-veiculo-container">
         <div className="header-container">
           <h2 className="header-title">Gerenciamento de Veiculos</h2>
-          <Button 
+          <Button
             className="btn-novo-veiculo"
             onClick={handleNovoVeiculo}
           >
-            <FiAperture style={{marginRight: '10px'}} size={20} />
+            <FiAperture style={{ marginRight: '10px' }} size={20} />
             Novo Veiculo
           </Button>
         </div>
-        
+
         <div className="table-container">
           <table className="data-table">
             <thead>
@@ -94,8 +109,8 @@ export function GerenciamentoVeiculo() {
             </tbody>
           </table>
         </div>
+      </div>
     </div>
-  </div>
     // <div className="d-flex home-container">
     //   <SidebarMenu />
     //   <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
@@ -111,3 +126,4 @@ export function GerenciamentoVeiculo() {
     // </div>
   );
 }
+

@@ -7,7 +7,7 @@ import './Home.css';
 import { criarTicket, finalizarTicket, listarTickets } from '../../services/TicketService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 
 export function Home() {
   const [modoEntrada, setModoEntrada] = useState(false);
@@ -18,8 +18,8 @@ export function Home() {
 
   const carregarTickets = async () => {
     try {
-      const data = mockData.tickets;
-      // const data = await listarTickets();
+      // const data = mockData.tickets;
+      const data = await listarTickets();
       setTickets(data);
     } catch (error) {
       toast.error('Erro ao carregar tickets.');

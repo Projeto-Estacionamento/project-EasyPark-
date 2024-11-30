@@ -8,7 +8,7 @@ import logo from '../../assets/logo.png';
 import './Login.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import mockData from "../../mock/mockData";
+// import mockData from "../../mock/mockData";
 
 export function Login() {
   const { login } = useContext(AuthContext);
@@ -22,20 +22,31 @@ export function Login() {
     e.preventDefault();
     const credentials = btoa(`${valores.email}:${valores.senha}`);
     try {
-      // const response = await fetch('http://localhost:8080/easypark/auth/login', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Basic ${credentials}`
-      //   },
-      //   body: JSON.stringify({ login: valores.email, senha: valores.senha }),
-      // });
+      
+      // const data = mockData.acessos.find(acesso => acesso.username === valores.email && acesso.password === valores.senha);
 
-      const data = mockData.acessos.find(acesso => acesso.username === valores.email && acesso.password === valores.senha);
-
-      if (data) {
-        // const data = await response.json();
-        login('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c');
+      // if (data) {
+      //   // const data = await response.json();
+      //   login('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c');
+      //   sessionStorage.setItem('accessType', data.accessType);
+      //   navigate("/home");
+      // } else {
+      //   console.error('Erro ao fazer login:', response.statusText);
+      //   toast.error("Email ou senha incorretos!");
+      // }
+      
+      
+      const response = await fetch('http://localhost:8080/easypark/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${credentials}`
+        },
+        body: JSON.stringify({ login: valores.email, senha: valores.senha }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        login(data.token);
         sessionStorage.setItem('accessType', data.accessType);
         navigate("/home");
       } else {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import mockData from '../../mock/mockData';
+// import mockData from '../../mock/mockData';
 // import { listarTickets } from '../../services/TicketService';
 
 export function Relatorio() {
