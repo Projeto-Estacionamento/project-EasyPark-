@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "../../components/button/button";
 import { fetchUsuarios } from "../../services/AssinaturaService";
+import { criarVeiculo } from "../../services/VeiculoService";
 import "./veiculo.css";
 import { SidebarMenu } from "../../components/sidebarMenu/SidebarMenu";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
-export function Veiculo({ adicionarVeiculo }) {
+export function Veiculo() {
   const navigate = useNavigate();
   const [placa, setPlaca] = useState("");
   const [tipoVeiculo, setTipoVeiculo] = useState("");
@@ -25,21 +26,27 @@ export function Veiculo({ adicionarVeiculo }) {
     carregarUsuarios();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    adicionarVeiculo({
-      placa,
-      tipoVeiculo,
-      ocupandoVaga: false,
-      idUsuarioDTO: idUsuario,
-      fabricanteDTO: { modelo, marca, ano },
-    });
-    setPlaca("");
-    setTipoVeiculo("");
-    setModelo("");
-    setMarca("");
-    setAno("");
-    setIdUsuario("");
+    try {
+      const novoVeiculo = {
+        placa,
+        tipoVeiculo,
+        ocupandoVaga: false,
+        idUsuarioDTO: parseInt(idUsuario),
+        fabricanteDTO: { 
+          modelo, 
+          marca, 
+          ano: parseInt(ano)
+        }
+      };
+
+      await criarVeiculo(novoVeiculo);
+      navigate('/gerenciamento-veiculo');
+    } catch (error) {
+      console.error('Erro ao criar veículo:', error);
+      alert('Erro ao criar veículo. Por favor, tente novamente.');
+    }
   };
 
   return (

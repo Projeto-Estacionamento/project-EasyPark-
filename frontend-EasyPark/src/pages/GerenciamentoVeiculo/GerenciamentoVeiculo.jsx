@@ -103,7 +103,7 @@ export function GerenciamentoVeiculo() {
                   <td>{veiculo.placa}</td>
                   <td>{veiculo.tipoVeiculo}</td>
                   <td>{veiculo.ocupandoVaga ? 'Sim' : 'Não'}</td>
-                  <td>{veiculo.fabricante.modelo}</td>
+                  <td>{veiculo.fabricanteDTO?.modelo || 'N/A'}</td>
                 </tr>
               ))}
             </tbody>
