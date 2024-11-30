@@ -15,7 +15,22 @@ export const fetchClientes = async () => {
 
 export const criarCliente = async (cliente) => {
   const token = sessionStorage.getItem('token');
-  const response = await api.post('http://localhost:8080/easypark/usuarios', cliente, {
+  console.log('Dados enviados:', cliente);
+  console.log('Token:', token);
+  
+  const dadosFormatados = {
+    nome: cliente.nome,
+    email: cliente.email,
+    telefone: cliente.telefone,
+    cpf: cliente.cpf,
+    endereco: {
+      cidade: cliente.cidade,
+      estado: cliente.estado,
+      cep: cliente.cep
+    }
+  };
+  
+  const response = await api.post('http://localhost:8080/easypark/usuarios', dadosFormatados, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',

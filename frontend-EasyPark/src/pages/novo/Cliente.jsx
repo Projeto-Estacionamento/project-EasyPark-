@@ -5,6 +5,7 @@ import { Button } from '../../components/button/button';
 import { Card } from '../../components/card/Card';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import './cliente.css';
+import { criarCliente } from '../../services/ClienteService';
 
 export function Cliente() {
   const navigate = useNavigate();
@@ -65,10 +66,14 @@ export function Cliente() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       await criarCliente(formData);
       navigate('/gerenciamento-cliente');
     } catch (error) {
       console.error('Erro ao criar cliente:', error);
+      alert('Erro ao criar cliente. Por favor, tente novamente.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -195,14 +200,13 @@ function formatarCPF(cpf) {
     .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
     .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
 }
-
-export const criarCliente = async (cliente) => {
-  const token = sessionStorage.getItem('token');
-  const response = await api.post(API_URL, cliente, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  });
-  return response.data;
-}; 
+// export const criarCliente = async (cliente) => {
+//   const token = sessionStorage.getItem('token');
+//   const response = await api.post(API_URL, cliente, {
+//     headers: {
+//       'Authorization': `Bearer ${token}`,
+//       'Content-Type': 'application/json'
+//     }
+//   });
+//   return response.data;
+// }; 
