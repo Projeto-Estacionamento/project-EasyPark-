@@ -54,6 +54,21 @@ export function GerenciamentoPlano() {
     setPlanosFiltrados(planos);
   };
 
+  const formatarHorario = (tipoPlano) => {
+    switch (tipoPlano) {
+      case 'INTEGRAL':
+        return { inicio: '08:00', fim: '22:00' };
+      case 'MANHA':
+        return { inicio: '08:00', fim: '12:00' };
+      case 'TARDE':
+        return { inicio: '12:00', fim: '18:00' };
+      case 'NOITE':
+        return { inicio: '18:00', fim: '22:00' };
+      default:
+        return { inicio: 'N/A', fim: 'N/A' };
+    }
+  };
+
   return (
     <div className="d-flex">
       <SidebarMenu />
@@ -104,16 +119,18 @@ export function GerenciamentoPlano() {
                 </tr>
               </thead>
               <tbody>
-                {planosFiltrados.map((plano) => (
-                  <tr key={plano.id}>
+                {planosFiltrados.map((plano) => {
+                  const horarios = formatarHorario(plano.tipoPlano);
+                  return (
+                    <tr key={plano.id}>
                       <td>{plano.tipoPlano}</td>
                       <td>{plano.tipoVeiculo}</td>
                       <td>{plano.valorPlano}</td>
-                      <td>{plano.horarioInicio}</td>
-                      <td>{plano.horarioFim}</td>
-                    
-                  </tr>
-                ))}
+                      <td>{horarios.inicio}</td>
+                      <td>{horarios.fim}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
