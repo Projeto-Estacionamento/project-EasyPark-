@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../components/button/button';
-import { fetchPlanos, fetchUsuarios } from '../../services/AssinaturaService';
+import { fetchPlanos, fetchUsuarios, criarAssinatura } from '../../services/AssinaturaService';
 import { SidebarMenu } from "../../components/sidebarMenu/SidebarMenu";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "./assinatura.css";
 // import mockData from '../../mock/mockData';
 
-export function Assinatura({ adicionarAssinatura }) {
+export function Assinatura() {
   const navigate = useNavigate();
   const [usuarioId, setUsuarioId] = useState('');
   const [planoId, setPlanoId] = useState('');
@@ -30,39 +30,36 @@ export function Assinatura({ adicionarAssinatura }) {
 
   useEffect(() => {
     const carregarDados = async () => {
-      const token = sessionStorage.getItem('token'); // Obtenha o token do sessionStorage
-  
       try {
-        const responsePlanos = await fetch('http://localhost:8080/api/planos', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        const planosData = await responsePlanos.json();
+        const planosData = await fetchPlanos();
+        console.log('Planos carregados:', planosData);
         setPlanos(planosData);
-  
-        const responseUsuarios = await fetch('http://localhost:8080/api/usuarios', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        const usuariosData = await responseUsuarios.json();
+
+        const usuariosData = await fetchUsuarios();
+        console.log('Usuários carregados:', usuariosData);
         setUsuarios(usuariosData);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
       }
     };
-  
+
     carregarDados();
   }, []);
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    adicionarAssinatura({ 
-      usuarioDTO: { id: usuarioId }, 
-      planoDTO: { id: planoId } 
-    });
-    setUsuarioId('');
-    setPlanoId('');
+    try {
+      const novaAssinatura = {
+        usuarioDTO: { id: parseInt(usuarioId) },
+        planoDTO: { id: parseInt(planoId) }
+      };
+      
+      await criarAssinatura(novaAssinatura);
+      navigate('/gerenciamento-assinatura-plano');
+    } catch (error) {
+      console.error('Erro ao criar assinatura:', error);
+      alert('Erro ao criar assinatura. Por favor, tente novamente.');
+    }
   };
 
   return (

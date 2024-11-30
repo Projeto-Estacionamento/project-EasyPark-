@@ -31,13 +31,20 @@ export const criarAssinatura = async (assinatura) => {
 };
 
 export const atualizarStatusAssinatura = async (id, novoStatus) => {
+  const token = sessionStorage.getItem('token');
   try {
-    const token = sessionStorage.getItem('token');
-    const response = await api.put(`/assinaturas/${id}`, { ativo: novoStatus }, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+    const response = await api.put(`/assinaturas/${id}`, 
+      { 
+        id: id,
+        ativo: novoStatus 
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
       }
-    });
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar status da assinatura:', error);
@@ -46,8 +53,14 @@ export const atualizarStatusAssinatura = async (id, novoStatus) => {
 };
 
 export const fetchPlanos = async () => {
+  const token = sessionStorage.getItem('token');
   try {
-    const response = await api.get('/planos');
+    const response = await api.get('/planos', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar planos:', error);
@@ -56,8 +69,14 @@ export const fetchPlanos = async () => {
 };
 
 export const fetchUsuarios = async () => {
+  const token = sessionStorage.getItem('token');
   try {
-    const response = await api.get('/usuarios');
+    const response = await api.get('/usuarios', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);

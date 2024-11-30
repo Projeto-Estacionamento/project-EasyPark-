@@ -25,64 +25,48 @@ const columns = [
 export function GerenciamentoAssinaturaPlano() {
   const navigate = useNavigate();
   const [assinaturas, setAssinaturas] = useState([]);
-  const [filtroStatus, setFiltroStatus] = useState('');
+  const [filtroStatus, setFiltroStatus] = useState('todos');
   const [assinaturasFiltradas, setAssinaturasFiltradas] = useState([]);
 
-  // useEffect(() => {
-  //   const carregarAssinaturas = async () => {
-  //     // const data = await fetchAssinaturas();
-  //     const data = mockData.assinaturas;
-  //     setAssinaturas(data);
-  //     setAssinaturasFiltradas(data);
-  //   };
-
-  //   carregarAssinaturas();
-  // }, []);
-
-  // const handleUpdateStatus = async (id, novoStatus) => {
-  //   const assinaturaAtualizada = await atualizarStatusAssinatura(id, novoStatus);
-  //   setAssinaturas(assinaturas.map(assinatura => 
-  //     assinatura.id === id ? assinaturaAtualizada : assinatura
-  //   ));
-  // };
+  const carregarAssinaturas = async () => {
+    try {
+      const data = await fetchAssinaturas();
+      setAssinaturas(data);
+      aplicarFiltro(data, filtroStatus);
+    } catch (error) {
+      console.error('Erro ao carregar assinaturas:', error);
+    }
+  };
 
   useEffect(() => {
-    const carregarAssinaturas = async () => {
-      try {
-        const data = await fetchAssinaturas(); // Busca as assinaturas do banco de dados
-        setAssinaturas(data);
-        setAssinaturasFiltradas(data);
-      } catch (error) {
-        console.error('Erro ao carregar assinaturas:', error);
-      }
-    };
-
     carregarAssinaturas();
   }, []);
 
-  const handleUpdateStatus = async (id, novoStatus) => {
-    try {
-      const assinaturaAtualizada = await atualizarStatusAssinatura(id, novoStatus);
-      setAssinaturas(assinaturas.map(assinatura => 
-        assinatura.id === id ? assinaturaAtualizada : assinatura
-      ));
-    } catch (error) {
-      console.error('Erro ao atualizar status da assinatura:', error);
+  const aplicarFiltro = (data, status) => {
+    if (status === 'todos') {
+      setAssinaturasFiltradas(data);
+    } else {
+      const filtradas = data.filter(assinatura => 
+        status === 'ativos' ? assinatura.ativo : !assinatura.ativo
+      );
+      setAssinaturasFiltradas(filtradas);
     }
   };
-  
+
   const handleFiltroChange = (e) => {
-    setFiltroStatus(e.target.value);
+    const novoStatus = e.target.value;
+    setFiltroStatus(novoStatus);
+    aplicarFiltro(assinaturas, novoStatus);
   };
 
-  const aplicarFiltros = () => {
-    const assinaturasFiltradas = assinaturas.filter(assinatura => assinatura.ativo.toString() === filtroStatus || filtroStatus === '');
-    setAssinaturasFiltradas(assinaturasFiltradas);
-  };
-
-  const limparFiltros = () => {
-    setFiltroStatus('');
-    setAssinaturasFiltradas(assinaturas);
+  const handleUpdateStatus = async (id, novoStatus) => {
+    try {
+      await atualizarStatusAssinatura(id, novoStatus);
+      await carregarAssinaturas(); // Recarrega os dados após atualização
+    } catch (error) {
+      console.error('Erro ao atualizar status:', error);
+      alert('Erro ao atualizar status da assinatura');
+    }
   };
 
   const handleNovoAssinatura = () => {
@@ -108,20 +92,14 @@ export function GerenciamentoAssinaturaPlano() {
             <div className="table-actions">
               <div className="search-filters">
                 <select
-                  name=""
                   value={filtroStatus}
                   onChange={handleFiltroChange}
                   className="filter-input"
                 >
-                  <option value="true">Ativo</option>
-                  <option value="false">Inativo</option>
+                  <option value="todos">Mostrar Todos</option>
+                  <option value="ativos">Ativos</option>
+                  <option value="inativos">Inativos</option>
                 </select>
-                <Button onClick={aplicarFiltros} className="filter-button">
-                  Aplicar
-                </Button>
-                <Button onClick={limparFiltros} className="filter-button">
-                  Limpar
-                </Button>
               </div>
             </div>
           </div>
@@ -140,18 +118,18 @@ export function GerenciamentoAssinaturaPlano() {
               <tbody>
                 {assinaturasFiltradas.map((assinatura) => (
                   <tr key={assinatura.id}>
-                      <td>{assinatura.usuario}</td>
-                      <td>{assinatura.plano}</td>
-                      <td>{assinatura.dataPagamento}</td>
-                      <td>{assinatura.dataVencimento}</td>
-                      <td>
-                        <Button
-                          className="btn-status"
-                          onClick={() => handleUpdateStatus(assinatura.id, !assinatura.ativo)}
-                        >
-                          {assinatura.ativo ? 'Desativar' : 'Ativar'}
-                        </Button>
-                      </td>                
+                    <td>{assinatura.usuarioDTO?.email || 'N/A'}</td>
+                    <td>{`${assinatura.planoDTO?.tipoPlano} - ${assinatura.planoDTO?.tipoVeiculo}` || 'N/A'}</td>
+                    <td>{new Date(assinatura.dataPagamento).toLocaleDateString('pt-BR')}</td>
+                    <td>{new Date(assinatura.dataVencimento).toLocaleDateString('pt-BR')}</td>
+                    <td>
+                      <Button
+                        className="btn-status"
+                        onClick={() => handleUpdateStatus(assinatura.id, !assinatura.ativo)}
+                      >
+                        {assinatura.ativo ? 'Desativar' : 'Ativar'}
+                      </Button>
+                    </td>                
                   </tr>
                 ))}
               </tbody>
