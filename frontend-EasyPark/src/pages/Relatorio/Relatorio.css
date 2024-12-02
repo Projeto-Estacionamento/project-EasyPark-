@@ -1,0 +1,6 @@
+.relatorio-container {
+    background-color: #1E1E1E; /* Cor de fundo consistente */
+    color: white; /* Cor do texto */
+    padding: 20px; /* Espaçamento interno */
+    height: 100vh; /* Garante que ocupe toda a altura da tela */
+}

@@ -79,6 +79,8 @@ public class TicketService {
         ticketEntity.setTipoVeiculo(ticket.getTipoVeiculo());
         ticketEntity.setHoraChegada(LocalDateTime.now());
 
+        //Validar o tipo do veiculo do plano tbm, pois o plano necessario precisa colocar o tipo do veiculo
+
         //Se encontrar veículos com assinatura válida
         if (!veiculos.isEmpty()) {
             Veiculo veiculo = veiculos.get(0);  //Considerando que pegamos o primeiro veículo válido
@@ -88,11 +90,11 @@ public class TicketService {
 //                Ele busca o tipo do plano e pega o horario definido no enum e compara com a hora atual
 //                Só continua se bater o horario
                 if (assinatura.getPlano().getTipoPlano().contemHorario(horaAtual)) {
-                        //Se encontrar um plano válido, define o ticket como mensalista
-                        ticketEntity.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
-                        veiculo.setOcupandoVaga(true);
-                        veiculoRepository.save(veiculo);  //Salva o estado do veículo
-                         //Para o loop ao encontrar o primeiro plano válido
+                    //Se encontrar um plano válido, define o ticket como mensalista
+                    ticketEntity.setTipoTicket(TipoTicket.TICKET_MENSALISTA);
+                    veiculo.setOcupandoVaga(true);
+                    veiculoRepository.save(veiculo);  //Salva o estado do veículo
+                    //Para o loop ao encontrar o primeiro plano válido
                 }else {
                     ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
                 }
@@ -102,6 +104,22 @@ public class TicketService {
             //Se nenhum veículo com assinatura válida for encontrado, cria ticket avulso
             ticketEntity.setTipoTicket(TipoTicket.TICKET_AVULSO);
         }
+
+        if (configuracao.isMostrar()) {
+            if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO) {
+                if (configuracao.getQtdCarro() <= 0) {
+                    throw new EstacionamentoException("Não há vagas disponíveis para carros.");
+                }
+                configuracao.setQtdCarro(configuracao.getQtdCarro() + 1);
+            } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO) {
+                if (configuracao.getQtdMoto() <= 0) {
+                    throw new EstacionamentoException("Não há vagas disponíveis para motos.");
+                }
+                configuracao.setQtdMoto(configuracao.getQtdMoto() + 1);
+            }
+            configuracaoSistemaRepository.save(configuracao); // Atualiza a configuração
+        }
+
 
         // Tenta salvar o ticket no banco de dados
         try {
@@ -116,6 +134,12 @@ public class TicketService {
         return ticketRepository.findById(id)
                 .map(TicketMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
+    }
+
+    public List<TicketDTO> listarTicketsPorTipo(TipoTicket tipoTicket) {
+        return ticketRepository.findByTipoTicket(tipoTicket).stream()
+                .map(TicketMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     public List<TicketDTO> listarTickets() {
@@ -136,6 +160,7 @@ public class TicketService {
         ticket.setValorTotalPagar(valorTotal.doubleValue());
 
         RelatorioTicketsFechados relatorio = new RelatorioTicketsFechados();
+        relatorio.setTipoTicket(ticket.getTipoTicket());
         relatorio.setHoraEntrada(ticket.getHoraChegada());
         relatorio.setHoraSaida(ticket.getHoraSaida());
         relatorio.setTipoVeiculo(ticket.getTipoVeiculo());
@@ -161,29 +186,20 @@ public class TicketService {
 
         if (configuracao.isMostrar()) {
             if (ticket.getTipoVeiculo() == TipoVeiculo.CARRO) {
-                if (configuracao.getQtdCarro() <= 0) {
-                    throw new EstacionamentoException("Não há vagas disponíveis para carros.");
-                }
                 configuracao.setQtdCarro(configuracao.getQtdCarro() + 1);
             } else if (ticket.getTipoVeiculo() == TipoVeiculo.MOTO) {
-                if (configuracao.getQtdMoto() <= 0) {
-                    throw new EstacionamentoException("Não há vagas disponíveis para motos.");
-                }
                 configuracao.setQtdMoto(configuracao.getQtdMoto() + 1);
             }
             configuracaoSistemaRepository.save(configuracao); // Atualiza a configuração
         }
-
         // Salva o relatório no banco de dados
         relatorioTicketsFechadosRepository.save(relatorio);
-
         ticketRepository.delete(ticket);
 
         //Exclui o ticket após finalização para evitar o acúmulo de dado
         //Retorna o DTO do ticket finalizado, com os dados atualizados
         return TicketMapper.toDTO(updatedTicket);
     }
-
 
     public BigDecimal calcularValorTicket(TicketDTO ticket) {
         // 1. Verifica se o ticket é de um cliente mensalista ou se a permanência foi inferior a 15 minutos
@@ -279,5 +295,3 @@ public class TicketService {
 
 
 }
-
-

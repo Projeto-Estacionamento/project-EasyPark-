@@ -1,7 +1,5 @@
 package com.backend.EasyPark.util.validacao;
 
-
-
 import com.backend.EasyPark.model.dto.VeiculoDTO;
 import com.backend.EasyPark.exception.EstacionamentoException;
 import com.backend.EasyPark.model.repository.TicketRepository;

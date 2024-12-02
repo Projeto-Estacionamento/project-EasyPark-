@@ -9,6 +9,7 @@ export const listarRelatorios = async () => {
         'Content-Type': 'application/json'
       }
     });
+    console.log('Dados dos relatórios fechados:', response.data);
     return response.data;
   } catch (error) {
     console.error('Erro ao listar relatórios:', error);
@@ -35,7 +36,7 @@ export const buscarRelatorioPorTipo = async (tipoVeiculo) => {
 export const listarTicketsAbertos = async () => {
   const token = sessionStorage.getItem('token');
   try {
-    const response = await api.get('/relatorios/tickets-abertos', {
+    const response = await api.get('/tickets', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
