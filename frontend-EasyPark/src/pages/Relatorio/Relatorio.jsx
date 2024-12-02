@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { listarRelatorios } from '../../services/RelatorioService';
+import { Link } from 'react-router-dom';
 
 export function Relatorio() {
   const [relatorios, setRelatorios] = useState([]);
@@ -20,9 +21,9 @@ export function Relatorio() {
   }, []);
 
   return (
-    <div className="d-flex">
+    <div className="d-flex" style={{ backgroundColor: '#333', color: 'white' }}>
       <SidebarMenu />
-      <div className="flex-grow-1" style={{ marginLeft: '0px', backgroundColor: '#f8f9fa', overflowY: 'auto', height: '100vh' }}>
+      <div className="flex-grow-1" style={{ marginLeft: '0px', backgroundColor: '#444', overflowY: 'auto', height: '100vh' }}>
         <div className="d-flex align-items-center justify-content-center" style={{ backgroundColor: '#00838f', color: 'white', padding: '1rem', borderRadius: '0 0 8px 8px' }}>
           <h1 className="m-0" style={{ fontSize: '2rem' }}>Relatório de Tickets Fechados</h1>
         </div>

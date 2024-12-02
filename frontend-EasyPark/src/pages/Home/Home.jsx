@@ -81,12 +81,10 @@ export function Home() {
               <Button variant="outline-light" style={{ width: '100%' }} onClick={() => setModoEntrada(false)}>
                 Fechar
               </Button>
-              <label style={{ color: 'white', marginBottom: '5px' }}>Tipo de Veículo</label>
               <select
                 value={tipoVeiculo}
                 onChange={(e) => setTipoVeiculo(e.target.value)}
-                className="form-control mb-3"
-                style={{ width: '100%', backgroundColor: '#333', color: 'white' }}
+                className="form-control mb-3 input-custom"
               >
                 <option value="" disabled>Selecione o tipo de veículo</option>
                 <option value="CARRO">Carro</option>
@@ -97,8 +95,7 @@ export function Home() {
                 placeholder="Placa do Veículo"
                 value={placaVeiculo}
                 onChange={(e) => setPlacaVeiculo(e.target.value)}
-                className="form-control mb-3"
-                style={{ width: '100%', backgroundColor: '#333', color: 'white' }}
+                className="form-control mb-3 input-custom"
               />
               <Button variant="outline-light" style={{ width: '100%' }} onClick={handleEntrada}>
                 Registrar Entrada

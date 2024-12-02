@@ -15,3 +15,9 @@
   border-radius: 8px;
   border: none;
 }
+
+/* Estilo para o placeholder do input */
+.input-custom::placeholder {
+  color: white; /* Cor do texto do placeholder */
+  opacity: 1; /* Para garantir que a opacidade seja total */
+}

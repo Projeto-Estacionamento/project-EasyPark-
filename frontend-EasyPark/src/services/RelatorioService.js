@@ -31,3 +31,19 @@ export const buscarRelatorioPorTipo = async (tipoVeiculo) => {
     throw error;
   }
 };
+
+export const listarTicketsAbertos = async () => {
+  const token = sessionStorage.getItem('token');
+  try {
+    const response = await api.get('/relatorios/tickets-abertos', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao listar tickets abertos:', error);
+    throw error;
+  }
+};

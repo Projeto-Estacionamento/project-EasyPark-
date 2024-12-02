@@ -1,18 +1,25 @@
 .editar-acesso-container {
-    padding: 20px;
-    width: 100%;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #1E1E1E;
+  color: white;
+}
+
   
   .form-editar-acesso {
     max-width: 500px;
     margin: 20px auto;
-  }
-  .form-container {
+}
+.form-container {
     background-color: #2D2D2D;
     padding: 20px;
     border-radius: 4px;
-    margin-top: 20px;
-  }
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
   
   .form-padrao {
     max-width: 500px;
@@ -41,10 +48,17 @@
     color: #666;
   }
   
-  .form-actions {
-    margin-top: 20px;
+.form-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .btn-salvar, .btn-voltar {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
   }
   
   .btn-salvar {
@@ -71,7 +85,7 @@
     align-items: center;
   }
   
-  .btn-voltar:hover {
+.btn-voltar:hover {
     background-color: #006064;
   }
   

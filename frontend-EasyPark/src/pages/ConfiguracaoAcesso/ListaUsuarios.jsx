@@ -15,7 +15,7 @@ function ListaUsuarios() {
   };
 
   return (
-    <div>
+    <div className="lista-usuarios-container">
       <h2>Lista de Usuários</h2>
       <div>
         <label htmlFor="tipoAcesso">Tipo de Acesso: </label>
@@ -37,17 +37,15 @@ function ListaUsuarios() {
       </div>
       <FetchWithAuth
         url={url}
-        render={data => {
-          return (
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {data.map(usuario => (
+        render={data => (
+          <ul style={{ listStyleType: 'none', padding: 0 }}>
+            {data.map(usuario => (
               <li key={usuario.id} style={{ marginBottom: '10px', wordBreak: 'break-word' }}>
                 <strong>{usuario.tipoAcesso}</strong> - {usuario.email}
               </li>
             ))}
-            </ul>
-          );
-        }}
+          </ul>
+        )}
       />
     </div>
   );
