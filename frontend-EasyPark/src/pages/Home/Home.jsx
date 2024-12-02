@@ -13,6 +13,7 @@ export function Home() {
   const [modoEntrada, setModoEntrada] = useState(false);
   const [modoSaida, setModoSaida] = useState(false);
   const [placaVeiculo, setPlacaVeiculo] = useState('');
+  const [tipoVeiculo, setTipoVeiculo] = useState('');
   const [tickets, setTickets] = useState([]);
   const [ticketSelecionado, setTicketSelecionado] = useState('');
 
@@ -31,10 +32,16 @@ export function Home() {
   }, []);
 
   const handleEntrada = async () => {
+    if (!placaVeiculo || tipoVeiculo === '') {
+      toast.error('Por favor, preencha todos os campos corretamente.');
+      return;
+    }
+
     try {
-      await criarTicket({ placaVeiculo });
+      await criarTicket({ placaVeiculo, tipoVeiculo });
       toast.success('Entrada registrada com sucesso!');
       setPlacaVeiculo('');
+      setTipoVeiculo('');
       setModoEntrada(false);
       carregarTickets();
     } catch (error) {
@@ -74,13 +81,24 @@ export function Home() {
               <Button variant="outline-light" style={{ width: '100%' }} onClick={() => setModoEntrada(false)}>
                 Fechar
               </Button>
+              <label style={{ color: 'white', marginBottom: '5px' }}>Tipo de Veículo</label>
+              <select
+                value={tipoVeiculo}
+                onChange={(e) => setTipoVeiculo(e.target.value)}
+                className="form-control mb-3"
+                style={{ width: '100%', backgroundColor: '#333', color: 'white' }}
+              >
+                <option value="" disabled>Selecione o tipo de veículo</option>
+                <option value="CARRO">Carro</option>
+                <option value="MOTO">Moto</option>
+              </select>
               <input
                 type="text"
                 placeholder="Placa do Veículo"
                 value={placaVeiculo}
                 onChange={(e) => setPlacaVeiculo(e.target.value)}
                 className="form-control mb-3"
-                style={{ width: '100%' }}
+                style={{ width: '100%', backgroundColor: '#333', color: 'white' }}
               />
               <Button variant="outline-light" style={{ width: '100%' }} onClick={handleEntrada}>
                 Registrar Entrada
