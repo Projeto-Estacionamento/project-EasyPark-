@@ -30,6 +30,8 @@ export function SidebarMenu() {
     navigate("/");
   };
 
+  const tipoAcesso = sessionStorage.getItem('accessType');
+
   const gerenciamentoSubItems = [
     {
       path: "/gerenciamento-cliente",
@@ -112,18 +114,23 @@ export function SidebarMenu() {
           </button>
           {isConfiguracaoOpen && (
             <div className="submenu">
-              {configuracaoSubItems.map((subItem) => (
-                <Link
-                  key={subItem.path}
-                  to={subItem.path}
-                  className={`submenu-item ${
-                    location.pathname === subItem.path ? "active" : ""
-                  }`}
-                >
-                  <span className="nav-icon">{subItem.icon}</span>
-                  <span className="nav-text">{subItem.label}</span>
-                </Link>
-              ))}
+              {configuracaoSubItems.map((subItem) => {
+                if (subItem.label === "Acesso" && tipoAcesso === "CAIXA") {
+                  return null;
+                }
+                return (
+                  <Link
+                    key={subItem.path}
+                    to={subItem.path}
+                    className={`submenu-item ${
+                      location.pathname === subItem.path ? "active" : ""
+                    }`}
+                  >
+                    <span className="nav-icon">{subItem.icon}</span>
+                    <span className="nav-text">{subItem.label}</span>
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>

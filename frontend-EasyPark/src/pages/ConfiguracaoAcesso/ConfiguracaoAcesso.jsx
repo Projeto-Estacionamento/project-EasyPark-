@@ -28,7 +28,7 @@ export function ConfiguracaoAcesso() {
       setAcessosFiltrados(data);
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
-      toast.error('Erro ao carregar usuários');
+      toast.error('Erro ao carregar usuários: ' + (error.response?.data?.message || 'Erro desconhecido'));
     }
   };
 
