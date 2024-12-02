@@ -56,10 +56,12 @@ export const registrarAcesso = async (dados) => {
 export const atualizarAcesso = async (id, dados) => {
   const token = sessionStorage.getItem('token');
   try {
-    const response = await api.put(`/acesso/${id}`, {
-      senha: dados.senha,
-      tipoAcesso: dados.tipoAcesso
-    }, {
+    const dadosParaEnviar = { ...dados };
+    if (!dadosParaEnviar.senha) {
+      delete dadosParaEnviar.senha;
+    }
+
+    const response = await api.put(`/acesso/${id}`, dadosParaEnviar, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -68,6 +70,22 @@ export const atualizarAcesso = async (id, dados) => {
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar acesso:', error);
+    throw error;
+  }
+};
+
+export const buscarAcessoPorId = async (id) => {
+  const token = sessionStorage.getItem('token');
+  try {
+    const response = await api.get(`/acesso/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar acesso:', error);
     throw error;
   }
 };

@@ -28,17 +28,17 @@
   }
   .form-input {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
+    margin-top: 5px;
     border: 1px solid #333;
     border-radius: 4px;
-    background-color: #1E1E1E;
-    color: white;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 14px;
   }
   
-  
-  .form-input:focus {
-    outline: none;
-    border-color: #00838F;
+  .form-input::placeholder {
+    color: #666;
   }
   
   .form-actions {
@@ -48,15 +48,16 @@
   }
   
   .btn-salvar {
-    padding: 8px 16px;
-    background-color: #00838F;
+    background-color: #008B8B;
     color: white;
     border: none;
+    padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
   }
-  btn-salvar:hover {
-    background-color: #006064;
+  .btn-salvar:hover {
+    background-color: #006666;
   }
   
   .btn-voltar {
@@ -99,10 +100,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    padding: 0 20px;
   }
   
   .header-title {
+    color: #fff;
     margin: 0;
-    color: white;
   }
