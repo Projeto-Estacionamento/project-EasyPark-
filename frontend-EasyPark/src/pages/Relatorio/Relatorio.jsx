@@ -24,7 +24,7 @@ export function Relatorio() {
   }, [tipoRelatorio]);
 
   const relatoriosFiltrados = relatorios.filter(relatorio => 
-    relatorio.placaVeiculo && relatorio.placaVeiculo.toLowerCase().includes(searchTerm.toLowerCase())
+    relatorio.placaVeiculo === null || relatorio.placaVeiculo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
