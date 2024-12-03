@@ -6,6 +6,8 @@ import { Card } from '../../components/card/Card';
 import { SidebarMenu } from '../../components/sidebarMenu/SidebarMenu';
 import './cliente.css';
 import { criarCliente } from '../../services/ClienteService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function Cliente() {
   const navigate = useNavigate();
@@ -68,10 +70,11 @@ export function Cliente() {
     try {
       setLoading(true);
       await criarCliente(formData);
+      toast.success('Cliente criado com sucesso!');
       navigate('/gerenciamento-cliente');
     } catch (error) {
       console.error('Erro ao criar cliente:', error);
-      alert('Erro ao criar cliente. Por favor, tente novamente.');
+      toast.error('Erro ao criar cliente. Por favor, tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -189,6 +192,7 @@ export function Cliente() {
             </div>
           </form>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
