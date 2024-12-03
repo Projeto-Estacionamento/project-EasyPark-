@@ -12,9 +12,9 @@ export function EditarAcesso() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [tipoAcesso, setTipoAcesso] = useState('');
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function EditarAcesso() {
       try {
         const dados = await buscarAcessoPorId(id);
         setEmail(dados.email || '');
-        setUsername(dados.username || '');
+        setTipoAcesso(dados.tipoAcesso || 'CAIXA');
         setCarregando(false);
       } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
@@ -51,8 +51,7 @@ export function EditarAcesso() {
 
       const dadosAtualizacao = {
         email,
-        username,
-        tipoAcesso: 'CAIXA'
+        tipoAcesso
       };
 
       if (senha) {
@@ -61,7 +60,7 @@ export function EditarAcesso() {
 
       await atualizarAcesso(id, dadosAtualizacao);
       
-      toast.success('Dados atualizados com sucesso!');
+      toast.success('Acesso Alterado!');
       navigate('/configuracao-acesso');
     } catch (error) {
       console.error('Erro ao atualizar dados:', error);
@@ -110,16 +109,6 @@ export function EditarAcesso() {
               />
             </div>
             <div className="form-group">
-              <label>Nome de Usuário</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="form-input"
-                required
-              />
-            </div>
-            <div className="form-group">
               <label>Nova Senha (opcional)</label>
               <input
                 type="password"
@@ -146,7 +135,7 @@ export function EditarAcesso() {
             </div>
           </form>
         </div>
-        <ToastContainer />
+        <ToastContainer position="top-right" autoClose={3000} />
       </div>
     </div>
   );

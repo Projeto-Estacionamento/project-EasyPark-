@@ -36,7 +36,8 @@ export function Acesso() {
         toast.success("Usuário criado com sucesso!");
         setEmail('');
         setSenha('');
-        setTipoAcesso('CAIXA');
+        setTipoAcesso('CAIXA'); // Resetando para o valor padrão
+        navigate('/configuracao-acesso');
       } else {
         const errorData = await response.json();
         toast.error(`Erro: ${errorData.message}`);
@@ -108,4 +109,4 @@ export function Acesso() {
       </div>
     </div>
   );
-} 
+}
