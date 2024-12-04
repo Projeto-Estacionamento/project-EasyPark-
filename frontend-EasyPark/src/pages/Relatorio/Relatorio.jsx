@@ -32,9 +32,9 @@ export function Relatorio() {
     <div className="relatorio-container d-flex">
       <SidebarMenu />
       <div className="flex-grow-1">
-        <RelatorioBase title={`Relatório de Tickets ${tipoRelatorio === 'fechados' ? 'Fechados' : 'Abertos'}`}>
+        <RelatorioBase title={`Relatório de Tickets ${tipoRelatorio === 'fechados' ? 'Fechados' : 'Abertos'}`} style={{ marginTop: '20px' }}>
           <div className="table-header d-flex justify-content-between align-items-center">
-            <div className="table-actions d-flex" style={{ marginRight: '20px' }}>
+            <div className="table-actions">
               <Button onClick={() => setTipoRelatorio('fechados')} variant="primary" style={{ marginRight: '20px' }}>
                 Fechados
               </Button>
@@ -42,7 +42,7 @@ export function Relatorio() {
                 Abertos
               </Button>
             </div>
-            {tipoRelatorio === 'abertos' && (
+            {tipoRelatorio === 'fechados' && (
               <input 
                 type="text" 
                 placeholder="Pesquisar por placa..." 
@@ -53,50 +53,54 @@ export function Relatorio() {
               />
             )}
           </div>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>ID</th>
-                {tipoRelatorio === 'fechados' ? (
-                  <>
-                    <th>Tipo de Ticket</th>
-                    <th>Valor Total</th>
-                  </>
-                ) : (
-                  <>
-                    <th>Placa</th>
-                    <th>Tipo de Ticket</th>
-                    <th>Hora de Entrada</th>
-                  </>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {relatoriosFiltrados.length > 0 ? (
-                relatoriosFiltrados.map((relatorio) => (
-                  <tr key={relatorio.id}>
-                    <td>{relatorio.id}</td>
-                    {tipoRelatorio === 'fechados' ? (
-                      <>
-                        <td>{relatorio.tipoTicket}</td>
-                        <td>R$ {relatorio.valorTotalPagar ? relatorio.valorTotalPagar.toFixed(2) : '0.00'}</td>
-                      </>
-                    ) : (
-                      <>
-                        <td>{relatorio.placaVeiculo || 'N/A'}</td>
-                        <td>{relatorio.tipoTicket}</td>
-                        <td>{new Date(relatorio.horaChegada).toLocaleString()}</td>
-                      </>
-                    )}
-                  </tr>
-                ))
-              ) : (
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <td colSpan="4" className="text-center">Nenhum relatório encontrado</td>
+                  <th>ID</th>
+                  <th>Placa</th>
+                  {tipoRelatorio === 'fechados' ? (
+                    <>
+                      <th>Tipo de Ticket</th>
+                      <th>Valor Total</th>
+                    </>
+                  ) : (
+                    <>
+                      <th>Placa</th>
+                      <th>Tipo de Ticket</th>
+                      <th>Hora de Entrada</th>
+                    </>
+                  )}
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {relatoriosFiltrados.length > 0 ? (
+                  relatoriosFiltrados.map((relatorio) => (
+                    <tr key={relatorio.id}>
+                      <td>{relatorio.id}</td>
+                      <td>{relatorio.placaVeiculo || 'N/A'}</td>
+                      {tipoRelatorio === 'fechados' ? (
+                        <>
+                          <td>{relatorio.tipoTicket}</td>
+                          <td>R$ {relatorio.valorTotalPagar ? relatorio.valorTotalPagar.toFixed(2) : '0.00'}</td>
+                        </>
+                      ) : (
+                        <>
+                          <td>{relatorio.placaVeiculo || 'N/A'}</td>
+                          <td>{relatorio.tipoTicket}</td>
+                          <td>{new Date(relatorio.horaChegada).toLocaleString()}</td>
+                        </>
+                      )}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center">Nenhum relatório encontrado</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </RelatorioBase>
       </div>
     </div>
