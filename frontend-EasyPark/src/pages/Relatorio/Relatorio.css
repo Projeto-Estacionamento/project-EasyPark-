@@ -11,6 +11,7 @@
   justify-content: space-between; /* Espaçamento entre os botões */
   align-items: center; /* Alinha verticalmente */
   margin-bottom: 20px; /* Espaço abaixo dos botões */
+  gap: 10px; /* Espaço entre os botões */
 }
 
 .table-header {

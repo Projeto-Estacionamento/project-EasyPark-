@@ -25,7 +25,7 @@ export function Relatorio() {
   }, [tipoRelatorio]);
 
   const relatoriosFiltrados = relatorios.filter(relatorio => 
-    relatorio.placaVeiculo === null || relatorio.placaVeiculo.toLowerCase().includes(searchTerm.toLowerCase())
+    relatorio.placaVeiculo && relatorio.placaVeiculo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -42,16 +42,14 @@ export function Relatorio() {
                 Abertos
               </Button>
             </div>
-            {tipoRelatorio === 'fechados' && (
-              <input 
-                type="text" 
-                placeholder="Pesquisar por placa..." 
-                value={searchTerm} 
-                onChange={(e) => setSearchTerm(e.target.value)} 
-                className="form-control my-2 filter-input" 
-                style={{ color: 'white', backgroundColor: '#2D2D2D', marginRight: '20px' }}
-              />
-            )}
+            <input 
+              type="text" 
+              placeholder="Pesquisar por placa..." 
+              value={searchTerm} 
+              onChange={(e) => setSearchTerm(e.target.value)} 
+              className="form-control my-2 filter-input" 
+              style={{ color: 'white', backgroundColor: '#2D2D2D', marginRight: '20px' }}
+            />
           </div>
           <div className="table-container">
             <table className="data-table">
@@ -66,7 +64,6 @@ export function Relatorio() {
                     </>
                   ) : (
                     <>
-                      <th>Placa</th>
                       <th>Tipo de Ticket</th>
                       <th>Hora de Entrada</th>
                     </>
@@ -86,7 +83,6 @@ export function Relatorio() {
                         </>
                       ) : (
                         <>
-                          <td>{relatorio.placaVeiculo || 'N/A'}</td>
                           <td>{relatorio.tipoTicket}</td>
                           <td>{new Date(relatorio.horaChegada).toLocaleString()}</td>
                         </>
