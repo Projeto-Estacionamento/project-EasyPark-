@@ -122,6 +122,7 @@ export function Assinatura() {
             </Button>
           </div>
         </form>
+        <ToastContainer position="top-right" autoClose={3000} />
       </div>
     </div>
   );
