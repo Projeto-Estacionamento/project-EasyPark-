@@ -6,6 +6,7 @@ import { Button } from '../../components/button/button';
 import { useNavigate } from 'react-router-dom';
 import { FiClipboard } from 'react-icons/fi';
 import './GerenciamentoAssinaturaPlano.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 /* id: 1,
 usuario: 1,
@@ -63,9 +64,10 @@ export function GerenciamentoAssinaturaPlano() {
     try {
       await atualizarStatusAssinatura(id, novoStatus);
       await carregarAssinaturas(); // Recarrega os dados após atualização
+      toast.success(`Assinatura ${novoStatus ? 'ativada' : 'desativada'} com sucesso!`);
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
-      alert('Erro ao atualizar status da assinatura');
+      toast.error('Erro ao atualizar status da assinatura');
     }
   };
 
@@ -135,6 +137,7 @@ export function GerenciamentoAssinaturaPlano() {
               </tbody>
             </table>
           </div>
+          <ToastContainer position="top-right" autoClose={3000} />
       </div>
     </div>
   );

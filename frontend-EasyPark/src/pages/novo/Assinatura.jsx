@@ -5,6 +5,8 @@ import { SidebarMenu } from "../../components/sidebarMenu/SidebarMenu";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "./assinatura.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import mockData from '../../mock/mockData';
 
 export function Assinatura() {
@@ -55,10 +57,13 @@ export function Assinatura() {
       };
       
       await criarAssinatura(novaAssinatura);
-      navigate('/gerenciamento-assinatura-plano');
+      toast.success('Assinatura criada com sucesso!');
+      setTimeout(() => {
+        navigate('/gerenciamento-assinatura-plano');
+      }, 2000);
     } catch (error) {
       console.error('Erro ao criar assinatura:', error);
-      alert('Erro ao criar assinatura. Por favor, tente novamente.');
+      toast.error('Erro ao criar assinatura. Por favor, tente novamente.');
     }
   };
 

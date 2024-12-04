@@ -5,24 +5,29 @@ import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { criarPlano } from "../../services/PlanoService";
 import "./plano.css";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export function Plano() {
   const navigate = useNavigate();
   const [tipoPlano, setTipoPlano] = useState('INTEGRAL');
   const [tipoVeiculo, setTipoVeiculo] = useState('CARRO');
   const [valorPlano, setValorPlano] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const novoPlano = {
       tipoPlano,
       tipoVeiculo,
       valorPlano: parseFloat(valorPlano)
     };
-    criarPlano(novoPlano);
+    await criarPlano(novoPlano);
+    toast.success('Plano criado com sucesso!');
     setTipoPlano('INTEGRAL');
     setTipoVeiculo('CARRO');
     setValorPlano('');
+    setTimeout(() => {
+      navigate('/gerenciamento-plano');
+    }, 2000);
   };
 
   return (

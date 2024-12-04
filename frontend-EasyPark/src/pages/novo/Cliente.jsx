@@ -71,7 +71,9 @@ export function Cliente() {
       setLoading(true);
       await criarCliente(formData);
       toast.success('Cliente criado com sucesso!');
-      navigate('/gerenciamento-cliente');
+      setTimeout(() => {
+        navigate('/gerenciamento-cliente');
+      }, 2000);
     } catch (error) {
       console.error('Erro ao criar cliente:', error);
       toast.error('Erro ao criar cliente. Por favor, tente novamente.');

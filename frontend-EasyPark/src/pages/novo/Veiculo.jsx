@@ -6,6 +6,8 @@ import "./veiculo.css";
 import { SidebarMenu } from "../../components/sidebarMenu/SidebarMenu";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function Veiculo() {
   const navigate = useNavigate();
@@ -42,7 +44,10 @@ export function Veiculo() {
       };
 
       await criarVeiculo(novoVeiculo);
-      navigate('/gerenciamento-veiculo');
+      toast.success('Veículo criado com sucesso!');
+      setTimeout(() => {
+        navigate('/gerenciamento-veiculo');
+      }, 2000);
     } catch (error) {
       console.error('Erro ao criar veículo:', error);
       alert('Erro ao criar veículo. Por favor, tente novamente.');
