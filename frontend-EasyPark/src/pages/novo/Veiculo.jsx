@@ -28,6 +28,10 @@ export function Veiculo() {
     carregarUsuarios();
   }, []);
 
+  useEffect(() => {
+    toast.info('Componente Veículo carregado!');
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -50,7 +54,7 @@ export function Veiculo() {
       }, 2000);
     } catch (error) {
       console.error('Erro ao criar veículo:', error);
-      alert('Erro ao criar veículo. Por favor, tente novamente.');
+      toast.error('Erro ao criar veículo. Por favor, tente novamente.');
     }
   };
 
@@ -146,6 +150,7 @@ export function Veiculo() {
             </Button>
           </div>
         </form>
+        <ToastContainer position="top-right" autoClose={3000} />
       </div>
     </div>
   );
