@@ -81,22 +81,60 @@ export function Home() {
           <Card className="ticket-info-card">
             <h5 className="ticket-title">{ticketInfo ? 'Informações do Ticket Criado' : 'Informações do Ticket Finalizado'}</h5>
             {ticketInfo && (
-              <>
-                <p>Placa: {ticketInfo.placaVeiculo}</p>
-                <p>Tipo: {ticketInfo.tipoVeiculo}</p>
-                <p>Tipo de Ticket: {ticketInfo.tipoTicket}</p>
-                <p>Hora de Entrada: {new Date(ticketInfo.horaChegada).toLocaleString()}</p>
-              </>
+              <div className="receipt-card">
+                <table className="receipt-table">
+                  <tbody>
+                    <tr>
+                      <th>Placa:</th>
+                      <td>{ticketInfo.placaVeiculo}</td>
+                    </tr>
+                    <tr>
+                      <th>Veículo:</th>
+                      <td>{ticketInfo.tipoVeiculo}</td>
+                    </tr>
+                    <tr>
+                      <th>Tipo de Ticket:</th>
+                      <td>{ticketInfo.tipoTicket === 'TICKET_AVULSO' ? 'Avulso' : 'Mensalista'}</td>
+                    </tr>
+                    <tr>
+                      <th>Hora de Entrada:</th>
+                      <td>{new Date(ticketInfo.horaChegada).toLocaleString()}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             )}
             {ticketFinalizadoInfo && (
-              <>
-                <p>Placa: {ticketFinalizadoInfo.placaVeiculo}</p>
-                <p>Tipo: {ticketFinalizadoInfo.tipoVeiculo}</p>
-                <p>Tipo de Ticket: {ticketFinalizadoInfo.tipoTicket}</p>
-                <p>Hora de Entrada: {new Date(ticketFinalizadoInfo.horaChegada).toLocaleString()}</p>
-                <p>Hora de Saída: {new Date(ticketFinalizadoInfo.horaSaida).toLocaleString()}</p>
-                <p>Valor Total: R$ {ticketFinalizadoInfo.valorTotalPagar}</p>
-              </>
+              <div className="receipt-card">
+                <table className="receipt-table">
+                  <tbody>
+                    <tr>
+                      <th>Placa:</th>
+                      <td>{ticketFinalizadoInfo.placaVeiculo}</td>
+                    </tr>
+                    <tr>
+                      <th>Veículo:</th>
+                      <td>{ticketFinalizadoInfo.tipoVeiculo}</td>
+                    </tr>
+                    <tr>
+                      <th>Tipo de Ticket:</th>
+                      <td>{ticketFinalizadoInfo.tipoTicket === 'TICKET_AVULSO' ? 'Avulso' : 'Mensalista'}</td>
+                    </tr>
+                    <tr>
+                      <th>Hora de Entrada:</th>
+                      <td>{new Date(ticketFinalizadoInfo.horaChegada).toLocaleString()}</td>
+                    </tr>
+                    <tr>
+                      <th>Hora de Saída:</th>
+                      <td>{new Date(ticketFinalizadoInfo.horaSaida).toLocaleString()}</td>
+                    </tr>
+                    <tr>
+                      <th>Valor Total:</th>
+                      <td>R$ {ticketFinalizadoInfo.valorTotalPagar}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             )}
             <Button variant="outline-light" className="close-button" onClick={fecharCard}>
               Fechar
