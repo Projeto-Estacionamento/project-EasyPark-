@@ -164,8 +164,8 @@ public class TicketService {
         relatorio.setHoraEntrada(ticket.getHoraChegada());
         relatorio.setHoraSaida(ticket.getHoraSaida());
         relatorio.setTipoVeiculo(ticket.getTipoVeiculo());
-        relatorio.setValorTotalPagar(ticket.getValorTotalPagar());
-
+        relatorio.setValorTotalPagar(ticket.getValorTotalPagar()); 
+        relatorio.setPlacaVeiculo(ticket.getPlacaVeiculo());
         // Salva o ticket com o valor calculado
         Ticket updatedTicket = ticketRepository.save(ticket);
 

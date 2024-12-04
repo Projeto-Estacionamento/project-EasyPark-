@@ -40,7 +40,7 @@ export function Home() {
 
     try {
       const novoTicket = await criarTicket({ placaVeiculo, tipoVeiculo });
-      setTicketInfo({ ...novoTicket, tipoTicket: tipoVeiculo });
+      setTicketInfo({ ...novoTicket, tipoTicket: novoTicket.tipoTicket || tipoVeiculo });
       setModoVisualizacao(true);
       toast.success('Entrada registrada com sucesso!');
       setPlacaVeiculo('');
