@@ -40,7 +40,7 @@ export function Home() {
 
     try {
       const novoTicket = await criarTicket({ placaVeiculo, tipoVeiculo });
-      setTicketInfo(novoTicket);
+      setTicketInfo({ ...novoTicket, tipoTicket: tipoVeiculo });
       setModoVisualizacao(true);
       toast.success('Entrada registrada com sucesso!');
       setPlacaVeiculo('');
@@ -84,6 +84,7 @@ export function Home() {
               <>
                 <p>Placa: {ticketInfo.placaVeiculo}</p>
                 <p>Tipo: {ticketInfo.tipoVeiculo}</p>
+                <p>Tipo de Ticket: {ticketInfo.tipoTicket}</p>
                 <p>Hora de Entrada: {new Date(ticketInfo.horaChegada).toLocaleString()}</p>
               </>
             )}
@@ -91,6 +92,7 @@ export function Home() {
               <>
                 <p>Placa: {ticketFinalizadoInfo.placaVeiculo}</p>
                 <p>Tipo: {ticketFinalizadoInfo.tipoVeiculo}</p>
+                <p>Tipo de Ticket: {ticketFinalizadoInfo.tipoTicket}</p>
                 <p>Hora de Entrada: {new Date(ticketFinalizadoInfo.horaChegada).toLocaleString()}</p>
                 <p>Hora de Saída: {new Date(ticketFinalizadoInfo.horaSaida).toLocaleString()}</p>
                 <p>Valor Total: R$ {ticketFinalizadoInfo.valorTotalPagar}</p>
