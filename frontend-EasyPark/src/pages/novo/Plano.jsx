@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../../components/button/button';
 import { SidebarMenu } from "../../components/sidebarMenu/SidebarMenu";
 import { FiArrowLeft } from "react-icons/fi";
@@ -20,15 +20,21 @@ export function Plano() {
       tipoVeiculo,
       valorPlano: parseFloat(valorPlano)
     };
-    await criarPlano(novoPlano);
-    toast.success('Plano criado com sucesso!');
-    setTipoPlano('INTEGRAL');
-    setTipoVeiculo('CARRO');
-    setValorPlano('');
-    setTimeout(() => {
-      navigate('/gerenciamento-plano');
-    }, 2000);
+    try {
+      await criarPlano(novoPlano);
+      toast.success('Plano criado com sucesso!');
+      setTimeout(() => {
+        navigate('/gerenciamento-plano');
+      }, 2000);
+    } catch (error) {
+      console.error('Erro ao criar plano:', error);
+      toast.error('Erro ao criar plano. Por favor, tente novamente.');
+    }
   };
+
+  useEffect(() => {
+    toast.info('Componente Plano carregado!');
+  }, []);
 
   return (
     <div className="d-flex">
@@ -89,6 +95,7 @@ export function Plano() {
             <Button type="submit" className="btn-adicionar">Adicionar</Button>
           </div>
         </form>
+        <ToastContainer position="top-right" autoClose={3000} />
       </div>
     </div>
   );
