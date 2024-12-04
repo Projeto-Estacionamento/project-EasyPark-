@@ -1,0 +1,14 @@
+.filter-input {
+  color: white; /* Cor do texto */
+}
+
+.filter-input::placeholder {
+  color: white; /* Cor do texto do placeholder */
+}
+.table-actions {
+    margin-left: 20px; /* Espaço entre o menu lateral e os botões */
+  }
+  
+  .table-header {
+    margin-bottom: 20px; /* Espaço abaixo do cabeçalho da tabela */
+  }
