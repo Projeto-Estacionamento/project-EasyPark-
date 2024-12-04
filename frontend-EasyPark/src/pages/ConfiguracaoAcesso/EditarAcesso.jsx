@@ -61,7 +61,9 @@ export function EditarAcesso() {
       await atualizarAcesso(id, dadosAtualizacao);
       
       toast.success('Acesso Alterado!');
-      navigate('/configuracao-acesso');
+      setTimeout(() => {
+        navigate('/configuracao-acesso');
+      }, 2000);
     } catch (error) {
       console.error('Erro ao atualizar dados:', error);
       toast.error('Erro ao atualizar dados: ' + (error.response?.data?.message || 'Erro desconhecido'));

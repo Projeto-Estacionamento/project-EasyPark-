@@ -37,7 +37,9 @@ export function Acesso() {
         setEmail('');
         setSenha('');
         setTipoAcesso('CAIXA'); // Resetando para o valor padrão
-        navigate('/configuracao-acesso');
+        setTimeout(() => {
+          navigate('/configuracao-acesso');
+        }, 2000); // 2000 milissegundos = 2 segundos
       } else {
         const errorData = await response.json();
         toast.error(`Erro: ${errorData.message}`);
