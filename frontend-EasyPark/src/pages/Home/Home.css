@@ -1,0 +1,78 @@
+.home-container {
+  position: relative;
+  height: 100vh;
+}
+
+.Home-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  min-height: 300px;
+  width: 400px;
+  background-color: #00838f;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: none;
+}
+
+/* Estilo para o placeholder do input */
+.input-custom::placeholder {
+  color: white; /* Cor do texto do placeholder */
+  opacity: 1; /* Para garantir que a opacidade seja total */
+}
+
+.ticket-info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px; /* Espaçamento acima do card */
+}
+
+.ticket-info-card {
+  background-color: #00838f; /* Cor de fundo do card azul */
+  color: #ffffff; /* Cor do texto */
+  padding: 20px; /* Espaçamento interno */
+  border-radius: 10px; /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra do card */
+  width: 400px; /* Largura do card */
+  text-align: left; /* Alinhamento do texto à esquerda */
+}
+
+.receipt-card {
+  background-color: #ffffff; /* Cor de fundo do recibo */
+  color: #000000; /* Cor do texto do recibo */
+  padding: 15px; /* Espaçamento interno do recibo */
+  border-radius: 5px; /* Bordas arredondadas do recibo */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra do recibo */
+  margin-top: 10px; /* Espaçamento acima do recibo */
+  width: 400px; /* Largura do recibo */
+  text-align: left; /* Alinhamento do texto à esquerda */
+  margin-bottom: 20px; /* Adicionando espaçamento abaixo da tabela */
+}
+
+.receipt-table {
+  width: 100%; /* Largura total da tabela */
+  border-collapse: collapse; /* Colapsar bordas */
+}
+
+.receipt-table th, .receipt-table td {
+  border: 1px solid #000; /* Bordas da tabela */
+  padding: 8px; /* Espaçamento interno das células */
+  text-align: left; /* Alinhamento do texto à esquerda */
+}
+
+.receipt-table th {
+  background-color: #00838f; /* Cor de fundo do cabeçalho */
+  color: #ffffff; /* Cor do texto do cabeçalho */
+}
+
+.ticket-title {
+  font-size: 1.5rem; /* Tamanho da fonte do título */
+  margin-bottom: 15px; /* Espaçamento abaixo do título */
+}
+
+.close-button {
+  margin-top: 30px; /* Aumente o valor para mover o botão mais para baixo */
+  width: 100%; /* Largura do botão */
+}

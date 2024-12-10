@@ -1,0 +1,55 @@
+.configuracao-acesso-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 20px;
+  background-color: #1E1E1E;
+  color: white;
+}
+
+.header-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.header-title {
+  margin: 0;
+  color: #333;
+}
+
+.table-header {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.table-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-width: 200px;
+}
+
+.filter-button {
+  padding: 8px 16px;
+}
+
+.form-novo-acesso {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+

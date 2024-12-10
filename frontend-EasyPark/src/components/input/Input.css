@@ -1,0 +1,75 @@
+.modern-input-container {
+  position: relative;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.modern-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.modern-input:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.2);
+}
+
+.modern-label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary-color);
+  padding: 0 0.5rem;
+  color: white;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.modern-input:focus ~ .modern-label,
+.modern-input:not(:placeholder-shown) ~ .modern-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+  background: var(--secondary-color);
+}
+
+.dark-mode .modern-input {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .modern-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .modern-label {
+  color: white;
+  background: var(--primary-color);
+}
+
+.dark-mode .modern-input:focus ~ .modern-label {
+  background: var(--secondary-color);
+}
+
+/* Estilo para o placeholder */
+.modern-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Estilo para o autofill */
+.modern-input:-webkit-autofill,
+.modern-input:-webkit-autofill:hover,
+.modern-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-color);
+  -webkit-box-shadow: 0 0 0px 1000px var(--primary-color) inset;
+  transition: background-color 5000s ease-in-out 0s;
+} 
