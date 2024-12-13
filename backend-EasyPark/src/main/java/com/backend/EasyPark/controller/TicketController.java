@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.EasyPark.model.dto.TicketDTO;
 import com.backend.EasyPark.service.TicketService;
 
+
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {

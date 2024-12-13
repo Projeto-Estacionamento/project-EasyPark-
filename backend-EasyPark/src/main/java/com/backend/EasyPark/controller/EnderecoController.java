@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.backend.EasyPark.model.dto.EnderecoDTO;
 import com.backend.EasyPark.service.EnderecoService;
 
+
 @RestController
 @RequestMapping("/enderecos")
 public class EnderecoController {
